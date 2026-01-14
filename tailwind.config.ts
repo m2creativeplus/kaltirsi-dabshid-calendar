@@ -10,6 +10,15 @@ const config = {
     "*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
+  safelist: [
+    {
+      pattern: /(bg|text|border)-(jiilaal|gu|xagaa|dayr)(-light|-dark)?/,
+      variants: ['hover', 'focus'],
+    },
+    {
+       pattern: /bg-(jiilaal|gu|xagaa|dayr)/,
+    }
+  ],
   theme: {
     container: {
       center: true,

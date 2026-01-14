@@ -1,4 +1,5 @@
 // Calendar utility functions for the Somali Calendar app
+import { getSomalilandHolidays } from "./holidays/somaliland-holidays"
 
 // Types
 type EventType = "cultural" | "astronomical" | "holiday"
@@ -21,6 +22,8 @@ interface CalendarDay {
   isToday: boolean
   isHoliday: boolean
   events: Event[]
+  year: number
+  season: Season
 }
 
 interface CalendarData {
@@ -294,19 +297,30 @@ function createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
   const weekday = weekdays[date.getDay()]
 
   // Check if it's a holiday
-  const isHoliday =
-    (date.getMonth() === 4 && date.getDate() === 18) || // May 18 - Independence Day
-    (date.getMonth() === 5 && date.getDate() === 26) || // June 26 - Republic Day
-    (date.getMonth() === 6 && date.getDate() === 1) // July 1 - Unity Day
+  const holidays = getSomalilandHolidays(year)
+  const dateStr = date.toISOString().split('T')[0]
+  const todaysHolidays = holidays.filter(h => h.date === dateStr)
+  
+  const isHoliday = todaysHolidays.some(h => h.type === "public" || h.type === "religious")
 
   // Get events for this day
   const events: Event[] = []
+
+  // Add holidays to events
+  todaysHolidays.forEach(h => {
+    events.push({
+      nameKey: h.name,
+      date: date.toLocaleDateString(),
+      type: h.type === "public" || h.type === "religious" ? "holiday" : "cultural", // Map types
+      description: h.name
+    })
+  })
 
   if (date.getMonth() === 6 && date.getDate() === 19) {
     // July 19 - Dabshid Festival
     events.push({
       nameKey: "event.dabshid",
-      date: "July 19, 2025",
+      date: "July 19, " + year,
       type: "cultural",
       description: "Traditional fire festival marking the beginning of the Somali New Year",
     })
@@ -316,39 +330,9 @@ function createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
     // October 19 - Dambasame Night
     events.push({
       nameKey: "event.dambasame",
-      date: "October 19, 2025",
+      date: "October 19, " + year,
       type: "astronomical",
       description: "Night when the Dambasame star is at its zenith",
-    })
-  }
-
-  if (date.getMonth() === 4 && date.getDate() === 18) {
-    // May 18 - Independence Day
-    events.push({
-      nameKey: "holiday.independence",
-      date: "May 18, 2025",
-      type: "holiday",
-      description: "Somaliland Independence Day",
-    })
-  }
-
-  if (date.getMonth() === 5 && date.getDate() === 26) {
-    // June 26 - Republic Day
-    events.push({
-      nameKey: "holiday.republic",
-      date: "June 26, 2025",
-      type: "holiday",
-      description: "Somaliland Republic Day",
-    })
-  }
-
-  if (date.getMonth() === 6 && date.getDate() === 1) {
-    // July 1 - Unity Day
-    events.push({
-      nameKey: "holiday.unity",
-      date: "July 1, 2025",
-      type: "holiday",
-      description: "Somaliland Unity Day",
     })
   }
 
@@ -367,7 +351,7 @@ function createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
   }
 }
 
-function getSeason(date: Date): Season {
+export function getSeason(date: Date): Season {
   const month = date.getMonth()
 
   if (month >= 11 || month <= 2) {

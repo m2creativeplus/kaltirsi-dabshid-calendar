@@ -1,11 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Plus, ChevronDown, ChevronRight } from "lucide-react"
+import { Plus, ChevronDown, ChevronRight, PawPrint } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useCultural } from "@/components/cultural-provider"
 import { MiniCalendar } from "@/components/mini-calendar"
+import { ProverbCard } from "@/components/proverb-card"
 
 interface CalendarSidebarProps {
   isOpen: boolean
@@ -33,10 +34,18 @@ export function CalendarSidebar({ isOpen, onToggle, onDateSelect }: CalendarSide
   return (
     <div className="w-80 border-r border-gray-200 bg-white flex flex-col">
       {/* Create Button */}
-      <div className="p-4">
+      <div className="p-4 space-y-2">
         <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
           <Plus className="h-4 w-4 mr-2" />
           Create Event
+        </Button>
+        <Button 
+          variant="outline" 
+          className="w-full border-green-600 text-green-700 hover:bg-green-50"
+          onClick={() => window.location.href = '/livestock'}
+        >
+          <PawPrint className="h-4 w-4 mr-2" />
+          Livestock Manager
         </Button>
       </div>
 
@@ -191,7 +200,7 @@ export function CalendarSidebar({ isOpen, onToggle, onDateSelect }: CalendarSide
       </div>
 
       {/* Season Indicator */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-gray-200 space-y-4">
         <div className="bg-green-50 rounded-lg p-3">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -199,6 +208,8 @@ export function CalendarSidebar({ isOpen, onToggle, onDateSelect }: CalendarSide
           </div>
           <p className="text-xs text-green-600">Spring rains season - ideal for planting</p>
         </div>
+
+        <ProverbCard />
       </div>
     </div>
   )
