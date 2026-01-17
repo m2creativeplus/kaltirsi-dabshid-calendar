@@ -16,6 +16,7 @@ import { KaltirsiEngine, getSeason, MONTHS_SOLAR } from "@/lib/kaltirsi-engine"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Sparkles, Sun, CloudRain, Cloud, Thermometer } from "lucide-react"
 import { SomaliClock } from "@/components/somali-clock"
+import { motion } from "framer-motion"
 
 type ViewType = "month" | "week" | "day"
 
@@ -114,31 +115,43 @@ export default function GoogleCalendarView() {
 
         {/* Hero Section */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 px-6 pt-6 pb-2">
-          <Card className={`col-span-2 bg-${season.color}-light border-${season.color} relative overflow-hidden`}>
-             <div className={`absolute top-0 right-0 p-4 opacity-10 text-${season.color}-dark`}>
-                <SeasonIcon className="h-32 w-32" />
-             </div>
-             <CardHeader>
-               <CardTitle className="text-3xl md:text-4xl font-serif">
-                 {kaltirsiDate.day} {kaltirsiDate.monthName}
-               </CardTitle>
-               <CardDescription className="text-lg font-medium opacity-90">
-                 {kaltirsiDate.year} Kaltirsi
-               </CardDescription>
-             </CardHeader>
-             <CardContent>
-               <div className="flex items-center space-x-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-bold bg-${season.color} text-white`}>
-                    {season.name} Season
-                  </span>
-                  <span className="text-sm opacity-80 italic">
-                    Cycle of {MONTHS_SOLAR[kaltirsiDate.month - 1]}
-                  </span>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="col-span-2"
+          >
+            <Card className={`h-full bg-${season.color}-light border-${season.color} relative overflow-hidden`}>
+               <div className={`absolute top-0 right-0 p-4 opacity-10 text-${season.color}-dark`}>
+                  <SeasonIcon className="h-32 w-32" />
                </div>
-             </CardContent>
-          </Card>
+               <CardHeader>
+                 <CardTitle className="text-3xl md:text-4xl font-serif">
+                   {kaltirsiDate.day} {kaltirsiDate.monthName}
+                 </CardTitle>
+                 <CardDescription className="text-lg font-medium opacity-90">
+                   {kaltirsiDate.year} Kaltirsi
+                 </CardDescription>
+               </CardHeader>
+               <CardContent>
+                 <div className="flex items-center space-x-2">
+                    <span className={`px-2 py-1 rounded-full text-xs font-bold bg-${season.color} text-white`}>
+                      {season.name} Season
+                    </span>
+                    <span className="text-sm opacity-80 italic">
+                      Cycle of {MONTHS_SOLAR[kaltirsiDate.month - 1]}
+                    </span>
+                 </div>
+               </CardContent>
+            </Card>
+          </motion.div>
 
-          <Card>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <Card className="h-full">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Xiddigta (Star)</CardTitle>
               <Sparkles className="h-4 w-4 text-muted-foreground" />
@@ -151,8 +164,15 @@ export default function GoogleCalendarView() {
               </div>
             </CardContent>
           </Card>
+          </motion.div>
 
-          <SomaliClock />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <SomaliClock />
+          </motion.div>
         </div>
 
         {/* Calendar Header */}
