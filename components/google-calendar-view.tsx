@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Sparkles, Sun, CloudRain, Cloud, Thermometer } from "lucide-react"
 import { SomaliClock } from "@/components/somali-clock"
 import { motion } from "framer-motion"
+import { KaltirsiStats } from "@/components/kaltirsi-stats"
 
 type ViewType = "month" | "week" | "day"
 
@@ -174,6 +175,9 @@ export default function GoogleCalendarView() {
             <SomaliClock />
           </motion.div>
         </div>
+
+        {/* Quick Stats */}
+        <KaltirsiStats />
 
         {/* Calendar Header */}
         <CalendarHeader
