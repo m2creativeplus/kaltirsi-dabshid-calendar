@@ -65,7 +65,7 @@ export function ScreensShowcase() {
               <CardTitle className="text-sm">{screen.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="aspect-[9/16] bg-gray-100 rounded-lg mb-3 relative overflow-hidden">
+              <div className="aspect-[9/16] bg-muted rounded-lg mb-3 relative overflow-hidden">
                 {/* Screen mockups */}
                 {screen.id === "splash" && <SplashScreen />}
                 {screen.id === "onboarding" && <OnboardingScreen />}
@@ -77,7 +77,7 @@ export function ScreensShowcase() {
                 {screen.id === "stars" && <StarsScreen />}
                 {screen.id === "offline" && <OfflineScreen />}
               </div>
-              <p className="text-xs text-gray-600">{screen.description}</p>
+              <p className="text-xs text-muted-foreground">{screen.description}</p>
             </CardContent>
           </Card>
         ))}
@@ -89,7 +89,7 @@ export function ScreensShowcase() {
 function SplashScreen() {
   return (
     <div className="w-full h-full bg-gradient-to-br from-orange-400 via-red-500 to-pink-600 flex flex-col items-center justify-center text-white p-4">
-      <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 backdrop-blur-sm">
+      <div className="w-16 h-16 bg-card/20 rounded-full flex items-center justify-center mb-4 backdrop-blur-sm">
         <span className="text-2xl">🐪</span>
       </div>
       <h1 className="text-lg font-bold mb-1">Dabshid Calendar</h1>
@@ -105,20 +105,20 @@ function SplashScreen() {
 
 function OnboardingScreen() {
   return (
-    <div className="w-full h-full bg-white p-4 flex flex-col">
+    <div className="w-full h-full bg-card p-4 flex flex-col">
       <div className="text-center mb-6">
         <div className="w-12 h-12 bg-orange-500 rounded-full mx-auto mb-3 flex items-center justify-center">
           <Globe className="h-6 w-6 text-white" />
         </div>
         <h2 className="text-sm font-bold mb-1">Choose Your Language</h2>
-        <p className="text-xs text-gray-600">Dooro Luqaddaada</p>
+        <p className="text-xs text-muted-foreground">Dooro Luqaddaada</p>
       </div>
 
       <div className="space-y-3 mb-6">
         <button className="w-full p-3 border-2 border-orange-500 rounded-lg bg-orange-50">
           <span className="text-sm font-medium">🇸🇴 Somali</span>
         </button>
-        <button className="w-full p-3 border border-gray-200 rounded-lg">
+        <button className="w-full p-3 border border-border rounded-lg">
           <span className="text-sm">🇺🇸 English</span>
         </button>
       </div>
@@ -143,7 +143,7 @@ function OnboardingScreen() {
 
 function HomeScreen() {
   return (
-    <div className="w-full h-full bg-white flex flex-col">
+    <div className="w-full h-full bg-card flex flex-col">
       <div className="bg-gradient-to-r from-orange-400 to-red-500 p-3 text-white">
         <h1 className="text-sm font-bold">Dabshid 3122</h1>
         <p className="text-xs opacity-90">January 2025 • Jiilaal Season</p>
@@ -167,15 +167,15 @@ function HomeScreen() {
             <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
             <span className="text-xs font-medium">Jiilaal Season</span>
           </div>
-          <p className="text-xs text-gray-600">Dry season - cool mornings</p>
+          <p className="text-xs text-muted-foreground">Dry season - cool mornings</p>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <div className="bg-gray-50 rounded-lg p-2 text-center">
+          <div className="bg-muted/50 rounded-lg p-2 text-center">
             <Calendar className="h-4 w-4 mx-auto mb-1 text-orange-500" />
             <span className="text-xs">Events</span>
           </div>
-          <div className="bg-gray-50 rounded-lg p-2 text-center">
+          <div className="bg-muted/50 rounded-lg p-2 text-center">
             <Star className="h-4 w-4 mx-auto mb-1 text-purple-500" />
             <span className="text-xs">Stars</span>
           </div>
@@ -187,13 +187,13 @@ function HomeScreen() {
 
 function MonthViewScreen() {
   return (
-    <div className="w-full h-full bg-white flex flex-col">
+    <div className="w-full h-full bg-card flex flex-col">
       <div className="border-b p-2">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xs font-bold">Xays 3122</h2>
-          <span className="text-xs text-gray-500">Jan 2025</span>
+          <span className="text-xs text-muted-foreground">Jan 2025</span>
         </div>
-        <div className="grid grid-cols-7 gap-1 text-xs text-center text-gray-500">
+        <div className="grid grid-cols-7 gap-1 text-xs text-center text-muted-foreground">
           <span>S</span>
           <span>M</span>
           <span>T</span>
@@ -234,10 +234,10 @@ function MonthViewScreen() {
 
 function DayViewScreen() {
   return (
-    <div className="w-full h-full bg-white flex flex-col">
+    <div className="w-full h-full bg-card flex flex-col">
       <div className="border-b p-3">
         <h2 className="text-sm font-bold">Monday, January 15</h2>
-        <p className="text-xs text-gray-600">Xays 15, 3122 • Hijri: 1446</p>
+        <p className="text-xs text-muted-foreground">Xays 15, 3122 • Hijri: 1446</p>
       </div>
 
       <div className="flex-1 p-3 space-y-3">
@@ -246,7 +246,7 @@ function DayViewScreen() {
             <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
             <span className="text-xs font-medium">Dabshid Preparation</span>
           </div>
-          <p className="text-xs text-gray-600">Traditional fire gathering</p>
+          <p className="text-xs text-muted-foreground">Traditional fire gathering</p>
         </div>
 
         <div className="bg-purple-50 rounded-lg p-2">
@@ -254,7 +254,7 @@ function DayViewScreen() {
             <Star className="h-3 w-3 text-purple-500" />
             <span className="text-xs font-medium">Cirir Rising</span>
           </div>
-          <p className="text-xs text-gray-600">Visible before dawn</p>
+          <p className="text-xs text-muted-foreground">Visible before dawn</p>
         </div>
 
         <div className="bg-blue-50 rounded-lg p-2">
@@ -262,7 +262,7 @@ function DayViewScreen() {
             <Moon className="h-3 w-3 text-blue-500" />
             <span className="text-xs font-medium">Moon Phase</span>
           </div>
-          <p className="text-xs text-gray-600">Waxing Crescent</p>
+          <p className="text-xs text-muted-foreground">Waxing Crescent</p>
         </div>
       </div>
     </div>
@@ -271,10 +271,10 @@ function DayViewScreen() {
 
 function EventsScreen() {
   return (
-    <div className="w-full h-full bg-white flex flex-col">
+    <div className="w-full h-full bg-card flex flex-col">
       <div className="border-b p-3">
         <h2 className="text-sm font-bold">Events & Holidays</h2>
-        <p className="text-xs text-gray-600">Cultural celebrations and observances</p>
+        <p className="text-xs text-muted-foreground">Cultural celebrations and observances</p>
       </div>
 
       <div className="flex-1 p-3 space-y-2">
@@ -283,7 +283,7 @@ function EventsScreen() {
             <Badge className="bg-orange-500 text-xs">Jul 19</Badge>
             <span className="text-xs font-medium">Dabshid Festival</span>
           </div>
-          <p className="text-xs text-gray-600">Traditional fire festival</p>
+          <p className="text-xs text-muted-foreground">Traditional fire festival</p>
         </div>
 
         <div className="border rounded-lg p-2">
@@ -291,7 +291,7 @@ function EventsScreen() {
             <Badge className="bg-red-500 text-xs">May 18</Badge>
             <span className="text-xs font-medium">Independence Day</span>
           </div>
-          <p className="text-xs text-gray-600">Somaliland independence</p>
+          <p className="text-xs text-muted-foreground">Somaliland independence</p>
         </div>
 
         <div className="border rounded-lg p-2">
@@ -299,7 +299,7 @@ function EventsScreen() {
             <Badge className="bg-green-500 text-xs">Apr 10</Badge>
             <span className="text-xs font-medium">Eid al-Fitr</span>
           </div>
-          <p className="text-xs text-gray-600">End of Ramadan</p>
+          <p className="text-xs text-muted-foreground">End of Ramadan</p>
         </div>
 
         <div className="border rounded-lg p-2">
@@ -307,7 +307,7 @@ function EventsScreen() {
             <Badge className="bg-purple-500 text-xs">Oct 19</Badge>
             <span className="text-xs font-medium">Dambasame Night</span>
           </div>
-          <p className="text-xs text-gray-600">Star observation night</p>
+          <p className="text-xs text-muted-foreground">Star observation night</p>
         </div>
       </div>
     </div>
@@ -316,10 +316,10 @@ function EventsScreen() {
 
 function SettingsScreen() {
   return (
-    <div className="w-full h-full bg-white flex flex-col">
+    <div className="w-full h-full bg-card flex flex-col">
       <div className="border-b p-3">
         <h2 className="text-sm font-bold">Settings</h2>
-        <p className="text-xs text-gray-600">App preferences and configuration</p>
+        <p className="text-xs text-muted-foreground">App preferences and configuration</p>
       </div>
 
       <div className="flex-1 p-3 space-y-4">
@@ -383,9 +383,9 @@ function StarsScreen() {
       <div className="flex-1 p-3 relative">
         <div className="absolute inset-0">
           {/* Mock stars */}
-          <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+          <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-card rounded-full animate-pulse"></div>
           <div className="absolute top-1/3 right-1/3 w-2 h-2 bg-yellow-300 rounded-full"></div>
-          <div className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-white rounded-full"></div>
+          <div className="absolute bottom-1/3 left-1/2 w-1 h-1 bg-card rounded-full"></div>
           <div className="absolute top-1/2 right-1/4 w-1 h-1 bg-blue-300 rounded-full animate-pulse"></div>
         </div>
 
@@ -402,12 +402,12 @@ function StarsScreen() {
 
 function OfflineScreen() {
   return (
-    <div className="w-full h-full bg-white flex flex-col items-center justify-center p-4 text-center">
-      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+    <div className="w-full h-full bg-card flex flex-col items-center justify-center p-4 text-center">
+      <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
         <span className="text-2xl">📡</span>
       </div>
       <h2 className="text-sm font-bold mb-2">No Connection</h2>
-      <p className="text-xs text-gray-600 mb-4">Unable to connect to the internet</p>
+      <p className="text-xs text-muted-foreground mb-4">Unable to connect to the internet</p>
 
       <div className="bg-orange-50 rounded-lg p-3 mb-4">
         <p className="text-xs italic text-orange-800">"Xiddigtu waa hagayso, haddii aad aragto."</p>

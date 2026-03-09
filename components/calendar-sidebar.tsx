@@ -32,7 +32,7 @@ export function CalendarSidebar({ isOpen, onToggle, onDateSelect }: CalendarSide
   if (!isOpen) return null
 
   return (
-    <div className="w-80 border-r border-gray-200 bg-white flex flex-col">
+    <div className="w-80 border-r border-border bg-card flex flex-col">
       {/* Create Button */}
       <div className="p-4 space-y-2">
         <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
@@ -71,7 +71,7 @@ export function CalendarSidebar({ isOpen, onToggle, onDateSelect }: CalendarSide
           <div>
             <Button
               variant="ghost"
-              className="w-full justify-start p-0 h-auto font-medium text-gray-700"
+              className="w-full justify-start p-0 h-auto font-medium text-foreground"
               onClick={() => toggleSection("cultural")}
             >
               {expandedSections.cultural ? (
@@ -111,7 +111,7 @@ export function CalendarSidebar({ isOpen, onToggle, onDateSelect }: CalendarSide
           <div>
             <Button
               variant="ghost"
-              className="w-full justify-start p-0 h-auto font-medium text-gray-700"
+              className="w-full justify-start p-0 h-auto font-medium text-foreground"
               onClick={() => toggleSection("agricultural")}
             >
               {expandedSections.agricultural ? (
@@ -161,7 +161,7 @@ export function CalendarSidebar({ isOpen, onToggle, onDateSelect }: CalendarSide
           <div>
             <Button
               variant="ghost"
-              className="w-full justify-start p-0 h-auto font-medium text-gray-700"
+              className="w-full justify-start p-0 h-auto font-medium text-foreground"
               onClick={() => toggleSection("astronomical")}
             >
               {expandedSections.astronomical ? (
@@ -200,7 +200,7 @@ export function CalendarSidebar({ isOpen, onToggle, onDateSelect }: CalendarSide
       </div>
 
       {/* Season Indicator */}
-      <div className="p-4 border-t border-gray-200 space-y-4">
+      <div className="p-4 border-t border-border space-y-4">
         <div className="bg-green-50 rounded-lg p-3">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>

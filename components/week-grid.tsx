@@ -41,13 +41,13 @@ export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
   return (
     <div className="flex flex-col h-full">
       {/* Week header */}
-      <div className="grid grid-cols-8 border-b border-gray-200 bg-white sticky top-0 z-10">
-        <div className="p-3 border-r border-gray-200"></div>
+      <div className="grid grid-cols-8 border-b border-border bg-card sticky top-0 z-10">
+        <div className="p-3 border-r border-border"></div>
         {days.map((date, index) => {
           const isCurrentDay = isToday(date)
           return (
-            <div key={index} className="p-3 text-center border-r border-gray-200 last:border-r-0">
-              <div className="text-xs text-gray-500 mb-1">{weekDays[index]}</div>
+            <div key={index} className="p-3 text-center border-r border-border last:border-r-0">
+              <div className="text-xs text-muted-foreground mb-1">{weekDays[index]}</div>
               <div
                 className={cn(
                   "text-lg font-medium",
@@ -66,9 +66,9 @@ export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
       <div className="flex-1 overflow-auto">
         <div className="grid grid-cols-8">
           {/* Time column */}
-          <div className="border-r border-gray-200">
+          <div className="border-r border-border">
             {hours.map((hour) => (
-              <div key={hour} className="h-16 border-b border-gray-200 p-2 text-xs text-gray-500">
+              <div key={hour} className="h-16 border-b border-border p-2 text-xs text-muted-foreground">
                 {hour === 0 ? "12 AM" : hour < 12 ? `${hour} AM` : hour === 12 ? "12 PM" : `${hour - 12} PM`}
               </div>
             ))}
@@ -76,7 +76,7 @@ export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
 
           {/* Day columns */}
           {days.map((date, dayIndex) => (
-            <div key={dayIndex} className="border-r border-gray-200 last:border-r-0">
+            <div key={dayIndex} className="border-r border-border last:border-r-0">
               {hours.map((hour) => {
                 const timeSlot = new Date(date)
                 timeSlot.setHours(hour, 0, 0, 0)
@@ -87,7 +87,7 @@ export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
                 return (
                   <div
                     key={hour}
-                    className="h-16 border-b border-gray-200 p-1 cursor-pointer hover:bg-gray-50 relative"
+                    className="h-16 border-b border-border p-1 cursor-pointer hover:bg-muted/50 relative"
                     onClick={() => onDateClick(timeSlot)}
                   >
                     {events.map((event, eventIndex) => (

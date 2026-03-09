@@ -43,7 +43,7 @@ export function AnimalProfile() {
           <div className="space-y-4">
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-500">Health Score</span>
+                <span className="text-muted-foreground">Health Score</span>
                 <span className="font-bold">{animal.healthScore}/100</span>
               </div>
               <Progress value={animal.healthScore} className="h-2" />
@@ -53,21 +53,21 @@ export function AnimalProfile() {
               <div className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg">
                 <Heart className="text-blue-500 h-5 w-5" />
                 <div>
-                  <p className="text-xs text-gray-500">Condition</p>
+                  <p className="text-xs text-muted-foreground">Condition</p>
                   <p className="font-semibold">Excellent</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-purple-50 rounded-lg">
                 <Baby className="text-purple-500 h-5 w-5" />
                 <div>
-                  <p className="text-xs text-gray-500">Reproduction</p>
+                  <p className="text-xs text-muted-foreground">Reproduction</p>
                   <p className="font-semibold">{animal.pregnancyStatus}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-orange-50 rounded-lg">
                 <Syringe className="text-orange-500 h-5 w-5" />
                 <div>
-                  <p className="text-xs text-gray-500">Next Vax</p>
+                  <p className="text-xs text-muted-foreground">Next Vax</p>
                   <p className="font-semibold">{animal.nextVaccination}</p>
                 </div>
               </div>
@@ -84,12 +84,12 @@ export function AnimalProfile() {
         <CardContent>
            <ul className="space-y-4">
              <li className="flex gap-3 text-sm">
-               <div className="mt-0.5 bg-gray-100 p-1 rounded h-fit">
+               <div className="mt-0.5 bg-muted p-1 rounded h-fit">
                  <Syringe className="h-3 w-3" />
                </div>
                <div>
                  <p className="font-medium">Routine Vaccination</p>
-                 <p className="text-xs text-gray-500">2 months ago</p>
+                 <p className="text-xs text-muted-foreground">2 months ago</p>
                </div>
              </li>
              <li className="flex gap-3 text-sm">
@@ -98,7 +98,7 @@ export function AnimalProfile() {
                </div>
                <div>
                  <p className="font-medium">Calf Delivery (Male)</p>
-                 <p className="text-xs text-gray-500">1 year ago</p>
+                 <p className="text-xs text-muted-foreground">1 year ago</p>
                </div>
              </li>
            </ul>

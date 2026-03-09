@@ -71,7 +71,7 @@ export function CropPlanner({ onBack }: CropPlannerProps) {
             {["Apr", "May", "Jun", "Jul", "Aug"].map((month, i) => (
               <div key={month} className="flex items-center gap-3">
                 <span className="text-xs w-8">{month}</span>
-                <div className="flex-1 h-2 bg-gray-200 rounded-full">
+                <div className="flex-1 h-2 bg-accent rounded-full">
                   <div className="h-2 bg-blue-500 rounded-full" style={{ width: `${[80, 90, 70, 40, 20][i]}%` }}></div>
                 </div>
                 <span className="text-xs text-muted-foreground">{[80, 90, 70, 40, 20][i]}mm</span>
@@ -92,7 +92,7 @@ export function CropPlanner({ onBack }: CropPlannerProps) {
                   <span className="font-medium text-sm">{crop.name}</span>
                   <span className="text-xs text-muted-foreground">{crop.season}</span>
                 </div>
-                <div className="relative h-3 bg-gray-200 rounded-full">
+                <div className="relative h-3 bg-accent rounded-full">
                   <div
                     className={`absolute h-3 rounded-full ${crop.color} opacity-80`}
                     style={{ left: "20%", width: "60%" }}

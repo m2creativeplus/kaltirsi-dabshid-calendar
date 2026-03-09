@@ -19,9 +19,9 @@ export function ProverbCard() {
       <CardContent className="p-4">
         <div className="flex gap-2 mb-2">
           <Quote className="h-5 w-5 text-orange-400 rotate-180" />
-          <p className="font-semibold text-gray-900 italic">"{proverb.somali}"</p>
+          <p className="font-semibold text-foreground italic">"{proverb.somali}"</p>
         </div>
-        <p className="text-sm text-gray-600 mb-2 pl-7">{proverb.english}</p>
+        <p className="text-sm text-muted-foreground mb-2 pl-7">{proverb.english}</p>
         {proverb.context && (
           <p className="text-xs text-orange-700 pl-7 border-l-2 border-orange-300 ml-1">
             {proverb.context}

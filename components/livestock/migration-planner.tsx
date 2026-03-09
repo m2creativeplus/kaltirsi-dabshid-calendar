@@ -16,12 +16,12 @@ export function MigrationPlanner() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-             <div className="aspect-video bg-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden">
+             <div className="aspect-video bg-accent rounded-lg flex items-center justify-center relative overflow-hidden">
                {/* Placeholder Map - In production use Mapbox/Leaflet */}
                <div className="absolute inset-0 bg-[url('/map-placeholder.png')] bg-cover opacity-50"></div>
-               <div className="z-10 bg-white/90 p-3 rounded-lg shadow text-center">
+               <div className="z-10 bg-card/90 p-3 rounded-lg shadow text-center">
                  <p className="font-bold text-lg">Haud Region</p>
-                 <p className="text-sm text-gray-500">Coordinates: 8.5, 45.2</p>
+                 <p className="text-sm text-muted-foreground">Coordinates: 8.5, 45.2</p>
                </div>
              </div>
           </CardContent>
@@ -39,7 +39,7 @@ export function MigrationPlanner() {
                 </div>
                 <div>
                   <p className="font-medium">Water Sources</p>
-                  <p className="text-xs text-gray-500">Nearest borehol: 12km SE</p>
+                  <p className="text-xs text-muted-foreground">Nearest borehol: 12km SE</p>
                 </div>
               </div>
               <Badge>Adequate</Badge>
@@ -52,7 +52,7 @@ export function MigrationPlanner() {
                 </div>
                 <div>
                   <p className="font-medium">Pasture Quality</p>
-                  <p className="text-xs text-gray-500">Recent rains in Galbeed</p>
+                  <p className="text-xs text-muted-foreground">Recent rains in Galbeed</p>
                 </div>
               </div>
               <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50">Excellent</Badge>

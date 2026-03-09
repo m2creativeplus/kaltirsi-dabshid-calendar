@@ -50,7 +50,7 @@ export default function DashboardView() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-white hover:bg-white/20"
+                    className="text-white hover:bg-card/20"
                     onClick={() => setLanguage(language === "so" ? "en" : "so")}
                   >
                     <Globe className="h-5 w-5" />

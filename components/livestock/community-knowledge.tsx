@@ -35,8 +35,8 @@ export function CommunityKnowledge() {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-700 mb-4">{post.content}</p>
-            <div className="flex gap-4 text-sm text-gray-500">
+            <p className="text-foreground mb-4">{post.content}</p>
+            <div className="flex gap-4 text-sm text-muted-foreground">
               <button className="flex items-center gap-1 hover:text-blue-600">
                 <ThumbsUp className="h-4 w-4" /> {post.likes}
               </button>

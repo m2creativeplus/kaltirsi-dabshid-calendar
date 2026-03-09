@@ -55,7 +55,7 @@ export function MiniCalendar({ onDateSelect }: MiniCalendarProps) {
   const weekDays = ["S", "M", "T", "W", "T", "F", "S"]
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-3">
+    <div className="bg-card border border-border rounded-lg p-3">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => navigateMonth("prev")}>
@@ -74,7 +74,7 @@ export function MiniCalendar({ onDateSelect }: MiniCalendarProps) {
       {/* Week days */}
       <div className="grid grid-cols-7 gap-1 mb-1">
         {weekDays.map((day) => (
-          <div key={day} className="text-center text-xs text-gray-500 font-medium p-1">
+          <div key={day} className="text-center text-xs text-muted-foreground font-medium p-1">
             {day}
           </div>
         ))}
@@ -86,7 +86,7 @@ export function MiniCalendar({ onDateSelect }: MiniCalendarProps) {
           <button
             key={index}
             className={cn(
-              "h-6 w-6 text-xs rounded hover:bg-gray-100 flex items-center justify-center",
+              "h-6 w-6 text-xs rounded hover:bg-muted flex items-center justify-center",
               date && isToday(date) && "bg-blue-600 text-white hover:bg-blue-700",
               !date && "cursor-default",
             )}

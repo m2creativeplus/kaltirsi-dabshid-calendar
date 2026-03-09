@@ -37,7 +37,7 @@ export function AstronomyViewer({ onBack }: AstronomyViewerProps) {
             ].map((star, i) => (
               <div
                 key={i}
-                className={`absolute ${star.size} bg-white rounded-full animate-pulse`}
+                className={`absolute ${star.size} bg-card rounded-full animate-pulse`}
                 style={{ left: star.x, top: star.y }}
               ></div>
             ))}

@@ -39,7 +39,7 @@ export function CalendarHeader({ currentDate, viewType, onNavigate, onToday, onV
       case "Gu'": return "bg-green-100 text-green-800 border-green-200"
       case "Xagaa": return "bg-yellow-100 text-yellow-800 border-yellow-200"
       case "Dayr": return "bg-emerald-100 text-emerald-800 border-emerald-200"
-      default: return "bg-gray-100 text-gray-800"
+      default: return "bg-muted text-foreground"
     }
   }
 
@@ -75,7 +75,7 @@ export function CalendarHeader({ currentDate, viewType, onNavigate, onToday, onV
   }
 
   return (
-    <div className="border-b border-gray-200 bg-white px-6 py-4">
+    <div className="border-b border-border bg-card px-6 py-4">
       <div className="flex flex-col gap-4">
         {/* Top Row: Navigation and Title */}
         <div className="flex items-center justify-between">
@@ -98,9 +98,9 @@ export function CalendarHeader({ currentDate, viewType, onNavigate, onToday, onV
             </div>
 
             <div className="flex flex-col">
-              <h2 className="text-xl font-normal text-gray-900">{formatHeaderDate()}</h2>
+              <h2 className="text-xl font-normal text-foreground">{formatHeaderDate()}</h2>
               {/* Kaltirsi Date Subtitle */}
-              <div className="text-sm text-gray-500 font-medium flex items-center gap-2">
+              <div className="text-sm text-muted-foreground font-medium flex items-center gap-2">
                 <span>{kaltirsiDate.monthName} {kaltirsiDate.day}, {kaltirsiDate.year}</span>
                 <Badge variant="outline" className={cn("gap-1 font-normal", getSeasonColor(season))}>
                   {getSeasonIcon(season)}
@@ -110,12 +110,12 @@ export function CalendarHeader({ currentDate, viewType, onNavigate, onToday, onV
             </div>
           </div>
 
-          <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
             <Button
               variant={viewType === "month" ? "default" : "ghost"}
               size="sm"
               onClick={() => onViewChange("month")}
-              className={viewType === "month" ? "bg-white shadow-sm" : ""}
+              className={viewType === "month" ? "bg-card shadow-sm" : ""}
             >
               <Grid3X3 className="h-4 w-4 mr-1" />
               Month
@@ -124,7 +124,7 @@ export function CalendarHeader({ currentDate, viewType, onNavigate, onToday, onV
               variant={viewType === "week" ? "default" : "ghost"}
               size="sm"
               onClick={() => onViewChange("week")}
-              className={viewType === "week" ? "bg-white shadow-sm" : ""}
+              className={viewType === "week" ? "bg-card shadow-sm" : ""}
             >
               <Calendar className="h-4 w-4 mr-1" />
               Week
@@ -133,7 +133,7 @@ export function CalendarHeader({ currentDate, viewType, onNavigate, onToday, onV
               variant={viewType === "day" ? "default" : "ghost"}
               size="sm"
               onClick={() => onViewChange("day")}
-              className={viewType === "day" ? "bg-white shadow-sm" : ""}
+              className={viewType === "day" ? "bg-card shadow-sm" : ""}
             >
               <Clock className="h-4 w-4 mr-1" />
               Day

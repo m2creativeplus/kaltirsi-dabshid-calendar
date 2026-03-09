@@ -17,7 +17,7 @@ export function DayGrid({ currentDate, onTimeClick }: DayGridProps) {
   return (
     <div className="flex flex-col h-full">
       {/* Day header */}
-      <div className="border-b border-gray-200 bg-white p-4">
+      <div className="border-b border-border bg-card p-4">
         <h2 className="text-2xl font-normal">
           {currentDate.toLocaleDateString("en-US", {
             weekday: "long",
@@ -26,7 +26,7 @@ export function DayGrid({ currentDate, onTimeClick }: DayGridProps) {
             year: "numeric",
           })}
         </h2>
-        <div className="mt-2 text-sm text-gray-600">{events.length} events scheduled</div>
+        <div className="mt-2 text-sm text-muted-foreground">{events.length} events scheduled</div>
       </div>
 
       {/* Time slots */}
@@ -36,7 +36,7 @@ export function DayGrid({ currentDate, onTimeClick }: DayGridProps) {
           <div className="col-span-2">
             {hours.map((hour) => (
               <div key={hour} className="h-16 flex items-start pt-2">
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-muted-foreground">
                   {hour === 0 ? "12 AM" : hour < 12 ? `${hour} AM` : hour === 12 ? "12 PM" : `${hour - 12} PM`}
                 </span>
               </div>
@@ -55,7 +55,7 @@ export function DayGrid({ currentDate, onTimeClick }: DayGridProps) {
               return (
                 <div
                   key={hour}
-                  className="h-16 border-b border-gray-100 cursor-pointer hover:bg-gray-50 p-2 relative"
+                  className="h-16 border-b border-border cursor-pointer hover:bg-muted/50 p-2 relative"
                   onClick={() => onTimeClick(timeSlot)}
                 >
                   {hourEvents.map((event, eventIndex) => (

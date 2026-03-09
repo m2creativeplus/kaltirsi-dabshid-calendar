@@ -58,14 +58,14 @@ export function AssetsLibrary() {
                 {set.items.map((item, itemIndex) => (
                   <div key={itemIndex} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center">
+                      <div className="w-8 h-8 bg-muted rounded flex items-center justify-center">
                         {set.category === "Cultural Icons" && <span className="text-sm">🐪</span>}
                         {set.category === "Star Maps" && <Star className="h-4 w-4" />}
                         {set.category === "Seasonal Icons" && <span className="text-sm">🌱</span>}
                       </div>
                       <div>
                         <div className="text-xs font-medium">{item.name}</div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted-foreground">
                           {item.format} • {item.size}
                         </div>
                       </div>
@@ -97,7 +97,7 @@ export function AssetsLibrary() {
               </div>
               <div className="text-xs text-center">
                 <div className="font-medium">Standard Flag</div>
-                <div className="text-gray-500">SVG • 32x24</div>
+                <div className="text-muted-foreground">SVG • 32x24</div>
               </div>
             </div>
 
@@ -107,27 +107,27 @@ export function AssetsLibrary() {
               </div>
               <div className="text-xs text-center">
                 <div className="font-medium">Gradient Version</div>
-                <div className="text-gray-500">SVG • 32x24</div>
+                <div className="text-muted-foreground">SVG • 32x24</div>
               </div>
             </div>
 
             <div className="space-y-2">
-              <div className="w-full h-16 border-2 border-blue-500 rounded flex items-center justify-center bg-white">
+              <div className="w-full h-16 border-2 border-blue-500 rounded flex items-center justify-center bg-card">
                 <span className="text-blue-500 text-xl">⭐</span>
               </div>
               <div className="text-xs text-center">
                 <div className="font-medium">Outline Version</div>
-                <div className="text-gray-500">SVG • 32x24</div>
+                <div className="text-muted-foreground">SVG • 32x24</div>
               </div>
             </div>
 
             <div className="space-y-2">
-              <div className="w-full h-16 bg-gray-100 rounded flex items-center justify-center">
+              <div className="w-full h-16 bg-muted rounded flex items-center justify-center">
                 <span className="text-gray-400 text-xl">⭐</span>
               </div>
               <div className="text-xs text-center">
                 <div className="font-medium">Monochrome</div>
-                <div className="text-gray-500">SVG • 32x24</div>
+                <div className="text-muted-foreground">SVG • 32x24</div>
               </div>
             </div>
           </div>
@@ -147,9 +147,9 @@ export function AssetsLibrary() {
                 <div className="space-y-2">
                   <div className="p-3 border rounded-lg">
                     <div className="text-lg font-bold mb-1">Inter Regular</div>
-                    <div className="text-sm text-gray-600">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
-                    <div className="text-sm text-gray-600">abcdefghijklmnopqrstuvwxyz</div>
-                    <div className="text-xs text-gray-500 mt-2">
+                    <div className="text-sm text-muted-foreground">ABCDEFGHIJKLMNOPQRSTUVWXYZ</div>
+                    <div className="text-sm text-muted-foreground">abcdefghijklmnopqrstuvwxyz</div>
+                    <div className="text-xs text-muted-foreground mt-2">
                       <Badge variant="secondary">WOFF2</Badge>
                       <Badge variant="secondary" className="ml-1">
                         TTF
@@ -164,9 +164,9 @@ export function AssetsLibrary() {
                 <div className="space-y-2">
                   <div className="p-3 border rounded-lg">
                     <div className="text-lg font-bold mb-1">Noto Sans Somali</div>
-                    <div className="text-sm text-gray-600">Kalandarka Soomaaliyeed</div>
-                    <div className="text-sm text-gray-600">Dhaqanka iyo Xiddigiska</div>
-                    <div className="text-xs text-gray-500 mt-2">
+                    <div className="text-sm text-muted-foreground">Kalandarka Soomaaliyeed</div>
+                    <div className="text-sm text-muted-foreground">Dhaqanka iyo Xiddigiska</div>
+                    <div className="text-xs text-muted-foreground mt-2">
                       <Badge variant="secondary">WOFF2</Badge>
                       <Badge variant="secondary" className="ml-1">
                         TTF
@@ -182,18 +182,18 @@ export function AssetsLibrary() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div className="space-y-2">
                   <h4 className="font-medium">Headers & Titles</h4>
-                  <p className="text-gray-600">Inter Bold, 18-32px</p>
-                  <p className="text-gray-600">Line height: 1.2-1.4</p>
+                  <p className="text-muted-foreground">Inter Bold, 18-32px</p>
+                  <p className="text-muted-foreground">Line height: 1.2-1.4</p>
                 </div>
                 <div className="space-y-2">
                   <h4 className="font-medium">Body Text</h4>
-                  <p className="text-gray-600">Inter Regular, 14-16px</p>
-                  <p className="text-gray-600">Line height: 1.5-1.6</p>
+                  <p className="text-muted-foreground">Inter Regular, 14-16px</p>
+                  <p className="text-muted-foreground">Line height: 1.5-1.6</p>
                 </div>
                 <div className="space-y-2">
                   <h4 className="font-medium">Captions</h4>
-                  <p className="text-gray-600">Inter Medium, 12-14px</p>
-                  <p className="text-gray-600">Line height: 1.4-1.5</p>
+                  <p className="text-muted-foreground">Inter Medium, 12-14px</p>
+                  <p className="text-muted-foreground">Line height: 1.4-1.5</p>
                 </div>
               </div>
             </div>
@@ -214,7 +214,7 @@ export function AssetsLibrary() {
             {screenshots.map((screenshot, index) => (
               <div key={index} className="space-y-3">
                 <div className="aspect-[9/19.5] bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-4 bg-white rounded-lg shadow-sm flex flex-col">
+                  <div className="absolute inset-4 bg-card rounded-lg shadow-sm flex flex-col">
                     <div className="h-8 bg-gradient-to-r from-orange-400 to-red-500 rounded-t-lg flex items-center justify-center">
                       <span className="text-white text-xs font-bold">Dabshid Calendar</span>
                     </div>
@@ -222,7 +222,7 @@ export function AssetsLibrary() {
                       {index === 0 && (
                         <div className="grid grid-cols-7 gap-1 text-xs">
                           {Array.from({ length: 35 }, (_, i) => (
-                            <div key={i} className="aspect-square bg-gray-100 rounded flex items-center justify-center">
+                            <div key={i} className="aspect-square bg-muted rounded flex items-center justify-center">
                               {i > 6 && i < 28 ? i - 6 : ""}
                             </div>
                           ))}
@@ -239,8 +239,8 @@ export function AssetsLibrary() {
                       {index === 2 && (
                         <div className="space-y-2">
                           <div className="h-3 bg-orange-500 rounded"></div>
-                          <div className="h-1 bg-gray-200 rounded"></div>
-                          <div className="h-1 bg-gray-200 rounded w-3/4"></div>
+                          <div className="h-1 bg-accent rounded"></div>
+                          <div className="h-1 bg-accent rounded w-3/4"></div>
                         </div>
                       )}
                       {index === 3 && (
@@ -265,8 +265,8 @@ export function AssetsLibrary() {
                 </div>
                 <div className="text-center">
                   <div className="text-xs font-medium">{screenshot.name}</div>
-                  <div className="text-xs text-gray-500">{screenshot.size}</div>
-                  <div className="text-xs text-gray-600 mt-1">{screenshot.description}</div>
+                  <div className="text-xs text-muted-foreground">{screenshot.size}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{screenshot.description}</div>
                   <Button size="sm" variant="outline" className="mt-2 bg-transparent">
                     <Download className="h-3 w-3 mr-1" />
                     Download
@@ -290,19 +290,19 @@ export function AssetsLibrary() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>App Icon</span>
-                  <span className="text-gray-600">1024x1024 PNG</span>
+                  <span className="text-muted-foreground">1024x1024 PNG</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Launch Screen</span>
-                  <span className="text-gray-600">1125x2436 PNG</span>
+                  <span className="text-muted-foreground">1125x2436 PNG</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Screenshots</span>
-                  <span className="text-gray-600">1242x2688 PNG</span>
+                  <span className="text-muted-foreground">1242x2688 PNG</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Tab Bar Icons</span>
-                  <span className="text-gray-600">25x25 PDF</span>
+                  <span className="text-muted-foreground">25x25 PDF</span>
                 </div>
               </div>
             </div>
@@ -312,19 +312,19 @@ export function AssetsLibrary() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>App Icon</span>
-                  <span className="text-gray-600">512x512 PNG</span>
+                  <span className="text-muted-foreground">512x512 PNG</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Feature Graphic</span>
-                  <span className="text-gray-600">1024x500 PNG</span>
+                  <span className="text-muted-foreground">1024x500 PNG</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Screenshots</span>
-                  <span className="text-gray-600">1080x1920 PNG</span>
+                  <span className="text-muted-foreground">1080x1920 PNG</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Notification Icons</span>
-                  <span className="text-gray-600">24x24 PNG</span>
+                  <span className="text-muted-foreground">24x24 PNG</span>
                 </div>
               </div>
             </div>

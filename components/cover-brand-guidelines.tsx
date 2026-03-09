@@ -102,7 +102,7 @@ export function CoverBrandGuidelines() {
         <CardContent>
           <div className="bg-gradient-to-br from-orange-400 via-red-500 to-pink-600 rounded-lg p-8 text-white text-center">
             <div className="space-y-6">
-              <div className="w-24 h-24 bg-white/20 rounded-full mx-auto flex items-center justify-center backdrop-blur-sm">
+              <div className="w-24 h-24 bg-card/20 rounded-full mx-auto flex items-center justify-center backdrop-blur-sm">
                 <span className="text-4xl">🐪</span>
               </div>
               <div>
@@ -131,10 +131,10 @@ export function CoverBrandGuidelines() {
                 <div className="w-full h-24 rounded-lg shadow-sm" style={{ backgroundColor: color.hex }}></div>
                 <div className="space-y-1">
                   <h3 className="font-semibold text-sm">{color.name}</h3>
-                  <p className="text-xs text-gray-600">{color.description}</p>
+                  <p className="text-xs text-muted-foreground">{color.description}</p>
                   <div className="space-y-1 text-xs">
                     <div className="font-mono">{color.hex}</div>
-                    <div className="font-mono text-gray-500">rgb({color.rgb})</div>
+                    <div className="font-mono text-muted-foreground">rgb({color.rgb})</div>
                   </div>
                 </div>
               </div>
@@ -154,21 +154,21 @@ export function CoverBrandGuidelines() {
               <h3 className="font-semibold mb-4">Bilingual Font Pairing</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-gray-600">English Typography</h4>
+                  <h4 className="text-sm font-medium text-muted-foreground">English Typography</h4>
                   <div className="space-y-2">
                     <div className="text-3xl font-bold">Dabshid Calendar</div>
                     <div className="text-xl font-semibold">Traditional Somali Calendar</div>
                     <div className="text-base">Body text for descriptions and content</div>
-                    <div className="text-sm text-gray-600">Caption and helper text</div>
+                    <div className="text-sm text-muted-foreground">Caption and helper text</div>
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-gray-600">Somali Typography</h4>
+                  <h4 className="text-sm font-medium text-muted-foreground">Somali Typography</h4>
                   <div className="space-y-2">
                     <div className="text-3xl font-bold">Kalandarka Dabshid</div>
                     <div className="text-xl font-semibold">Kalandarka Dhaqameedka Soomaaliyeed</div>
                     <div className="text-base">Qoraalka guud ee sharaxaadda iyo waxyaabaha</div>
-                    <div className="text-sm text-gray-600">Qoraalka yar ee caawinta</div>
+                    <div className="text-sm text-muted-foreground">Qoraalka yar ee caawinta</div>
                   </div>
                 </div>
               </div>
@@ -180,17 +180,17 @@ export function CoverBrandGuidelines() {
                 <div className="space-y-2">
                   <h4 className="font-medium">Primary Font</h4>
                   <p>Inter (Latin script)</p>
-                  <p className="text-gray-600">Modern, clean, highly legible</p>
+                  <p className="text-muted-foreground">Modern, clean, highly legible</p>
                 </div>
                 <div className="space-y-2">
                   <h4 className="font-medium">Secondary Font</h4>
                   <p>Noto Sans (Somali support)</p>
-                  <p className="text-gray-600">Comprehensive language support</p>
+                  <p className="text-muted-foreground">Comprehensive language support</p>
                 </div>
                 <div className="space-y-2">
                   <h4 className="font-medium">Display Font</h4>
                   <p>Custom Serif (Headers)</p>
-                  <p className="text-gray-600">Cultural, warm, traditional</p>
+                  <p className="text-muted-foreground">Cultural, warm, traditional</p>
                 </div>
               </div>
             </div>

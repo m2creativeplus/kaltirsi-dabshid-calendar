@@ -71,11 +71,11 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
   return (
     <div className="flex flex-col h-full">
       {/* Week header */}
-      <div className="grid grid-cols-7 border-b border-gray-200">
+      <div className="grid grid-cols-7 border-b border-border">
         {weekDays.map((day) => (
           <div
             key={day}
-            className="p-3 text-center text-sm font-medium text-gray-500 border-r border-gray-200 last:border-r-0"
+            className="p-3 text-center text-sm font-medium text-muted-foreground border-r border-border last:border-r-0"
           >
             {day}
           </div>
@@ -113,8 +113,8 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
             <div
               key={index}
               className={cn(
-                "group relative border-r border-b border-gray-200 last:border-r-0 p-2 min-h-[120px] cursor-pointer hover:bg-gray-50 transition-colors",
-                !isCurrentMonth && "bg-gray-50/50 text-gray-400",
+                "group relative border-r border-b border-border last:border-r-0 p-2 min-h-[120px] cursor-pointer hover:bg-muted/50 transition-colors",
+                !isCurrentMonth && "bg-muted/50/50 text-gray-400",
                 isCurrentDay && "bg-accent/10"
               )}
               onClick={() => onDateClick(date)}
@@ -129,7 +129,7 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
                       "text-sm font-medium transition-all",
                       isCurrentDay 
                         ? "bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center shadow-sm"
-                        : "text-gray-700" 
+                        : "text-foreground" 
                     )}
                   >
                     {date.getDate()}
@@ -172,7 +172,7 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
                   </div>
                 ))}
                 {allEvents.length > 4 && (
-                  <div className="text-[10px] text-gray-500 font-medium pl-1">
+                  <div className="text-[10px] text-muted-foreground font-medium pl-1">
                     +{allEvents.length - 4} more
                   </div>
                 )}

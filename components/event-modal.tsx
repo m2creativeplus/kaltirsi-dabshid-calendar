@@ -100,9 +100,9 @@ export function EventModal({ date, event, onClose }: EventModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+      <div className="bg-card rounded-lg shadow-xl w-full max-w-md mx-4">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="text-lg font-semibold">{event ? "Edit Event" : "Create Event"}</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-5 w-5" />
@@ -121,12 +121,12 @@ export function EventModal({ date, event, onClose }: EventModalProps) {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="h-4 w-4" />
               {date.toLocaleDateString()}
             </div>
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-gray-600" />
+              <Clock className="h-4 w-4 text-muted-foreground" />
               <Input 
                 type="time" 
                 className="text-sm"
@@ -201,7 +201,7 @@ export function EventModal({ date, event, onClose }: EventModalProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-gray-600" />
+            <MapPin className="h-4 w-4 text-muted-foreground" />
             <Input 
               placeholder="Location" 
               value={location}
@@ -224,7 +224,7 @@ export function EventModal({ date, event, onClose }: EventModalProps) {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-between items-center p-4 border-t border-gray-200">
+        <div className="flex justify-between items-center p-4 border-t border-border">
           <div>
             {event && (
               <Button 

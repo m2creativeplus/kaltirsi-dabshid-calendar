@@ -58,7 +58,7 @@ export function MonthlyDetail({ month, onBack }: MonthlyDetailProps) {
         <CardContent className="p-4">
           <h3 className="font-semibold mb-2">Climate & Rainfall</h3>
           <p className="text-sm text-muted-foreground">{data.climate}</p>
-          <div className="mt-3 h-2 bg-gray-200 rounded-full">
+          <div className="mt-3 h-2 bg-accent rounded-full">
             <div className="h-2 bg-blue-500 rounded-full w-1/4"></div>
           </div>
           <p className="text-xs text-muted-foreground mt-1">25% chance of rain</p>

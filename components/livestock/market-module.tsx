@@ -38,7 +38,7 @@ export function MarketModule() {
                 <TableCell>
                   {item.trend === "up" && <div className="flex items-center text-green-600"><TrendingUp className="h-4 w-4 mr-1"/> +2.5%</div>}
                   {item.trend === "down" && <div className="flex items-center text-red-600"><TrendingDown className="h-4 w-4 mr-1"/> -1.2%</div>}
-                  {item.trend === "stable" && <div className="flex items-center text-gray-500"><Minus className="h-4 w-4 mr-1"/> 0.0%</div>}
+                  {item.trend === "stable" && <div className="flex items-center text-muted-foreground"><Minus className="h-4 w-4 mr-1"/> 0.0%</div>}
                 </TableCell>
               </TableRow>
             ))}

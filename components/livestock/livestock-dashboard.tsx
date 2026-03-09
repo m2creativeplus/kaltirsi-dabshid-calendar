@@ -12,9 +12,9 @@ import { CommunityKnowledge } from "@/components/livestock/community-knowledge"
 
 export function LivestockDashboard() {
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-6 space-y-6 bg-muted/50 min-h-screen">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Livestock Management</h1>
+        <h1 className="text-3xl font-bold text-foreground">Livestock Management</h1>
         <Button className="bg-green-700 hover:bg-green-800">
           <Plus className="h-4 w-4 mr-2" />
           Add Animal
@@ -26,7 +26,7 @@ export function LivestockDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Herd</CardTitle>
-            <PawPrint className="h-4 w-4 text-gray-500" />
+            <PawPrint className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">142</div>

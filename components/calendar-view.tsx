@@ -90,7 +90,7 @@ export default function CalendarView() {
             >
               {t(`season.${calendarData.season.toLowerCase()}`)}
             </div>
-            <div className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+            <div className="px-2 py-1 text-xs rounded-full bg-muted text-foreground dark:bg-gray-800 dark:text-gray-200">
               {calendarData.somaliYear}
             </div>
           </div>

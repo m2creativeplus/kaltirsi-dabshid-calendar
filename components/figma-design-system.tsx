@@ -11,17 +11,17 @@ export default function FigmaDesignSystem() {
   return (
     <div className="w-full">
       {/* Figma-style Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-card border-b border-border px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Somali Calendar App 2025</h1>
-            <p className="text-sm text-gray-600">Figma Design System & Prototypes</p>
+            <h1 className="text-2xl font-bold text-foreground">Somali Calendar App 2025</h1>
+            <p className="text-sm text-muted-foreground">Figma Design System & Prototypes</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center">
               <span className="text-white text-sm font-bold">SC</span>
             </div>
-            <span className="text-sm text-gray-600">Design System v1.0</span>
+            <span className="text-sm text-muted-foreground">Design System v1.0</span>
           </div>
         </div>
       </div>

@@ -18,7 +18,7 @@ export function WeatherIndicator() {
             <span className="text-xs">28°C</span>
           </div>
           <div className="flex items-center gap-2">
-            <Wind className="h-4 w-4 text-gray-500" />
+            <Wind className="h-4 w-4 text-muted-foreground" />
             <span className="text-xs">NE Winds</span>
           </div>
         </div>

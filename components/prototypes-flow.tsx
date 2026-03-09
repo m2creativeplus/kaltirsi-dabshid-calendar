@@ -75,14 +75,14 @@ export function PrototypesFlow() {
                 <div className={`w-3 h-3 rounded-full ${flow.color}`}></div>
                 {flow.title}
               </CardTitle>
-              <p className="text-xs text-gray-600">{flow.description}</p>
+              <p className="text-xs text-muted-foreground">{flow.description}</p>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-2">
                   {flow.steps.map((step, index) => (
                     <div key={index} className="flex items-center gap-1">
-                      <div className="bg-gray-100 px-2 py-1 rounded text-xs">{step}</div>
+                      <div className="bg-muted px-2 py-1 rounded text-xs">{step}</div>
                       {index < flow.steps.length - 1 && <ArrowRight className="h-3 w-3 text-gray-400" />}
                     </div>
                   ))}
@@ -103,12 +103,12 @@ export function PrototypesFlow() {
           <CardTitle>🎮 Interactive Prototype Preview</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="bg-gray-100 rounded-lg p-8 text-center">
+          <div className="bg-muted rounded-lg p-8 text-center">
             <div className="max-w-sm mx-auto">
-              <div className="bg-white rounded-2xl shadow-lg p-4 mb-4">
+              <div className="bg-card rounded-2xl shadow-lg p-4 mb-4">
                 <div className="aspect-[9/16] bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center text-white">
                   <div className="text-center">
-                    <div className="w-12 h-12 bg-white/20 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <div className="w-12 h-12 bg-card/20 rounded-full mx-auto mb-2 flex items-center justify-center">
                       <span className="text-xl">🐪</span>
                     </div>
                     <h3 className="font-bold">Dabshid Calendar</h3>
@@ -142,19 +142,19 @@ export function PrototypesFlow() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Swipe Left/Right</span>
-                  <span className="text-gray-600">Navigate months</span>
+                  <span className="text-muted-foreground">Navigate months</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Tap & Hold</span>
-                  <span className="text-gray-600">Quick event creation</span>
+                  <span className="text-muted-foreground">Quick event creation</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Pull to Refresh</span>
-                  <span className="text-gray-600">Sync calendar data</span>
+                  <span className="text-muted-foreground">Sync calendar data</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Pinch to Zoom</span>
-                  <span className="text-gray-600">Month/Week view toggle</span>
+                  <span className="text-muted-foreground">Month/Week view toggle</span>
                 </div>
               </div>
             </div>
@@ -164,19 +164,19 @@ export function PrototypesFlow() {
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Page Transitions</span>
-                  <span className="text-gray-600">300ms ease-out</span>
+                  <span className="text-muted-foreground">300ms ease-out</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Button Press</span>
-                  <span className="text-gray-600">Scale 0.95, 150ms</span>
+                  <span className="text-muted-foreground">Scale 0.95, 150ms</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Modal Appearance</span>
-                  <span className="text-gray-600">Slide up, 250ms</span>
+                  <span className="text-muted-foreground">Slide up, 250ms</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Loading States</span>
-                  <span className="text-gray-600">Skeleton shimmer</span>
+                  <span className="text-muted-foreground">Skeleton shimmer</span>
                 </div>
               </div>
             </div>

@@ -66,9 +66,9 @@ export function UIComponentsLibrary() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="space-y-4">
               <h3 className="font-semibold">Default State</h3>
-              <div className="w-16 h-16 border border-gray-200 rounded-lg flex flex-col items-center justify-center hover:bg-gray-50 cursor-pointer">
+              <div className="w-16 h-16 border border-border rounded-lg flex flex-col items-center justify-center hover:bg-muted/50 cursor-pointer">
                 <span className="text-sm font-medium">15</span>
-                <span className="text-xs text-gray-500">Xays</span>
+                <span className="text-xs text-muted-foreground">Xays</span>
               </div>
             </div>
 
@@ -90,7 +90,7 @@ export function UIComponentsLibrary() {
 
             <div className="space-y-4">
               <h3 className="font-semibold">Disabled State</h3>
-              <div className="w-16 h-16 bg-gray-100 text-gray-400 rounded-lg flex flex-col items-center justify-center cursor-not-allowed">
+              <div className="w-16 h-16 bg-muted text-gray-400 rounded-lg flex flex-col items-center justify-center cursor-not-allowed">
                 <span className="text-sm font-medium">25</span>
                 <span className="text-xs">Past</span>
               </div>
@@ -113,16 +113,16 @@ export function UIComponentsLibrary() {
                   <p className="text-orange-100 text-sm">January 2025 • Jiilaal Season</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-card/20">
                     Today
                   </Button>
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <Badge variant="secondary" className="bg-white/20 text-white">
+                <Badge variant="secondary" className="bg-card/20 text-white">
                   Week 3
                 </Badge>
-                <Badge variant="secondary" className="bg-white/20 text-white">
+                <Badge variant="secondary" className="bg-card/20 text-white">
                   Hijri: 1446
                 </Badge>
               </div>
@@ -138,16 +138,16 @@ export function UIComponentsLibrary() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="flex bg-gray-100 rounded-lg p-1">
-              <button className="flex-1 py-2 px-4 bg-white rounded-md shadow-sm text-sm font-medium">Gregorian</button>
-              <button className="flex-1 py-2 px-4 text-sm font-medium text-gray-600 hover:text-gray-900">Somali</button>
-              <button className="flex-1 py-2 px-4 text-sm font-medium text-gray-600 hover:text-gray-900">Hijri</button>
+            <div className="flex bg-muted rounded-lg p-1">
+              <button className="flex-1 py-2 px-4 bg-card rounded-md shadow-sm text-sm font-medium">Gregorian</button>
+              <button className="flex-1 py-2 px-4 text-sm font-medium text-muted-foreground hover:text-foreground">Somali</button>
+              <button className="flex-1 py-2 px-4 text-sm font-medium text-muted-foreground hover:text-foreground">Hijri</button>
             </div>
 
-            <div className="flex bg-gray-100 rounded-lg p-1">
-              <button className="flex-1 py-2 px-4 text-sm font-medium text-gray-600 hover:text-gray-900">Month</button>
-              <button className="flex-1 py-2 px-4 bg-white rounded-md shadow-sm text-sm font-medium">Week</button>
-              <button className="flex-1 py-2 px-4 text-sm font-medium text-gray-600 hover:text-gray-900">Day</button>
+            <div className="flex bg-muted rounded-lg p-1">
+              <button className="flex-1 py-2 px-4 text-sm font-medium text-muted-foreground hover:text-foreground">Month</button>
+              <button className="flex-1 py-2 px-4 bg-card rounded-md shadow-sm text-sm font-medium">Week</button>
+              <button className="flex-1 py-2 px-4 text-sm font-medium text-muted-foreground hover:text-foreground">Day</button>
             </div>
           </div>
         </CardContent>
@@ -169,8 +169,8 @@ export function UIComponentsLibrary() {
                 <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <Sun className="h-5 w-5 text-yellow-600" />
                 </div>
-                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Cloud className="h-5 w-5 text-gray-600" />
+                <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
+                  <Cloud className="h-5 w-5 text-muted-foreground" />
                 </div>
               </div>
             </div>
