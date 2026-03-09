@@ -7,7 +7,6 @@ import { api } from "@/convex/_generated/api";
 type AuthContextType = {
   token: string | null;
   user: any | null;
-  isLoading: boolean;
   login: (token: string) => void;
   logout: () => void;
 };
@@ -16,14 +15,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check localStorage hydration
+    // Check localStorage hydration only on client
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("kaltirsi_auth_token");
       if (stored) setToken(stored);
-      setIsLoading(false);
     }
   }, []);
 
@@ -41,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ token, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
