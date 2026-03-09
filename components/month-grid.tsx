@@ -94,13 +94,11 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
           // Combine hardcoded cultural events with dynamic user events
           const culturalEvents = getCalendarEvents(date)
           const dailyUserEvents = userEvents
-            .filter(e => e.gregorianDate === dateStr)
+            .filter(e => e.startDate === dateStr)
             .map(e => ({
-              titleKey: e.title, // Treat title as key for rendering consistency or direct string
-              type: e.eventType,
+              ...e,
+              titleKey: e.title,
               isUserEvent: true,
-              // Map user event types to standard types for color logic if needed
-              ...e
             }))
 
           // Merge events - careful with typing. Simple view for now.
@@ -144,18 +142,24 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
 
               {/* Events */}
               <div className="space-y-1 pl-2">
-                {allEvents.slice(0, 4).map((event, eventIndex) => (
+                {allEvents.slice(0, 4).map((event: any, eventIndex) => (
                   <div
                     key={eventIndex}
                     className={cn(
                       "text-[10px] px-1.5 py-0.5 rounded text-white truncate shadow-sm cursor-pointer hover:opacity-90",
+                      // Custom mapping based on real Convex fields or mock events
                       event.type === "cultural" && "bg-orange-500",
                       event.type === "agricultural" && "bg-green-600",
                       event.type === "astronomical" && "bg-purple-600",
                       event.type === "holiday" && "bg-red-500",
+                      event.type === "national" && "bg-[#1EB53A]", // Gu' green by default for national
+                      // Ensure our defined styling passes through if present
+                      event.seasonalColor && `bg-[${event.seasonalColor}]`,
                       // User personal events if not typed
-                      !["cultural", "agricultural", "astronomical", "holiday"].includes(event.type) && "bg-blue-500"
+                      !["cultural", "agricultural", "astronomical", "holiday", "national"].includes(event.type) && !event.seasonalColor && "bg-blue-500"
                     )}
+                    // Force inline style application for the specific seasonal color if provided (Tailwind JIT dynamic classes workaround)
+                    style={event.seasonalColor ? { backgroundColor: event.seasonalColor } : {}}
                     title={event.title}
                     onClick={(e) => {
                       e.stopPropagation()

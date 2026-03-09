@@ -23,9 +23,18 @@ type ViewType = "month" | "week" | "day"
 
 export default function GoogleCalendarView() {
   const { t } = useCultural()
+  const [mounted, setMounted] = useState(false)
   const [currentDate, setCurrentDate] = useState(new Date(2025, 0, 1))
   const [viewType, setViewType] = useState<ViewType>("month")
   const [showEventModal, setShowEventModal] = useState(false)
+
+  // Wait for client hydration to avoid timezone mismatches
+  if (!mounted) {
+    if (typeof window !== "undefined") {
+       setTimeout(() => setMounted(true), 0)
+    }
+    return <div className="flex h-screen items-center justify-center">Loading Calendar...</div>
+  }
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<any>(null) // Typed as any for flexibility, ideally match Event interface
   const [sidebarOpen, setSidebarOpen] = useState(true)

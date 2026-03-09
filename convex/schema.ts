@@ -2,9 +2,26 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+  // Core user accounts for custom authentication
+  users: defineTable({
+    email: v.string(),
+    passwordHash: v.string(),
+    name: v.string(),
+    role: v.string(), // "admin" | "user"
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_email", ["email"]),
+
+  // Sessions for custom auth JWT-like tokens
+  sessions: defineTable({
+    userId: v.id("users"),
+    token: v.string(),
+    expiresAt: v.number(),
+  }).index("by_token", ["token"]),
+
   // User preferences for personalization
   userPreferences: defineTable({
-    clerkId: v.string(),
+    userId: v.string(),
     language: v.string(), // "so" | "en" | "ar"
     theme: v.string(), // "light" | "dark" | "system"
     region: v.string(), // Somali regions
@@ -12,26 +29,25 @@ export default defineSchema({
     notifications: v.boolean(),
     createdAt: v.number(),
     updatedAt: v.number(),
-  }).index("by_clerk_id", ["clerkId"]),
+  }).index("by_user_id", ["userId"]),
 
-  // Custom user calendar events
-  customEvents: defineTable({
+  // Core Events Table for Calendar (Persistent & Real-time)
+  events: defineTable({
     userId: v.string(),
     title: v.string(),
     description: v.optional(v.string()),
-    kaltirsiDate: v.object({
-      day: v.number(),
-      month: v.number(),
-      year: v.number(),
-    }),
-    gregorianDate: v.string(), // ISO date string
-    eventType: v.string(), // "personal" | "cultural" | "agricultural" | "religious"
-    isRecurring: v.boolean(),
-    recurrencePattern: v.optional(v.string()),
-    reminders: v.optional(v.array(v.number())),
+    startDate: v.string(), // YYYY-MM-DD
+    endDate: v.optional(v.string()), // For multi-day events
+    startTime: v.optional(v.string()), // HH:mm
+    endTime: v.optional(v.string()), // HH:mm
+    type: v.string(), // "national" | "custom"
+    seasonalColor: v.string(), // "#1EB53A", "#E85D04", "#8B5A2B", "#4A5568"
+    recurrenceRule: v.optional(v.string()), // "daily" | "weekly" | "monthly" | "yearly"
+    timezone: v.string(), // Default UTC+3
     createdAt: v.number(),
+    updatedAt: v.number(),
   }).index("by_user", ["userId"])
-    .index("by_date", ["gregorianDate"]),
+    .index("by_date", ["startDate"]),
 
   // Cultural stories and elder recordings
   culturalStories: defineTable({

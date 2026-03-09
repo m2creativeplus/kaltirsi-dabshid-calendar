@@ -18,7 +18,7 @@ export const updatePreferences = mutation({
 
     const user = await ctx.db
       .query("userPreferences")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .withIndex("by_user_id", (q) => q.eq("userId", identity.subject))
       .first();
 
     if (user) {
@@ -28,7 +28,7 @@ export const updatePreferences = mutation({
       });
     } else {
       await ctx.db.insert("userPreferences", {
-        clerkId: identity.subject,
+        userId: identity.subject,
         language: args.language || "so",
         theme: args.theme || "system",
         region: args.region || "Somaliland",
@@ -52,7 +52,7 @@ export const getPreferences = query({
 
     return await ctx.db
       .query("userPreferences")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .withIndex("by_user_id", (q) => q.eq("userId", identity.subject))
       .first();
   },
 });

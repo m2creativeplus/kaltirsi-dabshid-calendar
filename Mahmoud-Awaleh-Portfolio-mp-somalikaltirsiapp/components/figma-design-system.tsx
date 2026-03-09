@@ -14,8 +14,8 @@ export default function FigmaDesignSystem() {
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Somali Calendar App 2025</h1>
-            <p className="text-sm text-gray-600">Figma Design System & Prototypes</p>
+            <h1 className="text-2xl font-bold text-gray-900">Mahmoud Awaleh | Strategic Architect</h1>
+            <p className="text-sm text-gray-600">Building Digital Sovereignty & Tech Infrastructure in the Horn of Africa</p>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center">

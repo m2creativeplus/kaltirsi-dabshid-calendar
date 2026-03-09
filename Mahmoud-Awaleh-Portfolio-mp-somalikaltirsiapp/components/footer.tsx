@@ -15,7 +15,7 @@ const Footer = () => {
         backgroundColor: "transparent",
       }}
     >
-      <span>Naqshadeeye: Mohamoud Mohamed Awaleh ·</span>
+      <span>Eng. Mahmoud Mohamed Awaleh · Strategic Architect ·</span>
       <a
         href="https://m2awaleh.vercel.app"
         target="_blank"
@@ -34,7 +34,7 @@ const Footer = () => {
         🔗
       </a>
       <a
-        href="https://behance.net/m2creative"
+        href="https://behance.net/mahmoudawaleh"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Behance"
@@ -52,16 +52,7 @@ const Footer = () => {
         📷
       </a>
       <a
-        href="https://twitter.com/m2awaleh"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Twitter"
-        style={{ color: "#1E90FF", fontSize: 16, margin: "0 4px" }}
-      >
-        🐦
-      </a>
-      <a
-        href="https://facebook.com/m2awaleh"
+        href="https://facebook.com/mahmoud.awaleh"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Facebook"

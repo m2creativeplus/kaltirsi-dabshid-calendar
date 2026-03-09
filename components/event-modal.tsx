@@ -11,14 +11,16 @@ import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
 
+import { useAuth } from "@/components/auth-provider"
+
 interface EventModalProps {
   date: Date
   event?: {
-    _id: Id<"customEvents">
+    _id: Id<"events">
     title: string
     description?: string
-    gregorianDate: string
-    eventType: string
+    startDate: string
+    type: string
     // Add other fields if needed
   }
   onClose: () => void
@@ -26,13 +28,15 @@ interface EventModalProps {
 
 export function EventModal({ date, event, onClose }: EventModalProps) {
   const { t } = useCultural()
-  const [eventType, setEventType] = useState(event?.eventType || "cultural")
+  const { token } = useAuth()
+  const [eventType, setEventType] = useState(event?.type || "cultural")
   const [title, setTitle] = useState(event?.title || "")
   const [description, setDescription] = useState(event?.description || "")
   const [time, setTime] = useState("")
   const [location, setLocation] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [recurrenceRule, setRecurrenceRule] = useState("none")
 
   const createEvent = useMutation(api.events.createEvent)
   const updateEvent = useMutation(api.events.updateEvent)
@@ -42,7 +46,7 @@ export function EventModal({ date, event, onClose }: EventModalProps) {
     if (event) {
       setTitle(event.title)
       setDescription(event.description || "")
-      setEventType(event.eventType)
+      setEventType(event.type)
     }
   }, [event])
 
@@ -54,18 +58,21 @@ export function EventModal({ date, event, onClose }: EventModalProps) {
       if (event) {
         await updateEvent({
           id: event._id,
+          token: token || undefined,
           title,
           description,
-          gregorianDate: date.toISOString().split('T')[0],
-          eventType,
+          startDate: date.toISOString().split('T')[0],
+          type: eventType,
+          recurrenceRule: recurrenceRule !== "none" ? recurrenceRule : undefined,
         })
       } else {
         await createEvent({
+          token: token || undefined,
           title,
           description,
-          gregorianDate: date.toISOString().split('T')[0], // YYYY-MM-DD
-          eventType,
-          // We could calculate Kaltirsi date here or let backend/engine handle it
+          startDate: date.toISOString().split('T')[0], // YYYY-MM-DD
+          type: eventType,
+          recurrenceRule: recurrenceRule !== "none" ? recurrenceRule : undefined,
         })
       }
       onClose()
@@ -82,7 +89,7 @@ export function EventModal({ date, event, onClose }: EventModalProps) {
 
     setIsDeleting(true)
     try {
-      await deleteEvent({ id: event._id })
+      await deleteEvent({ id: event._id, token: token || undefined })
       onClose()
     } catch (error) {
       console.error("Failed to delete event:", error)
@@ -159,6 +166,27 @@ export function EventModal({ date, event, onClose }: EventModalProps) {
                     Holiday
                   </div>
                 </SelectItem>
+                <SelectItem value="national">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-[#1EB53A] rounded"></div>
+                    National (Somaliland)
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+             <Select value={recurrenceRule} onValueChange={setRecurrenceRule}>
+              <SelectTrigger>
+                <SelectValue placeholder="Recurrence" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Does not repeat</SelectItem>
+                <SelectItem value="daily">Daily</SelectItem>
+                <SelectItem value="weekly">Weekly</SelectItem>
+                <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectItem value="yearly">Yearly</SelectItem>
               </SelectContent>
             </Select>
           </div>

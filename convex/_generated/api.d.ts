@@ -8,6 +8,8 @@
  * @module
  */
 
+import type * as authActions from "../authActions.js";
+import type * as crons from "../crons.js";
 import type * as events from "../events.js";
 import type * as references from "../references.js";
 import type * as seed from "../seed.js";
@@ -21,6 +23,8 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  authActions: typeof authActions;
+  crons: typeof crons;
   events: typeof events;
   references: typeof references;
   seed: typeof seed;
