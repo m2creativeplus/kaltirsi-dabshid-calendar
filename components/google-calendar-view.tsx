@@ -23,25 +23,9 @@ type ViewType = "month" | "week" | "day"
 
 export default function GoogleCalendarView() {
   const { t } = useCultural()
-  const [mounted, setMounted] = useState(false)
   const [currentDate, setCurrentDate] = useState(new Date(2025, 0, 1))
   const [viewType, setViewType] = useState<ViewType>("month")
   const [showEventModal, setShowEventModal] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return (
-      <div className="flex h-screen bg-white">
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-500 mb-4" />
-          <p className="text-gray-500 font-medium">Loading Dabshid Calendar...</p>
-        </div>
-      </div>
-    )
-  }
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<any>(null) // Typed as any for flexibility, ideally match Event interface
   const [sidebarOpen, setSidebarOpen] = useState(true)
