@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search, Settings, Menu, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,7 +14,7 @@ import { EventModal } from "@/components/event-modal"
 import { Id } from "@/convex/_generated/dataModel"
 import { KaltirsiEngine, getSeason, MONTHS_SOLAR } from "@/lib/kaltirsi-engine"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Sparkles, Sun, CloudRain, Cloud, Thermometer } from "lucide-react"
+import { Sparkles, Sun, CloudRain, Cloud, Thermometer, Loader2 } from "lucide-react"
 import { SomaliClock } from "@/components/somali-clock"
 import { motion } from "framer-motion"
 import { KaltirsiStats } from "@/components/kaltirsi-stats"
@@ -28,12 +28,19 @@ export default function GoogleCalendarView() {
   const [viewType, setViewType] = useState<ViewType>("month")
   const [showEventModal, setShowEventModal] = useState(false)
 
-  // Wait for client hydration to avoid timezone mismatches
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   if (!mounted) {
-    if (typeof window !== "undefined") {
-       setTimeout(() => setMounted(true), 0)
-    }
-    return <div className="flex h-screen items-center justify-center">Loading Calendar...</div>
+    return (
+      <div className="flex h-screen bg-white">
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-500 mb-4" />
+          <p className="text-gray-500 font-medium">Loading Dabshid Calendar...</p>
+        </div>
+      </div>
+    )
   }
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<any>(null) // Typed as any for flexibility, ideally match Event interface

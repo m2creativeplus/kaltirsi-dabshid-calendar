@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { KaltirsiEngine } from "@/lib/kaltirsi-engine"
+import { useState, useEffect } from "react"
 
 const getKaltirsiStats = (currentDate: Date) => {
   const kaltirsiDate = KaltirsiEngine.gregorianToKaltirsi(currentDate)
@@ -23,7 +24,15 @@ const getKaltirsiStats = (currentDate: Date) => {
 }
 
 export function KaltirsiStats() {
-  const stats = getKaltirsiStats(new Date())
+  const [mounted, setMounted] = useState(false)
+  const [stats, setStats] = useState<{value: string, label: string}[]>([])
+
+  useEffect(() => {
+    setStats(getKaltirsiStats(new Date()))
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
   
   return (
     <section className="py-6 border-y border-border/30 bg-muted/10">
