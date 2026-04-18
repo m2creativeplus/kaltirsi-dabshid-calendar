@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { KaltirsiEngine } from "@/lib/kaltirsi-engine"
 import { cn } from "@/lib/utils"
 import { Sun, Moon, Sunrise, Sunset, Coffee, Eye, Tent, Star } from "lucide-react"
+import { useTelemetry, TelemetryEngine } from "@/lib/telemetry-engine"
 
 // ═══════════════════════════════════════════════════════════════════
 // GOORSHEEGTA — The Somali Environmental Clock
@@ -481,6 +482,19 @@ export function GoorsheegtaClock() {
   const [currentSegment, setCurrentSegment] = useState<GoorsheegtaSegment>(GOORSHEEGTA_SEGMENTS[0])
   const [time, setTime] = useState(new Date())
 
+  // Live astronomical telemetry
+  const { data: telemetry, isLoading: telLoading } = useTelemetry("Oogo")
+  const liveSunrise = telemetry.today.sunrise
+  const liveSunset = telemetry.today.sunset
+
+  const sunriseFormatted = useMemo(() => {
+    try { return new Date(liveSunrise).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }) } catch { return "06:00" }
+  }, [liveSunrise])
+  const sunsetFormatted = useMemo(() => {
+    try { return new Date(liveSunset).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }) } catch { return "18:00" }
+  }, [liveSunset])
+  const weatherState = TelemetryEngine.getWeatherState(telemetry.current.weatherCode)
+
   useEffect(() => {
     setCurrentSegment(getCurrentSegment())
     const interval = setInterval(() => {
@@ -511,6 +525,28 @@ export function GoorsheegtaClock() {
               {time.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false })}
             </div>
             <div className="text-[10px] text-white/60">{somaliTime}</div>
+          </div>
+        </div>
+        {/* Live Sun/Weather bar */}
+        <div className="flex items-center gap-4 mt-2 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <Sunrise className="h-3 w-3 text-amber-300" />
+            <span className="text-[10px] text-white/50">Waaberi:</span>
+            <span className="text-[10px] font-bold text-amber-300 font-mono">{sunriseFormatted}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Sunset className="h-3 w-3 text-purple-300" />
+            <span className="text-[10px] text-white/50">Gabbal-dhac:</span>
+            <span className="text-[10px] font-bold text-purple-300 font-mono">{sunsetFormatted}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Sun className="h-3 w-3 text-cyan-300" />
+            <span className="text-[10px] text-white/50">Cimilada:</span>
+            <span className="text-[10px] font-bold text-cyan-300">{weatherState.somali}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] text-white/40">🌡</span>
+            <span className="text-[10px] font-bold text-orange-300">{Math.round(telemetry.current.temp)}°C</span>
           </div>
         </div>
       </div>

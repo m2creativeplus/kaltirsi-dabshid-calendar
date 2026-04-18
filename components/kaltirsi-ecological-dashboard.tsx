@@ -10,8 +10,9 @@ import {
 import { cn } from "@/lib/utils"
 import {
   Sun, Moon, Star, Anchor, Leaf, Flame, Droplets, Wind,
-  ChevronRight, Calendar, Clock, TrendingUp, AlertTriangle
+  ChevronRight, Calendar, Clock, TrendingUp, AlertTriangle, CloudRain, ThermometerSun
 } from "lucide-react"
+import { useTelemetry, TelemetryEngine } from "@/lib/telemetry-engine"
 
 // ── LIVE CLOCK BAR ─────────────────────────────────────────────────
 function LiveChronometer() {
@@ -25,6 +26,10 @@ function LiveChronometer() {
   const somaliTime = useMemo(() => KaltirsiEngine.getSomaliTime(now), [now])
   const weekday = KALTIRSI_WEEKDAYS[now.getDay() === 0 ? 1 : now.getDay() === 6 ? 0 : now.getDay() + 1] || KALTIRSI_WEEKDAYS[0]
   const month = getCurrentKaltirsiMonth(kDate.month)
+
+  // Real-time environmental engine
+  const { data: telemetry, isLoading: telLoading } = useTelemetry("Oogo")
+  const weatherState = TelemetryEngine.getWeatherState(telemetry.current.weatherCode)
 
   return (
     <motion.div
@@ -64,13 +69,21 @@ function LiveChronometer() {
         </div>
       </div>
 
-      {/* Bottom: Grazing status bar */}
-      <div className="px-6 py-2.5 bg-black/20 backdrop-blur-sm flex items-center gap-6 flex-wrap">
+      {/* Bottom: Live Pastoral/Environmental Status Bar */}
+      <div className="px-6 py-2.5 bg-black/20 backdrop-blur-sm flex items-center gap-6 flex-wrap relative">
+        {telLoading && (
+           <div className="absolute inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-10">
+             <span className="text-[10px] text-white/50 uppercase tracking-widest font-mono animate-pulse">
+               📡 Connecting to Atmospheric Nodes...
+             </span>
+           </div>
+        )}
         {[
-          { icon: TrendingUp, label: "Grazing Index", value: `${month.grazingIndex}/10`, color: month.grazingIndex >= 7 ? "text-emerald-300" : month.grazingIndex >= 4 ? "text-amber-300" : "text-red-300" },
-          { icon: Droplets, label: "Drought Risk", value: month.droughtRisk.toUpperCase(), color: month.droughtRisk === "low" ? "text-emerald-300" : month.droughtRisk === "moderate" ? "text-amber-300" : "text-red-300" },
-          { icon: Anchor, label: "Maritime", value: month.maritimeNote.substring(0, 30) + "…", color: "text-cyan-300" },
-          { icon: Star, label: "Godka / Lunar Station", value: "Transition", color: "text-purple-300" },
+          { icon: ThermometerSun, label: "Caawa/Maanta", value: `${Math.round(telemetry.current.temp)}°C`, color: "text-orange-300" },
+          { icon: CloudRain, label: "Cimilada Hadda", value: weatherState.somali, color: "text-cyan-300" },
+          { icon: Wind, label: "Dabaylraac", value: `${telemetry.current.windSpeed} km/h`, color: "text-emerald-300" },
+          { icon: Droplets, label: "Dhedo/Qoyaan", value: `${telemetry.current.precipitation} mm`, color: "text-blue-300" },
+          { icon: Star, label: "Godka Hadda", value: "Qayd", color: "text-purple-300" },
         ].map((stat) => (
           <div key={stat.label} className="flex items-center gap-2">
             <stat.icon className={cn("h-3.5 w-3.5", stat.color)} />

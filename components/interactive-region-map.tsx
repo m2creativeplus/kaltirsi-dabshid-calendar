@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { useTelemetry, TelemetryEngine, SOMALILAND_REGIONS } from "@/lib/telemetry-engine"
+import { CloudRain, ThermometerSun, Wind, Droplets } from "lucide-react"
 
 type RegionId = "highlands" | "plains" | "coast" | "rivers"
 
@@ -64,6 +66,9 @@ export function InteractiveRegionMap() {
   const [activeRegion, setActiveRegion] = useState<RegionId>("plains")
   
   const currentRegion = REGIONS.find((r) => r.id === activeRegion)!
+  const telemetryKey = currentRegion.somaliName as keyof typeof SOMALILAND_REGIONS
+  const { data: telemetry, isLoading: telLoading } = useTelemetry(telemetryKey)
+  const weatherState = TelemetryEngine.getWeatherState(telemetry.current.weatherCode)
 
   return (
     <div className="space-y-6">
@@ -179,9 +184,52 @@ export function InteractiveRegionMap() {
                <h3 className="text-xl font-bold font-serif">{currentRegion.somaliName}</h3>
                <p className="text-sm text-muted-foreground uppercase tracking-wider mb-6">{currentRegion.name}</p>
                
-               <p className="text-sm text-foreground/80 mb-8 leading-relaxed">
+               <p className="text-sm text-foreground/80 mb-6 leading-relaxed">
                  {currentRegion.description}
                </p>
+               
+               {/* Live Telemetry Panel */}
+               <div className="bg-black/30 backdrop-blur-md rounded-2xl border border-white/5 p-4 mb-6 relative overflow-hidden">
+                  {telLoading && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10 backdrop-blur-sm">
+                       <span className="text-[10px] uppercase font-mono text-white/50 animate-pulse">📡 Syncing...</span>
+                    </div>
+                  )}
+                  <h4 className="text-[9px] uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                    Live Telemetry · {currentRegion.somaliName}
+                  </h4>
+                  
+                  <div className="grid grid-cols-2 gap-3 text-left">
+                     <div>
+                       <div className="flex items-center gap-1.5 mb-0.5">
+                         <ThermometerSun className="w-3 h-3 text-orange-400" />
+                         <span className="text-[10px] text-muted-foreground uppercase">Terkac / Temp</span>
+                       </div>
+                       <span className="text-lg font-bold text-foreground">{Math.round(telemetry.current.temp)}°C</span>
+                     </div>
+                     <div>
+                       <div className="flex items-center gap-1.5 mb-0.5">
+                         <CloudRain className="w-3 h-3 text-cyan-400" />
+                         <span className="text-[10px] text-muted-foreground uppercase">Cimilada</span>
+                       </div>
+                       <span className="text-sm font-bold text-foreground truncate block" title={weatherState.label}>{weatherState.somali}</span>
+                     </div>
+                     <div>
+                       <div className="flex items-center gap-1.5 mb-0.5">
+                         <Wind className="w-3 h-3 text-emerald-400" />
+                         <span className="text-[10px] text-muted-foreground uppercase">Dabayl</span>
+                       </div>
+                       <span className="text-sm font-bold text-foreground">{telemetry.current.windSpeed} km/h</span>
+                     </div>
+                     <div>
+                       <div className="flex items-center gap-1.5 mb-0.5">
+                         <Droplets className="w-3 h-3 text-blue-400" />
+                         <span className="text-[10px] text-muted-foreground uppercase">Dhedo</span>
+                       </div>
+                       <span className="text-sm font-bold text-foreground">{telemetry.current.precipitation} mm</span>
+                     </div>
+                  </div>
+               </div>
                
                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-muted-foreground">
                  <span className="opacity-70">Grazing Sensitvity:</span>
