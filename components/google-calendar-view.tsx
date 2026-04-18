@@ -15,6 +15,8 @@ import { KaltirsiHexTemporalCanvas } from "@/components/kaltirsi-3d-astrolabe"
 import { KaltirsiMonthStoryBanner } from "@/components/kaltirsi-month-story-banner"
 import { SomalilandHolidayTimeline } from "@/components/somaliland-holiday-timeline"
 import { KaltirsiWeekdayStrip } from "@/components/kaltirsi-weekday-strip"
+import { KaltirsiTripleCalendar } from "@/components/kaltirsi-triple-calendar"
+import { GoorsheegtaClock } from "@/components/goorsheegta-clock"
 import { Id } from "@/convex/_generated/dataModel"
 import { KaltirsiEngine, getSeason, MONTHS_SOLAR } from "@/lib/kaltirsi-engine"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -273,42 +275,46 @@ export default function GoogleCalendarView() {
 
         {/* Content Area — View-Dependent */}
         <div className="flex-1 overflow-auto">
-          {/* DAY VIEW: Full Kaltirsi Day Intelligence */}
+          {/* DAY VIEW: Maalin — Goorsheegta Clock + Day Grid + Triple Calendar */}
           {viewType === "day" && (
             <div className="px-6 py-4 space-y-6">
-              {/* Month Story Banner */}
               <KaltirsiMonthStoryBanner />
-              {/* Day Grid */}
-              <DayGrid currentDate={currentDate} onTimeClick={handleDateClick} />
-            </div>
-          )}
-
-          {/* MONTH VIEW: Calendar Grid + 3D Astrolabe + Holidays */}
-          {viewType === "month" && (
-            <div className="px-6 py-4 space-y-6">
-              {/* Month Story Banner */}
-              <KaltirsiMonthStoryBanner />
-
-              {/* Calendar Grid + Holiday Timeline side by side */}
               <div className="grid lg:grid-cols-5 gap-6">
-                <div className="lg:col-span-3">
-                  <MonthGrid
-                    currentDate={currentDate}
-                    onDateClick={handleDateClick}
-                    onEventClick={handleEventClick}
-                  />
+                <div className="lg:col-span-3 space-y-6">
+                  <GoorsheegtaClock />
+                  <DayGrid currentDate={currentDate} onTimeClick={handleDateClick} />
                 </div>
-                <div className="lg:col-span-2 overflow-y-auto max-h-[600px] pr-2">
+                <div className="lg:col-span-2 overflow-y-auto max-h-[900px] pr-2 space-y-6">
+                  <KaltirsiTripleCalendar />
                   <SomalilandHolidayTimeline />
                 </div>
               </div>
             </div>
           )}
 
-          {/* YEAR/WEEK VIEW: 3D Astrolabe + Full Hex-Temporal Overview */}
+          {/* MONTH VIEW: Bil — Calendar Grid + Triple Calendar + Holidays */}
+          {viewType === "month" && (
+            <div className="px-6 py-4 space-y-6">
+              <KaltirsiMonthStoryBanner />
+              <div className="grid lg:grid-cols-5 gap-6">
+                <div className="lg:col-span-3 space-y-6">
+                  <MonthGrid
+                    currentDate={currentDate}
+                    onDateClick={handleDateClick}
+                    onEventClick={handleEventClick}
+                  />
+                  <KaltirsiTripleCalendar />
+                </div>
+                <div className="lg:col-span-2 overflow-y-auto max-h-[900px] pr-2">
+                  <SomalilandHolidayTimeline />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* YEAR VIEW: Sannad — 3D Astrolabe + Triple Calendar + Holidays */}
           {viewType === "week" && (
             <div className="px-6 py-4 space-y-6">
-              {/* 3D Hex-Temporal Astrolabe */}
               <div className="grid lg:grid-cols-5 gap-6">
                 <div className="lg:col-span-3">
                   <KaltirsiHexTemporalCanvas />
@@ -317,7 +323,7 @@ export default function GoogleCalendarView() {
                   <SomalilandHolidayTimeline />
                 </div>
               </div>
-              {/* Month Story Banner */}
+              <KaltirsiTripleCalendar />
               <KaltirsiMonthStoryBanner />
             </div>
           )}
