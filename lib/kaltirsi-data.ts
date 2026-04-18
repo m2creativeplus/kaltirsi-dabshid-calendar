@@ -26,6 +26,8 @@ export interface HexTemporalMonth {
   proverbEnglish: string;         // English translation
   daysInMonth: number;            // Standard days (30 or 31)
   lunarEquivalent: string;        // Approximate Hijri month mapping
+  grazingIndex: number;           // 1-10: ecological grazing potential (1=critical stress, 10=peak abundance)
+  droughtRisk: "low" | "moderate" | "high" | "critical"; // Pastoral risk level
 }
 
 // --- Somaliland Public Holiday ---
@@ -95,6 +97,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "Fire is the beginning, and life is the beginning",
     daysInMonth: 31,
     lunarEquivalent: "Safar (approx)",
+    grazingIndex: 4,
+    droughtRisk: "high",
   },
   {
     id: 2,
@@ -115,6 +119,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "Sheep can survive little rain, but camels need abundance",
     daysInMonth: 30,
     lunarEquivalent: "Rabi' al-Awwal (approx)",
+    grazingIndex: 3,
+    droughtRisk: "high",
   },
   {
     id: 3,
@@ -135,6 +141,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "Heat is a test, and endurance is victory",
     daysInMonth: 30,
     lunarEquivalent: "Rabi' al-Thani (approx)",
+    grazingIndex: 2,
+    droughtRisk: "critical",
   },
   {
     id: 4,
@@ -155,6 +163,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "The Dayr is prosperity if one prepares",
     daysInMonth: 31,
     lunarEquivalent: "Jumada al-Awwal (approx)",
+    grazingIndex: 7,
+    droughtRisk: "low",
   },
   {
     id: 5,
@@ -175,6 +185,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "The red star is the sign of grazing",
     daysInMonth: 30,
     lunarEquivalent: "Jumada al-Thani (approx)",
+    grazingIndex: 8,
+    droughtRisk: "low",
   },
   {
     id: 6,
@@ -195,6 +207,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "The sea has opened, and trade has begun",
     daysInMonth: 30,
     lunarEquivalent: "Rajab (approx)",
+    grazingIndex: 6,
+    droughtRisk: "moderate",
   },
   {
     id: 7,
@@ -215,6 +229,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "Jiilaal is the test of livestock and people",
     daysInMonth: 31,
     lunarEquivalent: "Sha'ban (approx)",
+    grazingIndex: 2,
+    droughtRisk: "critical",
   },
   {
     id: 8,
@@ -235,6 +251,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "The seven stars are hope, but not a promise",
     daysInMonth: 30,
     lunarEquivalent: "Ramadan (approx)",
+    grazingIndex: 1,
+    droughtRisk: "critical",
   },
   {
     id: 9,
@@ -255,6 +273,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "Aminla' is a month you cannot trust",
     daysInMonth: 30,
     lunarEquivalent: "Shawwal (approx)",
+    grazingIndex: 2,
+    droughtRisk: "critical",
   },
   {
     id: 10,
@@ -275,6 +295,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "Fushade is joy, for the rain has come",
     daysInMonth: 31,
     lunarEquivalent: "Dhu al-Qi'dah (approx)",
+    grazingIndex: 8,
+    droughtRisk: "low",
   },
   {
     id: 11,
@@ -295,6 +317,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "Gu'soore is the month of abundance — everything is plentiful",
     daysInMonth: 30,
     lunarEquivalent: "Dhu al-Hijjah (approx)",
+    grazingIndex: 10,
+    droughtRisk: "low",
   },
   {
     id: 12,
@@ -315,6 +339,8 @@ export const KALTIRSI_MONTHS: HexTemporalMonth[] = [
     proverbEnglish: "Samuulad is the end of prosperity, the beginning of preparation",
     daysInMonth: 30,
     lunarEquivalent: "Muharram (approx)",
+    grazingIndex: 9,
+    droughtRisk: "low",
   },
 ];
 

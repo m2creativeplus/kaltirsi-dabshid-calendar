@@ -17,6 +17,7 @@ import { SomalilandHolidayTimeline } from "@/components/somaliland-holiday-timel
 import { KaltirsiWeekdayStrip } from "@/components/kaltirsi-weekday-strip"
 import { KaltirsiTripleCalendar } from "@/components/kaltirsi-triple-calendar"
 import { GoorsheegtaClock } from "@/components/goorsheegta-clock"
+import { KaltirsiGrazingIndex } from "@/components/kaltirsi-grazing-index"
 import { Id } from "@/convex/_generated/dataModel"
 import { KaltirsiEngine, getSeason, MONTHS_SOLAR } from "@/lib/kaltirsi-engine"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -292,7 +293,7 @@ export default function GoogleCalendarView() {
             </div>
           )}
 
-          {/* MONTH VIEW: Bil — Calendar Grid + Triple Calendar + Holidays */}
+          {/* MONTH VIEW: Bil */}
           {viewType === "month" && (
             <div className="px-6 py-4 space-y-6">
               <KaltirsiMonthStoryBanner />
@@ -303,16 +304,18 @@ export default function GoogleCalendarView() {
                     onDateClick={handleDateClick}
                     onEventClick={handleEventClick}
                   />
+                  <KaltirsiGrazingIndex />
                   <KaltirsiTripleCalendar />
                 </div>
-                <div className="lg:col-span-2 overflow-y-auto max-h-[900px] pr-2">
+                <div className="lg:col-span-2 overflow-y-auto max-h-[1200px] pr-2 space-y-6">
+                  <GoorsheegtaClock />
                   <SomalilandHolidayTimeline />
                 </div>
               </div>
             </div>
           )}
 
-          {/* YEAR VIEW: Sannad — 3D Astrolabe + Triple Calendar + Holidays */}
+          {/* YEAR VIEW: Sannad */}
           {viewType === "week" && (
             <div className="px-6 py-4 space-y-6">
               <div className="grid lg:grid-cols-5 gap-6">
@@ -323,6 +326,7 @@ export default function GoogleCalendarView() {
                   <SomalilandHolidayTimeline />
                 </div>
               </div>
+              <KaltirsiGrazingIndex />
               <KaltirsiTripleCalendar />
               <KaltirsiMonthStoryBanner />
             </div>
