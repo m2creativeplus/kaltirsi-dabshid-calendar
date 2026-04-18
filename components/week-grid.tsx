@@ -9,6 +9,13 @@ interface WeekGridProps {
   onDateClick: (date: Date) => void
 }
 
+const EVENT_COLORS: Record<string, string> = {
+  cultural:     "bg-gradient-to-r from-amber-500 to-orange-500",
+  agricultural: "bg-gradient-to-r from-emerald-500 to-green-600",
+  astronomical: "bg-gradient-to-r from-violet-500 to-purple-600",
+  holiday:      "bg-gradient-to-r from-red-500 to-rose-600",
+}
+
 export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
   const { t } = useCultural()
   const today = new Date()
@@ -39,20 +46,21 @@ export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
   const hours = Array.from({ length: 24 }, (_, i) => i)
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-card/30">
       {/* Week header */}
-      <div className="grid grid-cols-8 border-b border-border bg-card sticky top-0 z-10">
-        <div className="p-3 border-r border-border"></div>
+      <div className="grid grid-cols-8 border-b border-border/30 glass-subtle sticky top-0 z-10 shadow-sm shadow-black/20">
+        <div className="p-3 border-r border-border/20"></div>
         {days.map((date, index) => {
           const isCurrentDay = isToday(date)
           return (
-            <div key={index} className="p-3 text-center border-r border-border last:border-r-0">
-              <div className="text-xs text-muted-foreground mb-1">{weekDays[index]}</div>
+            <div key={index} className={cn("p-2 text-center border-r border-border/20 last:border-r-0 transition-colors", isCurrentDay && "bg-primary/5")}>
+              <div className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground mb-1">{weekDays[index]}</div>
               <div
                 className={cn(
-                  "text-lg font-medium",
-                  isCurrentDay &&
-                    "bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center mx-auto",
+                  "text-base font-medium transition-all w-8 h-8 flex items-center justify-center mx-auto",
+                  isCurrentDay 
+                    ? "bg-gradient-to-br from-amber-400 to-orange-500 text-white rounded-full font-bold shadow-md shadow-amber-500/20" 
+                    : "text-foreground/80"
                 )}
               >
                 {date.getDate()}
@@ -64,11 +72,11 @@ export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
 
       {/* Time grid */}
       <div className="flex-1 overflow-auto">
-        <div className="grid grid-cols-8">
+        <div className="grid grid-cols-8 relative">
           {/* Time column */}
-          <div className="border-r border-border">
+          <div className="border-r border-border/20">
             {hours.map((hour) => (
-              <div key={hour} className="h-16 border-b border-border p-2 text-xs text-muted-foreground">
+              <div key={hour} className="h-16 border-b border-border/10 p-2 text-[10px] text-muted-foreground/60 font-medium text-right pr-3 flex items-start justify-end">
                 {hour === 0 ? "12 AM" : hour < 12 ? `${hour} AM` : hour === 12 ? "12 PM" : `${hour - 12} PM`}
               </div>
             ))}
@@ -76,7 +84,7 @@ export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
 
           {/* Day columns */}
           {days.map((date, dayIndex) => (
-            <div key={dayIndex} className="border-r border-border last:border-r-0">
+            <div key={dayIndex} className={cn("border-r border-border/10 last:border-r-0", isToday(date) && "bg-primary/5")}>
               {hours.map((hour) => {
                 const timeSlot = new Date(date)
                 timeSlot.setHours(hour, 0, 0, 0)
@@ -87,23 +95,23 @@ export function WeekGrid({ currentDate, onDateClick }: WeekGridProps) {
                 return (
                   <div
                     key={hour}
-                    className="h-16 border-b border-border p-1 cursor-pointer hover:bg-muted/50 relative"
+                    className="h-16 border-b border-border/10 p-1 cursor-pointer hover:bg-white/[0.03] transition-colors relative group"
                     onClick={() => onDateClick(timeSlot)}
                   >
-                    {events.map((event, eventIndex) => (
-                      <div
-                        key={eventIndex}
-                        className={cn(
-                          "text-xs px-2 py-1 rounded text-white mb-1 truncate",
-                          event.type === "cultural" && "bg-orange-500",
-                          event.type === "agricultural" && "bg-green-500",
-                          event.type === "astronomical" && "bg-purple-500",
-                          event.type === "holiday" && "bg-red-500",
-                        )}
-                      >
-                        {t(event.titleKey)}
-                      </div>
-                    ))}
+                    {events.map((event, eventIndex) => {
+                      const colorClass = EVENT_COLORS[event.type] || "bg-blue-500"
+                      return (
+                        <div
+                          key={eventIndex}
+                          className={cn(
+                            "text-[10px] px-2 py-1 rounded-[4px] text-white/90 mb-1 truncate shadow-sm transition-transform group-hover:scale-[1.02]",
+                            colorClass
+                          )}
+                        >
+                          {t(event.titleKey)}
+                        </div>
+                      )
+                    })}
                   </div>
                 )
               })}

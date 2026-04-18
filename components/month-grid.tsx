@@ -13,6 +13,21 @@ interface MonthGridProps {
   onEventClick?: (event: any) => void
 }
 
+const SEASON_STRIPE: Record<string, string> = {
+  "Xagaa":   "bg-amber-500",
+  "Dayr":    "bg-amber-700",
+  "Jiilaal": "bg-blue-400",
+  "Gu'":     "bg-emerald-400",
+}
+
+const EVENT_COLORS: Record<string, string> = {
+  cultural:     "bg-gradient-to-r from-amber-500 to-orange-500",
+  agricultural: "bg-gradient-to-r from-emerald-500 to-green-600",
+  astronomical: "bg-gradient-to-r from-violet-500 to-purple-600",
+  holiday:      "bg-gradient-to-r from-red-500 to-rose-600",
+  national:     "bg-gradient-to-r from-emerald-500 to-green-500",
+}
+
 export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridProps) {
   const { t } = useCultural()
   const today = new Date()
@@ -27,21 +42,18 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
 
     const days = []
 
-    // Previous month days
     const prevMonth = new Date(year, month - 1, 0)
     for (let i = startingDayOfWeek - 1; i >= 0; i--) {
       const date = new Date(year, month - 1, prevMonth.getDate() - i)
       days.push({ date, isCurrentMonth: false })
     }
 
-    // Current month days
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(year, month, day)
       days.push({ date, isCurrentMonth: true })
     }
 
-    // Next month days to fill the grid
-    const remainingCells = 42 - days.length // 6 rows × 7 days
+    const remainingCells = 42 - days.length
     for (let day = 1; day <= remainingCells; day++) {
       const date = new Date(year, month + 1, day)
       days.push({ date, isCurrentMonth: false })
@@ -50,32 +62,26 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
     return days
   }
 
-  const isToday = (date: Date) => {
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    )
-  }
+  const isToday = (date: Date) =>
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
 
   const days = getDaysInMonth()
-  const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
-  // Calculate range for query
-  // We use the first and last visible day in the grid
-  const startDate = days[0].date.toISOString().split('T')[0]
-  const endDate = days[days.length - 1].date.toISOString().split('T')[0]
-
+  const startDate = days[0].date.toISOString().split("T")[0]
+  const endDate = days[days.length - 1].date.toISOString().split("T")[0]
   const userEvents = useQuery(api.events.getEvents, { startDate, endDate }) || []
 
   return (
     <div className="flex flex-col h-full">
       {/* Week header */}
-      <div className="grid grid-cols-7 border-b border-border">
+      <div className="grid grid-cols-7 border-b border-border/30">
         {weekDays.map((day) => (
           <div
             key={day}
-            className="p-3 text-center text-sm font-medium text-muted-foreground border-r border-border last:border-r-0"
+            className="p-2.5 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground border-r border-border/20 last:border-r-0"
           >
             {day}
           </div>
@@ -85,95 +91,88 @@ export function MonthGrid({ currentDate, onDateClick, onEventClick }: MonthGridP
       {/* Calendar grid */}
       <div className="flex-1 grid grid-cols-7 grid-rows-6">
         {days.map(({ date, isCurrentMonth }, index) => {
-          const dateStr = date.toISOString().split('T')[0]
-          
-          // Kaltirsi Data
+          const dateStr = date.toISOString().split("T")[0]
           const kaltirsi = KaltirsiEngine.gregorianToKaltirsi(date)
           const daySeason = getSeason(kaltirsi.month - 1)
+          const stripeColor = SEASON_STRIPE[daySeason.name] || "bg-amber-500"
 
-          // Combine hardcoded cultural events with dynamic user events
           const culturalEvents = getCalendarEvents(date)
           const dailyUserEvents = userEvents
-            .filter(e => e.startDate === dateStr)
-            .map(e => ({
-              ...e,
-              titleKey: e.title,
-              isUserEvent: true,
-            }))
+            .filter((e) => e.startDate === dateStr)
+            .map((e) => ({ ...e, titleKey: e.title, isUserEvent: true }))
 
-          // Merge events - careful with typing. Simple view for now.
           const allEvents = [
-            ...culturalEvents.map(e => ({ ...e, title: t(e.titleKey) })),
-            ...dailyUserEvents.map(e => ({ ...e, title: e.titleKey }))
+            ...culturalEvents.map((e) => ({ ...e, title: t(e.titleKey) })),
+            ...dailyUserEvents.map((e) => ({ ...e, title: e.titleKey })),
           ]
 
           const isCurrentDay = isToday(date)
+          const isFriday = date.getDay() === 5
 
           return (
             <div
               key={index}
               className={cn(
-                "group relative border-r border-b border-border last:border-r-0 p-2 min-h-[120px] cursor-pointer hover:bg-muted/50 transition-colors",
-                !isCurrentMonth && "bg-muted/50/50 text-gray-400",
-                isCurrentDay && "bg-accent/10"
+                "group relative border-r border-b border-border/20 last:border-r-0 p-2 min-h-[110px] cursor-pointer transition-all duration-200",
+                isCurrentMonth
+                  ? "hover:bg-white/[0.03]"
+                  : "opacity-30",
+                isCurrentDay && "bg-primary/5 ring-1 ring-inset ring-primary/20",
+                isFriday && isCurrentMonth && "bg-emerald-500/[0.03]"
               )}
               onClick={() => onDateClick(date)}
             >
               {/* Seasonal Stripe */}
-              <div className={`absolute top-0 left-0 w-1 h-full bg-${daySeason.color} opacity-40 group-hover:opacity-100 transition-opacity`} />
+              <div className={cn(
+                "absolute top-0 left-0 w-[3px] h-full rounded-r-full opacity-20 group-hover:opacity-60 transition-opacity",
+                stripeColor
+              )} />
 
-              {/* Header Row: Gregorian Left, Kaltirsi Right */}
-              <div className="flex justify-between items-start mb-1">
-                 <div
-                    className={cn(
-                      "text-sm font-medium transition-all",
-                      isCurrentDay 
-                        ? "bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center shadow-sm"
-                        : "text-foreground" 
-                    )}
-                  >
-                    {date.getDate()}
-                  </div>
-                  
-                  <div className="text-[10px] text-muted-foreground font-semibold opacity-70">
-                    {kaltirsi.day} <span className="hidden sm:inline">{kaltirsi.monthName.slice(0,3)}</span>
-                  </div>
+              {/* Header: Gregorian + Kaltirsi */}
+              <div className="flex justify-between items-start mb-1.5 pl-1.5">
+                <div
+                  className={cn(
+                    "text-sm transition-all",
+                    isCurrentDay
+                      ? "bg-gradient-to-br from-amber-400 to-orange-500 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold shadow-lg shadow-amber-500/20 text-xs"
+                      : "text-foreground/80 font-medium"
+                  )}
+                >
+                  {date.getDate()}
+                </div>
+                <div className="text-[9px] text-muted-foreground/60 font-mono tabular-nums">
+                  {kaltirsi.day}
+                  <span className="hidden sm:inline ml-0.5 text-muted-foreground/40">
+                    {kaltirsi.monthName.slice(0, 3)}
+                  </span>
+                </div>
               </div>
 
               {/* Events */}
-              <div className="space-y-1 pl-2">
-                {allEvents.slice(0, 4).map((event: any, eventIndex) => (
-                  <div
-                    key={eventIndex}
-                    className={cn(
-                      "text-[10px] px-1.5 py-0.5 rounded text-white truncate shadow-sm cursor-pointer hover:opacity-90",
-                      // Custom mapping based on real Convex fields or mock events
-                      event.type === "cultural" && "bg-orange-500",
-                      event.type === "agricultural" && "bg-green-600",
-                      event.type === "astronomical" && "bg-purple-600",
-                      event.type === "holiday" && "bg-red-500",
-                      event.type === "national" && "bg-[#1EB53A]", // Gu' green by default for national
-                      // Ensure our defined styling passes through if present
-                      event.seasonalColor && `bg-[${event.seasonalColor}]`,
-                      // User personal events if not typed
-                      !["cultural", "agricultural", "astronomical", "holiday", "national"].includes(event.type) && !event.seasonalColor && "bg-blue-500"
-                    )}
-                    // Force inline style application for the specific seasonal color if provided (Tailwind JIT dynamic classes workaround)
-                    style={event.seasonalColor ? { backgroundColor: event.seasonalColor } : {}}
-                    title={event.title}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      if (onEventClick && event.isUserEvent) {
-                        onEventClick(event)
-                      }
-                    }}
-                  >
-                    {event.title}
-                  </div>
-                ))}
-                {allEvents.length > 4 && (
-                  <div className="text-[10px] text-muted-foreground font-medium pl-1">
-                    +{allEvents.length - 4} more
+              <div className="space-y-0.5 pl-1.5">
+                {allEvents.slice(0, 3).map((event: any, eventIndex) => {
+                  const colorClass = EVENT_COLORS[event.type] || "bg-gradient-to-r from-sky-500 to-blue-500"
+                  return (
+                    <div
+                      key={eventIndex}
+                      className={cn(
+                        "text-[9px] px-1.5 py-[3px] rounded-[4px] text-white truncate cursor-pointer transition-all hover:brightness-110 hover:shadow-sm",
+                        colorClass
+                      )}
+                      style={event.seasonalColor ? { background: `linear-gradient(90deg, ${event.seasonalColor}, ${event.seasonalColor}dd)` } : {}}
+                      title={event.title}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (onEventClick && event.isUserEvent) onEventClick(event)
+                      }}
+                    >
+                      {event.title}
+                    </div>
+                  )
+                })}
+                {allEvents.length > 3 && (
+                  <div className="text-[9px] text-muted-foreground/50 font-medium pl-1">
+                    +{allEvents.length - 3} more
                   </div>
                 )}
               </div>

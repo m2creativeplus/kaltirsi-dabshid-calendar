@@ -116,10 +116,10 @@ function OnboardingScreen() {
 
       <div className="space-y-3 mb-6">
         <button className="w-full p-3 border-2 border-orange-500 rounded-lg bg-orange-50">
-          <span className="text-sm font-medium">🇸🇴 Somali</span>
+          <span className="text-sm font-black uppercase tracking-widest text-orange-600">Somali</span>
         </button>
         <button className="w-full p-3 border border-border rounded-lg">
-          <span className="text-sm">🇺🇸 English</span>
+          <span className="text-sm font-black uppercase tracking-widest text-zinc-400">English</span>
         </button>
       </div>
 

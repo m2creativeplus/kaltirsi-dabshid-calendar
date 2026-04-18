@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${dmSerif.variable} ${notoSans.variable} font-sans bg-background text-foreground`}>
         <ConvexClientProvider>
           <AuthProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
               {children}
             </ThemeProvider>
           </AuthProvider>

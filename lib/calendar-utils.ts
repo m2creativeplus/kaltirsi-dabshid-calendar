@@ -354,14 +354,16 @@ function createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
 export function getSeason(date: Date): Season {
   const month = date.getMonth()
 
-  if (month >= 11 || month <= 2) {
-    return "Jiilaal" // Dec-Mar
-  } else if (month >= 3 && month <= 4) {
-    return "Gu'" // Apr-May
-  } else if (month >= 5 && month <= 8) {
-    return "Xagaa" // Jun-Sep
+  // Aligned with Kaltirsi engine (Dabshid = Jul 20 anchor)
+  // Xagaa = Jul-Sep, Dayr = Oct-Dec, Jiilaal = Jan-Mar, Gu' = Apr-Jun
+  if (month >= 6 && month <= 8) {
+    return "Xagaa"   // Jul-Sep (Samalaho/Karan/Diraac-good)
+  } else if (month >= 9 && month <= 11) {
+    return "Dayr"    // Oct-Dec (Dambasame/Xoomir/Xays)
+  } else if (month >= 0 && month <= 2) {
+    return "Jiilaal" // Jan-Mar (Toddob/Adhi-caseeye/Aminla')
   } else {
-    return "Dayr" // Oct-Nov
+    return "Gu'"     // Apr-Jun (Fushade/Cawl/Sagaal)
   }
 }
 

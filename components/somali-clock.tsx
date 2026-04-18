@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Clock } from "lucide-react"
 import { KaltirsiEngine } from "@/lib/kaltirsi-engine"
+import { cn } from "@/lib/utils"
 
 export function SomaliClock() {
   const [timeStr, setTimeStr] = React.useState<string>("")
@@ -11,9 +11,7 @@ export function SomaliClock() {
 
   React.useEffect(() => {
     setMounted(true)
-    const tick = () => {
-      setTimeStr(KaltirsiEngine.getSomaliTime(new Date()))
-    }
+    const tick = () => setTimeStr(KaltirsiEngine.getSomaliTime(new Date()))
     tick()
     const timer = setInterval(tick, 1000)
     return () => clearInterval(timer)
@@ -22,22 +20,23 @@ export function SomaliClock() {
   if (!mounted) return null
 
   return (
-    <Card className="w-full bg-card/50 backdrop-blur border-primary/20">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
+    <div className="glass rounded-2xl p-4 h-full flex flex-col justify-between">
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
           Saacadda Soomaaliga
-        </CardTitle>
-        <Clock className="h-4 w-4 text-primary" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold font-serif text-primary">
+        </span>
+        <div className="w-6 h-6 rounded-md bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+          <Clock className="h-3 w-3 text-white" />
+        </div>
+      </div>
+      <div>
+        <div className="text-2xl font-bold font-serif text-gradient-gold leading-tight">
           {timeStr}
         </div>
-        <p className="text-xs text-muted-foreground capitalize mt-1">
-          {/* Extract suffix for display if needed properly */}
+        <p className="text-[10px] text-muted-foreground capitalize mt-0.5">
           Waqtiga Dhaqanka
         </p>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

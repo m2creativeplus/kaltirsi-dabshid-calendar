@@ -4,58 +4,75 @@
 
 @layer base {
   :root {
-    /* Kaltirsi Palette: Camel Beige Background */
-    --background: 38 55% 88%; /* #F3E6D0 */
-    --foreground: 222.2 84% 4.9%; /* Charcoal Black */
-    
+    /* Light mode base */
+    --background: 38 45% 95%;
+    --foreground: 220 25% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
- 
+    --card-foreground: 220 25% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
- 
-    /* Kaltirsi Palette: Desert Gold Primary */
-    --primary: 40 66% 55%; /* #D9A441 */
-    --primary-foreground: 210 40% 98%;
- 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
- 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
- 
-    --accent: 38 55% 80%; /* Slightly darker beige */
-    --accent-foreground: 222.2 47.4% 11.2%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
- 
-    --border: 38 30% 80%; /* Soft beige border */
-    --input: 38 30% 80%;
-    --ring: 40 66% 55%;
-    --radius: 0.5rem;
+    --popover-foreground: 220 25% 10%;
+    --primary: 38 85% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 38 20% 92%;
+    --secondary-foreground: 220 25% 10%;
+    --muted: 38 15% 93%;
+    --muted-foreground: 220 10% 42%;
+    --accent: 38 30% 88%;
+    --accent-foreground: 220 25% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 38 20% 85%;
+    --input: 38 20% 88%;
+    --ring: 38 85% 48%;
+    --radius: 0.75rem;
+
+    /* Kaltirsi Season Tokens (shared) */
+    --season-xagaa: 24 90% 50%;
+    --season-dayr: 28 65% 38%;
+    --season-jiilaal: 215 25% 40%;
+    --season-gu: 145 60% 40%;
+
+    /* Glassmorphism (light) */
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(0, 0, 0, 0.06);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
 
+  /* Kaltirsi Premium Dark — Obsidian + Desert Gold */
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --background: 220 20% 6%;      /* #0e1117 deep obsidian */
+    --foreground: 40 20% 92%;      /* warm off-white */
+
+    --card: 220 18% 9%;            /* #141820 */
+    --card-foreground: 40 15% 90%;
+
+    --popover: 220 18% 10%;
+    --popover-foreground: 40 15% 90%;
+
+    /* Desert Gold primary */
+    --primary: 38 85% 55%;         /* #E5A631 rich amber */
+    --primary-foreground: 220 20% 6%;
+
+    --secondary: 220 15% 14%;
+    --secondary-foreground: 40 15% 85%;
+
+    --muted: 220 15% 12%;
+    --muted-foreground: 220 10% 52%;
+
+    --accent: 220 15% 15%;
+    --accent-foreground: 40 15% 90%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 15% 16%;
+    --input: 220 15% 14%;
+    --ring: 38 85% 55%;
+
+    /* Glassmorphism (dark) */
+    --glass-bg: rgba(20, 24, 32, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -64,6 +81,121 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+  /* Premium scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+}
+
+@layer utilities {
+  /* Glass card */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  .glass-subtle {
+    background: rgba(20, 24, 32, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  /* Glow effects */
+  .glow-amber {
+    box-shadow: 0 0 20px rgba(229, 166, 49, 0.15), 0 0 60px rgba(229, 166, 49, 0.05);
+  }
+  .glow-green {
+    box-shadow: 0 0 20px rgba(30, 181, 58, 0.15), 0 0 60px rgba(30, 181, 58, 0.05);
+  }
+  .glow-orange {
+    box-shadow: 0 0 20px rgba(232, 93, 4, 0.15);
+  }
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(74, 85, 104, 0.2);
+  }
+
+  /* Gradient text */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #E5A631 0%, #F5D78E 50%, #D4941A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-season {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--season-xagaa)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Seasonal border glow */
+  .season-glow-xagaa { border-left: 2px solid hsl(var(--season-xagaa)); }
+  .season-glow-dayr { border-left: 2px solid hsl(var(--season-dayr)); }
+  .season-glow-jiilaal { border-left: 2px solid hsl(var(--season-jiilaal)); }
+  .season-glow-gu { border-left: 2px solid hsl(var(--season-gu)); }
+}
+
+/* Keyframe Animations */
+@keyframes kaltirsi-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-kaltirsi-pulse {
+  animation: kaltirsi-pulse 3s ease-in-out infinite;
+}
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out;
+}
+.animate-star-twinkle {
+  animation: star-twinkle 2s ease-in-out infinite;
+}
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
 }

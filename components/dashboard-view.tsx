@@ -13,11 +13,12 @@ import { MonthlyDetail } from "@/components/monthly-detail"
 import { CulturalStories } from "@/components/cultural-stories"
 import { CropPlanner } from "@/components/crop-planner"
 import { AstronomyViewer } from "@/components/astronomy-viewer"
+import { EcologicalIntelligence } from "@/components/ecological-intelligence"
 
 type ViewType = "dashboard" | "monthly" | "stories" | "crops" | "astronomy"
 
 export default function DashboardView() {
-  const { language, setLanguage, viewMode, setViewMode, t } = useCultural()
+  const { language, setLanguage, t } = useCultural()
   const [currentView, setCurrentView] = useState<ViewType>("dashboard")
   const [selectedMonth, setSelectedMonth] = useState("xays")
 
@@ -57,19 +58,9 @@ export default function DashboardView() {
                   </Button>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <Sun className="h-4 w-4" />
-                    <span className="text-sm">{t("view.solar")}</span>
-                  </div>
-                  <Switch
-                    checked={viewMode === "lunar"}
-                    onCheckedChange={(checked) => setViewMode(checked ? "lunar" : "solar")}
-                  />
-                  <div className="flex items-center gap-2">
-                    <Moon className="h-4 w-4" />
-                    <span className="text-sm">{t("view.lunar")}</span>
-                  </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Sun className="h-4 w-4" />
+                  <span className="text-orange-100">{t("view.solar")}</span>
                 </div>
               </div>
               <div className="absolute -right-8 -top-8 opacity-20">
@@ -85,7 +76,10 @@ export default function DashboardView() {
               }}
             />
 
-            {/* Weather & Star Map */}
+            {/* Ecological Intelligence — live data panel */}
+            <EcologicalIntelligence />
+
+            {/* Weather & Star Map — compact row */}
             <div className="grid grid-cols-2 gap-4">
               <WeatherIndicator />
               <StarMap />
