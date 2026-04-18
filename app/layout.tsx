@@ -4,6 +4,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ConvexClientProvider } from "@/components/convex-provider"
 import { AuthProvider } from "@/components/auth-provider"
+import { CinematicAmbientBackground } from "@/components/kaltirsi-cinematic-system"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 const dmSerif = DM_Serif_Display({ weight: "400", subsets: ["latin"], variable: "--font-serif" })
@@ -26,8 +27,9 @@ export default function RootLayout({
         <ConvexClientProvider>
           <AuthProvider>
             <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-              {children}
-            </ThemeProvider>
+                <CinematicAmbientBackground />
+                {children}
+              </ThemeProvider>
           </AuthProvider>
         </ConvexClientProvider>
       </body>

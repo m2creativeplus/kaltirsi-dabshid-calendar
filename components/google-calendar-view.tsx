@@ -19,6 +19,7 @@ import { KaltirsiTripleCalendar } from "@/components/kaltirsi-triple-calendar"
 import { GoorsheegtaClock } from "@/components/goorsheegta-clock"
 import { KaltirsiGrazingIndex } from "@/components/kaltirsi-grazing-index"
 import { KaltirsiEcologicalDashboard } from "@/components/kaltirsi-ecological-dashboard"
+import { GoorsheegtaTimeline, StaggerReveal } from "@/components/kaltirsi-cinematic-system"
 import { Id } from "@/convex/_generated/dataModel"
 import { KaltirsiEngine, getSeason, MONTHS_SOLAR } from "@/lib/kaltirsi-engine"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -277,20 +278,31 @@ export default function GoogleCalendarView() {
 
         {/* Content Area — View-Dependent */}
         <div className="flex-1 overflow-auto">
-          {/* DAY VIEW: Maalin — Full Ecological Intelligence Command Center */}
+          {/* DAY VIEW: Maalin — Ecological Intelligence Command Center */}
           {viewType === "day" && (
             <div className="px-6 py-4 space-y-6">
-              {/* Hero: Live 6-Layer Dashboard */}
-              <KaltirsiEcologicalDashboard />
-              {/* Below: Goorsheegta Clock + Triple Calendar */}
+              <StaggerReveal delay={0}>
+                <KaltirsiEcologicalDashboard />
+              </StaggerReveal>
               <div className="grid lg:grid-cols-5 gap-6">
                 <div className="lg:col-span-3 space-y-6">
-                  <GoorsheegtaClock />
-                  <KaltirsiGrazingIndex />
+                  <StaggerReveal delay={0.15}>
+                    <GoorsheegtaClock />
+                  </StaggerReveal>
+                  <StaggerReveal delay={0.25}>
+                    <KaltirsiGrazingIndex />
+                  </StaggerReveal>
                 </div>
                 <div className="lg:col-span-2 space-y-6">
-                  <KaltirsiTripleCalendar />
-                  <SomalilandHolidayTimeline />
+                  <StaggerReveal delay={0.2}>
+                    <GoorsheegtaTimeline />
+                  </StaggerReveal>
+                  <StaggerReveal delay={0.3}>
+                    <KaltirsiTripleCalendar />
+                  </StaggerReveal>
+                  <StaggerReveal delay={0.35}>
+                    <SomalilandHolidayTimeline />
+                  </StaggerReveal>
                 </div>
               </div>
             </div>

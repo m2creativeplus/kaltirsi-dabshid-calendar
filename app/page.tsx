@@ -1,13 +1,13 @@
 "use client"
 
-import GoogleCalendarView from "@/components/google-calendar-view"
+import { KaltirsiSuperAppShell } from "@/components/kaltirsi-superapp-shell"
 import { CulturalProvider } from "@/components/cultural-provider"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-transparent text-foreground relative">
       <CulturalProvider>
-        <GoogleCalendarView />
+        <KaltirsiSuperAppShell />
       </CulturalProvider>
     </main>
   )
