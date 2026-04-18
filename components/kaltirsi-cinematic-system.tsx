@@ -156,14 +156,33 @@ interface GoorsheegtaNode {
 }
 
 const TIMELINE_NODES: GoorsheegtaNode[] = [
-  { id: 1, nameSomali: "Mirkac",   nameEnglish: "Deep Night",    timeRange: "02:00–05:00", startHour: 2,    endHour: 5,    category: "observation", color: "#312e81" },
-  { id: 2, nameSomali: "Waaberi",  nameEnglish: "Dawn",          timeRange: "05:00–06:30", startHour: 5,    endHour: 6.5,  category: "prayer",      color: "#f59e0b" },
-  { id: 3, nameSomali: "Aroortii", nameEnglish: "Early Morning", timeRange: "06:30–10:00", startHour: 6.5,  endHour: 10,   category: "activity",    color: "#f97316" },
-  { id: 4, nameSomali: "Barqo",    nameEnglish: "Forenoon",      timeRange: "10:00–12:00", startHour: 10,   endHour: 12,   category: "activity",    color: "#ea580c" },
-  { id: 5, nameSomali: "Hadh-gal", nameEnglish: "Noon",          timeRange: "12:00–15:00", startHour: 12,   endHour: 15,   category: "rest",        color: "#dc2626" },
-  { id: 6, nameSomali: "Galab",    nameEnglish: "Afternoon",     timeRange: "15:00–18:00", startHour: 15,   endHour: 18,   category: "activity",    color: "#d97706" },
-  { id: 7, nameSomali: "Maqrib",   nameEnglish: "Sunset",        timeRange: "18:00–19:30", startHour: 18,   endHour: 19.5, category: "prayer",      color: "#7c3aed" },
-  { id: 8, nameSomali: "Fiid",     nameEnglish: "Evening",       timeRange: "19:30–02:00", startHour: 19.5, endHour: 26,   category: "rest",        color: "#1e1b4b" },
+  // Maalin: The 12 Hours of the Sun
+  { id: 6,  nameSomali: "Waaberi / Oog",          nameEnglish: "The True Dawn",         timeRange: "06:00–07:00", startHour: 6,  endHour: 7,  category: "prayer",      color: "#f59e0b" },
+  { id: 7,  nameSomali: "Aroor / Dheelmado",      nameEnglish: "The Dewy Morning",      timeRange: "07:00–08:00", startHour: 7,  endHour: 8,  category: "activity",    color: "#f97316" },
+  { id: 8,  nameSomali: "Barqa-Yar / Jarmaado",   nameEnglish: "Strategic Early Travel",timeRange: "08:00–09:00", startHour: 8,  endHour: 9,  category: "activity",    color: "#ea580c" },
+  { id: 9,  nameSomali: "Siraad / Xigsin",        nameEnglish: "Mid-Morning Pause",     timeRange: "09:00–10:00", startHour: 9,  endHour: 10, category: "rest",        color: "#fcd34d" },
+  { id: 10, nameSomali: "Barqo",                  nameEnglish: "Core Grazing Hour",     timeRange: "10:00–11:00", startHour: 10, endHour: 11, category: "activity",    color: "#eab308" },
+  { id: 11, nameSomali: "Barqo-Dheer",            nameEnglish: "Long Late-Morning",     timeRange: "11:00–12:00", startHour: 11, endHour: 12, category: "activity",    color: "#d97706" },
+  { id: 12, nameSomali: "Hadh / Duhur",           nameEnglish: "The Zenith",            timeRange: "12:00–13:00", startHour: 12, endHour: 13, category: "prayer",      color: "#ef4444" },
+  { id: 13, nameSomali: "Hadh-Gal / Kulaal",      nameEnglish: "Entering the Shade",    timeRange: "13:00–14:00", startHour: 13, endHour: 14, category: "rest",        color: "#dc2626" },
+  { id: 14, nameSomali: "Hadh-ac / Kulleyl",      nameEnglish: "Peak Heat",             timeRange: "14:00–15:00", startHour: 14, endHour: 15, category: "rest",        color: "#b91c1c" },
+  { id: 15, nameSomali: "Casar / Kulaal-Jebis",   nameEnglish: "Breaking of the Heat",  timeRange: "15:00–16:00", startHour: 15, endHour: 16, category: "prayer",      color: "#d97706" },
+  { id: 16, nameSomali: "Casar-Liiq / Tiraab",    nameEnglish: "Leaning Sun",           timeRange: "16:00–17:00", startHour: 16, endHour: 17, category: "activity",    color: "#f59e0b" },
+  { id: 17, nameSomali: "Galab / Carraabo",       nameEnglish: "Coordinated Return",    timeRange: "17:00–18:00", startHour: 17, endHour: 18, category: "activity",    color: "#fcd34d" },
+
+  // Habeen: The 12 Hours of the Night
+  { id: 18, nameSomali: "Gabbal-Dhac / Maqrib",   nameEnglish: "Day Dies",              timeRange: "18:00–19:00", startHour: 18, endHour: 19, category: "prayer",      color: "#7c3aed" },
+  { id: 19, nameSomali: "Fiid / Xoolo-Xereyn",    nameEnglish: "Twilight & Corralling", timeRange: "19:00–20:00", startHour: 19, endHour: 20, category: "activity",    color: "#5b21b6" },
+  { id: 20, nameSomali: "Cisho / Caweys-Hore",    nameEnglish: "Nightfall",             timeRange: "20:00–21:00", startHour: 20, endHour: 21, category: "prayer",      color: "#4c1d95" },
+  { id: 21, nameSomali: "Caweys / Sheeko-Xariir", nameEnglish: "The Social Hour",       timeRange: "21:00–22:00", startHour: 21, endHour: 22, category: "activity",    color: "#312e81" },
+  { id: 22, nameSomali: "Saq-Hore / Xasillooni",  nameEnglish: "First Deep Night",      timeRange: "22:00–23:00", startHour: 22, endHour: 23, category: "rest",        color: "#1e1b4b" },
+  { id: 23, nameSomali: "Hurdada-Hore / Lulmo",   nameEnglish: "Uninterrupted Slumber", timeRange: "23:00–00:00", startHour: 23, endHour: 24, category: "rest",        color: "#0f172a" },
+  { id: 0,  nameSomali: "Saqdhexe / Habeen-Badh", nameEnglish: "Exact Midnight",        timeRange: "00:00–01:00", startHour: 0,  endHour: 1,  category: "observation", color: "#020617" },
+  { id: 1,  nameSomali: "Mirkac / Guure",         nameEnglish: "Secret Night Travel",   timeRange: "01:00–02:00", startHour: 1,  endHour: 2,  category: "activity",    color: "#1e1b4b" },
+  { id: 2,  nameSomali: "Cidladhexe",             nameEnglish: "Desolate Middle",       timeRange: "02:00–03:00", startHour: 2,  endHour: 3,  category: "rest",        color: "#0f172a" },
+  { id: 3,  nameSomali: "Saq-Dambe",              nameEnglish: "Star Reading",          timeRange: "03:00–04:00", startHour: 3,  endHour: 4,  category: "observation", color: "#312e81" },
+  { id: 4,  nameSomali: "Hiraab",                 nameEnglish: "The False Dawn",        timeRange: "04:00–05:00", startHour: 4,  endHour: 5,  category: "observation", color: "#4338ca" },
+  { id: 5,  nameSomali: "Oogta-Hore / Waabariis", nameEnglish: "Break of Day",          timeRange: "05:00–06:00", startHour: 5,  endHour: 6,  category: "observation", color: "#4f46e5" },
 ]
 
 const CATEGORY_LABELS: Record<GoorsheegtaNode["category"], string> = {
@@ -174,15 +193,11 @@ const CATEGORY_LABELS: Record<GoorsheegtaNode["category"], string> = {
 }
 
 function getCurrentNodeId(): number {
-  const h = new Date().getHours() + new Date().getMinutes() / 60
+  const h = new Date().getHours()
   for (const n of TIMELINE_NODES) {
-    if (n.endHour > 24) {
-      if (h >= n.startHour || h < (n.endHour - 24)) return n.id
-    } else {
-      if (h >= n.startHour && h < n.endHour) return n.id
-    }
+    if (h >= n.startHour && h < n.endHour) return n.id
   }
-  return 8
+  return 0
 }
 
 export function GoorsheegtaTimeline() {

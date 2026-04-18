@@ -29,92 +29,240 @@ interface GoorsheegtaSegment {
 }
 
 const GOORSHEEGTA_SEGMENTS: GoorsheegtaSegment[] = [
+  // ☀️ Maalin: The 12 Hours of the Sun (Qorrax-Joog)
   {
-    id: 1, nameSomali: "Mirkac", nameEnglish: "Deep Night",
-    timeRange: "02:00 – 05:00", startHour: 2, endHour: 5,
-    description: "The darkest hours. Stars at maximum visibility. Night watch rotation.",
-    descriptionSomali: "Saacadaha ugu mugdiga badan. Xiddigahu si buuxda ayay u muuqdaan. Wareegga ilaalinta habeenkii.",
-    pastoralGuidance: "Read Goddad positions for season forecast. Protect livestock from predators.",
-    pastoralGuidanceSomali: "Akhri meelaha Goddadku ku yaalliin si aad u saadaashid xilliga. Xoolaha ka ilaali ugaadhsadayaasha.",
-    icon: Star, color: "#1e1b4b", gradient: "linear-gradient(135deg, #0f0a2e 0%, #1e1b4b 100%)", ambientOpacity: 0.1,
-  },
-  {
-    id: 2, nameSomali: "Waaberi", nameEnglish: "Dawn",
-    timeRange: "05:00 – 06:30", startHour: 5, endHour: 6.5,
-    description: "First light breaks the horizon. The Fajr prayer. Stars begin to set.",
-    descriptionSomali: "Iftiinka ugu horreeya ayaa cirka ka soo muuqda. Salaadda Fajrka. Xiddigahu way dhacayaan.",
+    id: 6, nameSomali: "Waaberi / Oog", nameEnglish: "The True Dawn",
+    timeRange: "06:00 – 07:00", startHour: 6, endHour: 7,
+    description: "The first distinct white thread of light appears on the horizon as the camp awakens.",
+    descriptionSomali: "Iftiinka ugu horreeya ayaa cirka ka soo muuqda. Salaadda Fajrka.",
     pastoralGuidance: "Begin morning milking. Assess overnight herd conditions.",
     pastoralGuidanceSomali: "Bilow lisidda subaxda. Eeg xaaladdii xoolaha habeenkii.",
     icon: Sunrise, color: "#f59e0b", gradient: "linear-gradient(135deg, #1e1b4b 0%, #f59e0b 50%, #fbbf24 100%)", ambientOpacity: 0.4,
   },
   {
-    id: 3, nameSomali: "Aroortii", nameEnglish: "Early Morning",
-    timeRange: "06:30 – 10:00", startHour: 6.5, endHour: 10,
-    description: "Full sunrise. Temperature rising. The active morning work period.",
-    descriptionSomali: "Qorraxda oo dhan ayaa soo baxday. Kulaylku wuu sii kordhayaa. Waqtiga shaqada subaxda.",
-    pastoralGuidance: "Move herds to grazing grounds. Peak grazing window begins.",
-    pastoralGuidanceSomali: "Xoolaha u guur dhulka daaqsinta. Waqtiga daaqsinta ugu fiican ayaa bilaabmaya.",
-    icon: Sun, color: "#f97316", gradient: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)", ambientOpacity: 0.7,
+    id: 7, nameSomali: "Aroor / Dheelmado", nameEnglish: "The Dewy Morning",
+    timeRange: "07:00 – 08:00", startHour: 7, endHour: 8,
+    description: "The air is cool, the ground may have dew, and livestock are released from their pens.",
+    descriptionSomali: "Hawadu waa qabow, dhulku dharab buu leeyahay, xoolahana waa la sii daayaa.",
+    pastoralGuidance: "Release livestock from enclosures. Check dew levels for soil moisture.",
+    pastoralGuidanceSomali: "Xoolaha xeradaha ka sii daa. Eeg dharabka dhulka.",
+    icon: Sun, color: "#f97316", gradient: "linear-gradient(135deg, #fbbf24 0%, #f97316 100%)", ambientOpacity: 0.5,
   },
   {
-    id: 4, nameSomali: "Barqo", nameEnglish: "Forenoon",
-    timeRange: "10:00 – 12:00", startHour: 10, endHour: 12,
-    description: "Heat building towards peak. Last productive outdoor hours before shelter.",
-    descriptionSomali: "Kulaylku wuu sii kordhayaa. Saacadaha ugu dambeeya ee shaqada dibadda ka hor hoyga.",
-    pastoralGuidance: "Complete field tasks. Ensure water access for livestock before midday heat.",
-    pastoralGuidanceSomali: "Dhammeystir hawlaha beerta. Hubi in xoolahu biyo helaan ka hor kulaylka hadhka.",
-    icon: Sun, color: "#ea580c", gradient: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)", ambientOpacity: 0.9,
+    id: 8, nameSomali: "Barqa-Yar / Jarmaado", nameEnglish: "Strategic Early Travel",
+    timeRange: "08:00 – 09:00", startHour: 8, endHour: 9,
+    description: "A strategic hour for fast-paced early travel and the first milking to feed the family.",
+    descriptionSomali: "Waqti lagu talagalay in dhakhso loo guuro (jarmaado) iyo lisidda koowaad.",
+    pastoralGuidance: "Fast early travel (jarmaado) and morning milking.",
+    pastoralGuidanceSomali: "Safarka degdegga ah (jarmaado) iyo lisidda subaxda.",
+    icon: Sun, color: "#ea580c", gradient: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)", ambientOpacity: 0.6,
   },
   {
-    id: 5, nameSomali: "Hadh-gal", nameEnglish: "Noon / Qiilo",
-    timeRange: "12:00 – 15:00", startHour: 12, endHour: 15,
-    description: "Solar peak. The Qiilo rest period. No forced animal movement. Shelter mandatory.",
-    descriptionSomali: "Qorraxdu waa meesha ugu sarreysa. Waqtiga nasashada Qiilada. Ma jiro dhaqaaqa xoolaha. Hoy waa waajib.",
-    pastoralGuidance: "Absolute rest. Shelter all animals. No travel or labor. Conserve water.",
-    pastoralGuidanceSomali: "Nasti buuxda. Xoolo walba hooy. Ma socdo, ma shaqeeyso. Biyo u kaydi.",
-    icon: Coffee, color: "#dc2626", gradient: "linear-gradient(135deg, #ea580c 0%, #dc2626 50%, #b91c1c 100%)", ambientOpacity: 1.0,
+    id: 9, nameSomali: "Siraad / Xigsin", nameEnglish: "The Mid-Morning Pause",
+    timeRange: "09:00 – 10:00", startHour: 9, endHour: 10,
+    description: "The sun is fully established. A brief rest for livestock after initial aggressive morning grazing.",
+    descriptionSomali: "Qorraxda oo dhan baa soo baxday. Nasasho gaaban oo xoolaha la siiyo.",
+    pastoralGuidance: "Allow camels a brief rest before the intense grazing window.",
+    pastoralGuidanceSomali: "Geela sii nasasho gaaban ka hor inta aan kulaylku jabin.",
+    icon: Sun, color: "#d97706", gradient: "linear-gradient(135deg, #ea580c 0%, #d97706 100%)", ambientOpacity: 0.7,
   },
   {
-    id: 6, nameSomali: "Galab", nameEnglish: "Afternoon",
-    timeRange: "15:00 – 18:00", startHour: 15, endHour: 18,
-    description: "Cooling begins. Second grazing window opens. Evening preparations.",
-    descriptionSomali: "Qaboojintu waa bilaabatay. Daaqsinta labaad ayaa furmaysa. Diyaarinta fiidkii.",
-    pastoralGuidance: "Return herds to secondary grazing. Evening milking preparations.",
-    pastoralGuidanceSomali: "Xoolaha ku celi daaqsinta labaad. Diyaari lisidda fiidkii.",
-    icon: Sunset, color: "#d97706", gradient: "linear-gradient(135deg, #ea580c 0%, #d97706 50%, #f59e0b 100%)", ambientOpacity: 0.7,
+    id: 10, nameSomali: "Barqo", nameEnglish: "The Core Grazing Hour",
+    timeRange: "10:00 – 11:00", startHour: 10, endHour: 11,
+    description: "As temperatures rise, this becomes the golden window for livestock to feed heavily.",
+    descriptionSomali: "Inta kulaylku kor u kacayo, kani waa waqtiga dahabiga ah ee xooluhu si fiican u daaqaan.",
+    pastoralGuidance: "Ensure peak grazing. Maximize food intake for herds.",
+    pastoralGuidanceSomali: "Hubi daaqsin buuxda. Xooluhu cawska ugu badan ha cunaan.",
+    icon: Sun, color: "#eab308", gradient: "linear-gradient(135deg, #d97706 0%, #eab308 100%)", ambientOpacity: 0.8,
   },
   {
-    id: 7, nameSomali: "Maqrib", nameEnglish: "Sunset / Dusk",
-    timeRange: "18:00 – 19:30", startHour: 18, endHour: 19.5,
-    description: "The sun sets. Maghrib prayer. Golden hour transitions to twilight.",
-    descriptionSomali: "Qorraxdu way dhacday. Salaadda Maqribka. Saacadda dahabiga ah waxay u beddelantaa huruudka.",
-    pastoralGuidance: "Secure livestock in enclosures. Complete evening milking. Count animals.",
-    pastoralGuidanceSomali: "Xoolaha ku xidh xeradaha. Dhammeystir lisidda fiidkii. Tiri xoolaha.",
-    icon: Sunset, color: "#7c3aed", gradient: "linear-gradient(135deg, #d97706 0%, #7c3aed 100%)", ambientOpacity: 0.4,
+    id: 11, nameSomali: "Barqo-Dheer", nameEnglish: "The Long Late-Morning",
+    timeRange: "11:00 – 12:00", startHour: 11, endHour: 12,
+    description: "The heat becomes oppressive. The young camels (qaalin) left behind at camp are milked.",
+    descriptionSomali: "Kulaylku wuu faraha ka baxayaa. Qeelmaha xerada ku hadhay waa la lisiyaa.",
+    pastoralGuidance: "Milk the qaalin (young camels). Begin moving towards shade paths.",
+    pastoralGuidanceSomali: "Lislidda qeelmaha. Diyaari waddooyinka hadhka leh.",
+    icon: Coffee, color: "#d97706", gradient: "linear-gradient(135deg, #eab308 0%, #d97706 100%)", ambientOpacity: 0.9,
   },
   {
-    id: 8, nameSomali: "Fiid", nameEnglish: "Evening / Night",
-    timeRange: "19:30 – 02:00", startHour: 19.5, endHour: 26, // 26 = 2:00 next day
-    description: "Night falls. Star observation begins. Stories around the fire.",
-    descriptionSomali: "Habeenku wuu dhacay. Daawashada xiddigaha ayaa bilaabmaysa. Sheekooyin dabka agtiisa.",
-    pastoralGuidance: "Night watch begins. Read stars for tomorrow's weather. Tell stories to youth.",
-    pastoralGuidanceSomali: "Ilaalinta habeenkii ayaa bilaabmaysa. Xiddigaha akhri cimilada berrito. Dhallinyarada u sheekee.",
-    icon: Moon, color: "#312e81", gradient: "linear-gradient(135deg, #7c3aed 0%, #312e81 50%, #1e1b4b 100%)", ambientOpacity: 0.15,
+    id: 12, nameSomali: "Hadh / Duhur", nameEnglish: "The Zenith",
+    timeRange: "12:00 – 13:00", startHour: 12, endHour: 13,
+    description: "The sun is directly overhead, casting no outward shadows.",
+    descriptionSomali: "Qorraxdu waa meesha ugu sarreysa, hoos ma jiro.",
+    pastoralGuidance: "Stop all forced movement. Shelter animals.",
+    pastoralGuidanceSomali: "Jooji dhaqaaqa xoolaha. Hooska geli.",
+    icon: Sun, color: "#ef4444", gradient: "linear-gradient(135deg, #d97706 0%, #ef4444 100%)", ambientOpacity: 1.0,
+  },
+  {
+    id: 13, nameSomali: "Hadh-Gal", nameEnglish: "Entering the Shade",
+    timeRange: "13:00 – 14:00", startHour: 13, endHour: 14,
+    description: "The burning heat (kulaal) forces stillness. Herds cluster under Acacia trees.",
+    descriptionSomali: "Kulaylka gubanaya (kulaal) wuxuu soo dedejiyaa xasillooni. Xoolahu geedaha hoostooda ayay isku uruuriyaan.",
+    pastoralGuidance: "Absolute rest. Ensure clustered sheltering under large trees.",
+    pastoralGuidanceSomali: "Nasti buuxda. Hubi in xoolahu isku urursadeen geedaha waaweyn hoostooda.",
+    icon: Tent, color: "#dc2626", gradient: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)", ambientOpacity: 1.0,
+  },
+  {
+    id: 14, nameSomali: "Hadh-ac", nameEnglish: "Peak Heat",
+    timeRange: "14:00 – 15:00", startHour: 14, endHour: 15,
+    description: "The absolute hottest hour, shadows just begin to lean slightly to the east.",
+    descriptionSomali: "Saacadda ugu kulul. Hoosku wuxuu inyar u janjeedhaa dhanka bari.",
+    pastoralGuidance: "No movement. Survive peak heat (kulleyl).",
+    pastoralGuidanceSomali: "Dhaqdhaqaaq ma jiro. Adkayso kulka ugu sarreeya (kulleyl).",
+    icon: Tent, color: "#b91c1c", gradient: "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)", ambientOpacity: 0.95,
+  },
+  {
+    id: 15, nameSomali: "Casar", nameEnglish: "Breaking of the Heat",
+    timeRange: "15:00 – 16:00", startHour: 15, endHour: 16,
+    description: "The blinding heat shatters (kulaal-jebis), accompanied by a breeze.",
+    descriptionSomali: "Kulaylkii indho-tirka ahaa wuu jabay (kulaal-jebis), oo neecaw qabow baa soo socota.",
+    pastoralGuidance: "Heat stress ends. Prepare herds for second grazing.",
+    pastoralGuidanceSomali: "Diqigii wuu dhammaaday. U diyaari xoolaha daaqa labaad.",
+    icon: Sunset, color: "#d97706", gradient: "linear-gradient(135deg, #b91c1c 0%, #d97706 100%)", ambientOpacity: 0.8,
+  },
+  {
+    id: 16, nameSomali: "Casar-Liiq", nameEnglish: "The Leaning Sun",
+    timeRange: "16:00 – 17:00", startHour: 16, endHour: 17,
+    description: "The sun leans heavily, turning the light golden.",
+    descriptionSomali: "Qorraxdu aad bay ugu foorarsataa (tiraab), iftiinkuna wuxuu isu beddelaa dahabi.",
+    pastoralGuidance: "Execute second grazing quickly before sunset.",
+    pastoralGuidanceSomali: "Soo dhaqso fuli daaqa labaad ka hor intaan qorraxdu dhicin.",
+    icon: Sun, color: "#f59e0b", gradient: "linear-gradient(135deg, #d97706 0%, #f59e0b 100%)", ambientOpacity: 0.7,
+  },
+  {
+    id: 17, nameSomali: "Galab", nameEnglish: "Coordinated Return",
+    timeRange: "17:00 – 18:00", startHour: 17, endHour: 18,
+    description: "This hour marks carraabo—the rushed return trek of all herds to the homestead.",
+    descriptionSomali: "Saacaddani waa carraabo — dib u noqoshada degdega ah ee xoolaha dhammaan si ay xerada ugu soo laabtaan.",
+    pastoralGuidance: "Initiate Carraabo. Return herds to safety before nightfall.",
+    pastoralGuidanceSomali: "Bilow Carraabo. Xoolaha nabad gelyo ku soo celi inta uusan dhicin mugdigu.",
+    icon: Sunset, color: "#fcd34d", gradient: "linear-gradient(135deg, #f59e0b 0%, #fcd34d 100%)", ambientOpacity: 0.6,
+  },
+
+  // 🌙 Habeen: The 12 Hours of the Night (Gudcur & Iftiin)
+  {
+    id: 18, nameSomali: "Gabbal-Dhac", nameEnglish: "Day Dies / Maghrib",
+    timeRange: "18:00 – 19:00", startHour: 18, endHour: 19,
+    description: "The exact moment the sun disappears and the day officially dies.",
+    descriptionSomali: "Daqiiqadda ay qorraxdu baxdo oo maalintu si rasmi ah u dhammaato.",
+    pastoralGuidance: "Count the animals returning to the compound.",
+    pastoralGuidanceSomali: "Tiri xoolaha soo gelaya xerada.",
+    icon: Sunset, color: "#7c3aed", gradient: "linear-gradient(135deg, #fcd34d 0%, #7c3aed 100%)", ambientOpacity: 0.4,
+  },
+  {
+    id: 19, nameSomali: "Fiid", nameEnglish: "Twilight & Corralling",
+    timeRange: "19:00 – 20:00", startHour: 19, endHour: 20,
+    description: "The sky turns deep purple. Time for evening milking and securing livestock.",
+    descriptionSomali: "Cirku wuxuu noqdaa buluug madow. Xilligii lisidda iyo xoolo-xereynta.",
+    pastoralGuidance: "Secure enclosures (xero) against predators. Finish evening milking.",
+    pastoralGuidanceSomali: "Rooji xayndaabyada (xero) ka ilaali dugaagga. Dhammee lisidda.",
+    icon: Moon, color: "#5b21b6", gradient: "linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%)", ambientOpacity: 0.3,
+  },
+  {
+    id: 20, nameSomali: "Cisho", nameEnglish: "Nightfall",
+    timeRange: "20:00 – 21:00", startHour: 20, endHour: 21,
+    description: "Total darkness sets in, and the evening meal is eaten.",
+    descriptionSomali: "Mugdi dhamaystiran ayaa u dhaca, cuntadii fiidkiina waa la cunaa.",
+    pastoralGuidance: "Share the evening meal. Rest after securing the perimeter.",
+    pastoralGuidanceSomali: "Qaybso cuntada fiidkii. Nasasho qaado markaad xerada xaqiijiso.",
+    icon: Moon, color: "#4c1d95", gradient: "linear-gradient(135deg, #5b21b6 0%, #4c1d95 100%)", ambientOpacity: 0.2,
+  },
+  {
+    id: 21, nameSomali: "Caweys", nameEnglish: "The Social Hour",
+    timeRange: "21:00 – 22:00", startHour: 21, endHour: 22,
+    description: "The Abwaan takes center stage. Poetry, dancing (dhaanto), and folktales around the fire.",
+    descriptionSomali: "Abwaanka ayaa hadlaya. Gabayo, dhaanto, iyo sheeko-xariir dabka la shito.",
+    pastoralGuidance: "Pass down oral traditions. Exchange news regarding water and pastures.",
+    pastoralGuidanceSomali: "Gudbi hiddaha. Is weydaarsada wararka biyaha iyo daaqsinta.",
+    icon: Eye, color: "#312e81", gradient: "linear-gradient(135deg, #4c1d95 0%, #312e81 100%)", ambientOpacity: 0.15,
+  },
+  {
+    id: 22, nameSomali: "Saq-Hore", nameEnglish: "The First Deep Night",
+    timeRange: "22:00 – 23:00", startHour: 22, endHour: 23,
+    description: "The fires burn down, socializing ends, and the camp embraces tranquility.",
+    descriptionSomali: "Dabku wuu sii damayaa, sheekadii way dhammaday, xeraduna xasillooni bay gelaysaa.",
+    pastoralGuidance: "Extinguish large fires. Prepare for the first sleep cycle.",
+    pastoralGuidanceSomali: "Dam dabka. U diyaar garow hurdada kowaad.",
+    icon: Moon, color: "#1e1b4b", gradient: "linear-gradient(135deg, #312e81 0%, #1e1b4b 100%)", ambientOpacity: 0.1,
+  },
+  {
+    id: 23, nameSomali: "Hurdada-Hore", nameEnglish: "Uninterrupted Slumber",
+    timeRange: "23:00 – 00:00", startHour: 23, endHour: 24,
+    description: "The period of heaviest, uninterrupted slumber.",
+    descriptionSomali: "Muddada ugu culus ee la seexdo iyadoo aan madoobaanin.",
+    pastoralGuidance: "Deep rest before the night watch shift changes.",
+    pastoralGuidanceSomali: "Nasasho xeel dheer ka hor inta uusan wareegga ilaaladu is beddelin.",
+    icon: Moon, color: "#0f172a", gradient: "linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)", ambientOpacity: 0.05,
+  },
+  {
+    id: 0, nameSomali: "Saqdhexe", nameEnglish: "Exact Midnight",
+    timeRange: "00:00 – 01:00", startHour: 0, endHour: 1,
+    description: "The exact midnight. Complete darkness dominates.",
+    descriptionSomali: "Saqda dhexe ee saxda ah. Mugdi aad u buuxa ayaa xukuma.",
+    pastoralGuidance: "Shift change for night watchmen protecting the herds.",
+    pastoralGuidanceSomali: "Beddelka waardiye xoolaha daafacaya.",
+    icon: Star, color: "#020617", gradient: "linear-gradient(135deg, #0f172a 0%, #020617 100%)", ambientOpacity: 0.0,
+  },
+  {
+    id: 1, nameSomali: "Mirkac", nameEnglish: "Secret Night Travel",
+    timeRange: "01:00 – 02:00", startHour: 1, endHour: 2,
+    description: "The hour of stillness. Guure refers to secret night travel under the stars.",
+    descriptionSomali: "Waqtiga guuraha. Dhaqdhaqaaq qarsoodi ah oo habeenkii xiddigaha lala socdo.",
+    pastoralGuidance: "Execute strategic night travels (Guure) to reach distant wells.",
+    pastoralGuidanceSomali: "Fuli safarada habeenkii si aad u gaarto ceelasha dhaadheer.",
+    icon: Star, color: "#1e1b4b", gradient: "linear-gradient(135deg, #020617 0%, #1e1b4b 100%)", ambientOpacity: 0.05,
+  },
+  {
+    id: 2, nameSomali: "Cidladhexe", nameEnglish: "The Desolate Middle",
+    timeRange: "02:00 – 03:00", startHour: 2, endHour: 3,
+    description: "The most profoundly silent and isolated hour in the vast landscape.",
+    descriptionSomali: "Waqtiga ugu badan ee aamusnaanta laga dareemo dhulka.",
+    pastoralGuidance: "Maintain vigilance against nocturnal predators.",
+    pastoralGuidanceSomali: "Feeyignaan badan ka muuji dugaagga habeen socodka ah.",
+    icon: Moon, color: "#0f172a", gradient: "linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%)", ambientOpacity: 0.05,
+  },
+  {
+    id: 3, nameSomali: "Saq-Dambe", nameEnglish: "The Star Reading",
+    timeRange: "03:00 – 04:00", startHour: 3, endHour: 4,
+    description: "The hour of the Jiheeye. Navigators observe setting master stars (like Dirir).",
+    descriptionSomali: "Xilliga Jiheeyaha. Waxa la eegayaa xiddigaha wax-sheegga (sida Dirirta).",
+    pastoralGuidance: "Read the stars for rain prediction before dawn washes them out.",
+    pastoralGuidanceSomali: "Akhri xiddigaha roob-doonka ah ka hor inta aanu iftiinku beddelin cirka.",
+    icon: Eye, color: "#312e81", gradient: "linear-gradient(135deg, #0f172a 0%, #312e81 100%)", ambientOpacity: 0.1,
+  },
+  {
+    id: 4, nameSomali: "Hiraab", nameEnglish: "The Pre-Dawn",
+    timeRange: "04:00 – 05:00", startHour: 4, endHour: 5,
+    description: "Known as the false dawn, where a faint vertical light appears in the east but fades.",
+    descriptionSomali: "Waaberi-Beenaad, iftiin aad u yar baa soo baxa oo haddana dhaca.",
+    pastoralGuidance: "Wake the camp elders. Prepare for the true dawn.",
+    pastoralGuidanceSomali: "Kici odayaasha xerada. U diyaar garow waaberiga rasmiga ah.",
+    icon: Star, color: "#4338ca", gradient: "linear-gradient(135deg, #312e81 0%, #4338ca 100%)", ambientOpacity: 0.2,
+  },
+  {
+    id: 5, nameSomali: "Oogta-Hore", nameEnglish: "The True Dawn Approaches",
+    timeRange: "05:00 – 06:00", startHour: 5, endHour: 6,
+    description: "The true break of day as light gathers strength, ready to begin the cycle of survival again.",
+    descriptionSomali: "Bilaabashada rasmiga ah ee waqtiga markii iftiinku isa soo tarayo.",
+    pastoralGuidance: "Perform dawn prayers. Organize the day's pastoral distribution.",
+    pastoralGuidanceSomali: "Tuko salaadda subax. Habeey in la kala tago shaqada daaqsinta.",
+    icon: Sunrise, color: "#4f46e5", gradient: "linear-gradient(135deg, #4338ca 0%, #4f46e5 50%, #1e1b4b 100%)", ambientOpacity: 0.3,
   },
 ]
 
 function getCurrentSegment(): GoorsheegtaSegment {
-  const hour = new Date().getHours() + new Date().getMinutes() / 60
+  const hour = new Date().getHours() 
+  // + new Date().getMinutes() / 60 if precise targeting within segments was needed,
+  // but strictly hour-based matching is cleaner for a discrete 24-segment clock.
+  
   for (const seg of GOORSHEEGTA_SEGMENTS) {
-    const end = seg.endHour > 24 ? seg.endHour - 24 : seg.endHour
-    if (seg.endHour > 24) {
-      // Wraps midnight
-      if (hour >= seg.startHour || hour < end) return seg
-    } else {
-      if (hour >= seg.startHour && hour < seg.endHour) return seg
+    if (hour >= seg.startHour && hour < seg.endHour) {
+      return seg
     }
   }
-  return GOORSHEEGTA_SEGMENTS[7] // fallback: Fiid
+  
+  // Fallback to Saqdhexe (Midnight) if somehow outside bounds
+  return GOORSHEEGTA_SEGMENTS.find(s => s.id === 0) || GOORSHEEGTA_SEGMENTS[0]
 }
 
 // ── SVG CIRCULAR CLOCK ──────────────────────────────────────
@@ -185,16 +333,6 @@ function ClockFace({ currentSegment }: { currentSegment: GoorsheegtaSegment }) {
               filter={isCurrent ? "url(#glow)" : undefined}
               className="cursor-pointer transition-all"
             />
-            <text
-              x={lx} y={ly}
-              textAnchor="middle" dominantBaseline="central"
-              fill={isCurrent ? "#FFF" : "rgba(255,255,255,0.35)"}
-              fontSize={isCurrent ? 8 : 6}
-              fontWeight={isCurrent ? "bold" : "normal"}
-              className="pointer-events-none select-none"
-            >
-              {seg.nameSomali.length > 7 ? seg.nameSomali.substring(0, 6) + "." : seg.nameSomali}
-            </text>
           </g>
         )
       })}
