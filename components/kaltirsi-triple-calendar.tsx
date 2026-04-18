@@ -47,71 +47,185 @@ function QorraxeedView() {
   const now = new Date()
   const kDate = KaltirsiEngine.gregorianToKaltirsi(now)
   const currentMonth = getCurrentKaltirsiMonth(kDate.month)
+  
+  const [selectedMonthId, setSelectedMonthId] = useState<number | null>(null)
 
   return (
     <div className="space-y-4">
-      {/* Current Month Highlight */}
-      <div className="rounded-2xl p-5 border border-[#D9A441]/20" style={{ background: currentMonth.themeGradient }}>
-        <div className="flex items-center gap-2 mb-2">
-          <Flame className="h-5 w-5 text-white" />
-          <span className="text-white/70 text-xs uppercase tracking-widest font-mono">
-            Bisha Hadda / Current Month
-          </span>
-        </div>
-        <h3 className="text-3xl font-serif font-bold text-white">{currentMonth.name}</h3>
-        <p className="text-white/80 text-sm mt-1">{currentMonth.nameEnglish}</p>
-        <p className="text-white/60 text-xs mt-1 italic">{currentMonth.ecologicalIndicatorSo}</p>
-      </div>
-
-      {/* Month Grid */}
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-        {KALTIRSI_MONTHS.map((m) => {
-          const isCurrent = m.id === kDate.month
-          return (
-            <motion.div
-              key={m.id}
-              whileHover={{ scale: 1.03 }}
-              className={cn(
-                "rounded-xl p-3 border transition-all cursor-default",
-                isCurrent
-                  ? "bg-primary/15 border-primary/30 shadow-lg"
-                  : "bg-white/[0.02] border-white/5 hover:bg-white/5"
-              )}
+      <AnimatePresence mode="wait">
+        {selectedMonthId === null ? (
+          <motion.div 
+            key="grid-view"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-4"
+          >
+            {/* Current Month Highlight */}
+            <div 
+              className="rounded-2xl p-5 border border-[#D9A441]/20 cursor-pointer transition-transform hover:scale-[1.01]" 
+              style={{ background: currentMonth.themeGradient }}
+              onClick={() => setSelectedMonthId(currentMonth.id)}
             >
-              <div className="flex items-center justify-between mb-1">
-                <span className={cn(
-                  "text-[10px] font-mono uppercase tracking-wider",
-                  isCurrent ? "text-primary" : "text-muted-foreground/50"
-                )}>
-                  {m.id}
-                </span>
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: m.themeColor }}
-                />
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Flame className="h-5 w-5 text-white" />
+                  <span className="text-white/70 text-xs uppercase tracking-widest font-mono">
+                    Bisha Hadda / Current Month
+                  </span>
+                </div>
+                <ChevronRight className="h-4 w-4 text-white/50" />
               </div>
-              <div className={cn(
-                "text-sm font-bold",
-                isCurrent ? "text-foreground" : "text-muted-foreground"
-              )}>
-                {m.name}
-              </div>
-              <div className="text-[10px] text-muted-foreground/50 mt-0.5">
-                {m.gregorianStart}
-              </div>
-              <div className={cn(
-                "text-[9px] mt-1 px-1.5 py-0.5 rounded-md inline-block",
-                m.season === "Xagaa" ? "bg-orange-500/10 text-orange-400" :
-                m.season === "Dayr" ? "bg-amber-700/10 text-amber-600" :
-                m.season === "Jiilaal" ? "bg-blue-500/10 text-blue-400" :
-                "bg-emerald-500/10 text-emerald-400"
-              )}>
-                {m.season}
-              </div>
-            </motion.div>
-          )
-        })}
-      </div>
+              <h3 className="text-3xl font-serif font-bold text-white">{currentMonth.name}</h3>
+              <p className="text-white/80 text-sm mt-1">{currentMonth.nameEnglish}</p>
+              <p className="text-white/60 text-xs mt-1 italic">{currentMonth.ecologicalIndicatorSo}</p>
+            </div>
+
+            {/* Month Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+              {KALTIRSI_MONTHS.map((m) => {
+                const isCurrent = m.id === kDate.month
+                return (
+                  <motion.div
+                    key={m.id}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setSelectedMonthId(m.id)}
+                    className={cn(
+                      "rounded-xl p-3 border transition-all cursor-pointer relative overflow-hidden",
+                      isCurrent
+                        ? "bg-primary/15 border-primary/30 shadow-lg"
+                        : "bg-white/[0.02] border-white/5 hover:bg-white/5 hover:border-white/10"
+                    )}
+                  >
+                    {isCurrent && (
+                      <div 
+                        className="absolute inset-0 opacity-20 pointer-events-none" 
+                        style={{ background: m.themeGradient }} 
+                      />
+                    )}
+                    <div className="flex items-center justify-between mb-1 relative z-10">
+                      <span className={cn(
+                        "text-[10px] font-mono uppercase tracking-wider",
+                        isCurrent ? "text-primary" : "text-muted-foreground/50"
+                      )}>
+                        {m.id.toString().padStart(2, '0')}
+                      </span>
+                      <div
+                        className="w-2 h-2 rounded-full shadow-sm"
+                        style={{ backgroundColor: m.themeColor }}
+                      />
+                    </div>
+                    <div className={cn(
+                      "text-sm font-bold relative z-10",
+                      isCurrent ? "text-foreground" : "text-muted-foreground"
+                    )}>
+                      {m.name}
+                    </div>
+                    <div className="text-[10px] text-muted-foreground/50 mt-0.5 relative z-10 truncate">
+                      {m.exactMeaningSomali}
+                    </div>
+                    <div className={cn(
+                      "text-[9px] mt-2 px-1.5 py-0.5 rounded-md inline-block relative z-10",
+                      m.season === "Xagaa" ? "bg-orange-500/10 text-orange-400" :
+                      m.season === "Dayr" ? "bg-amber-700/10 text-amber-600" :
+                      m.season === "Jiilaal" ? "bg-blue-500/10 text-blue-400" :
+                      "bg-emerald-500/10 text-emerald-400"
+                    )}>
+                      {m.season}
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div 
+            key="detail-view"
+            initial={{ opacity: 0, scale: 0.98, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            {(() => {
+              const activeMonth = KALTIRSI_MONTHS.find(m => m.id === selectedMonthId)!
+              return (
+                <div className="rounded-2xl border border-white/10 overflow-hidden bg-black/40 backdrop-blur-xl">
+                  {/* Detailed Banner */}
+                  <div 
+                    className="p-6 relative overflow-hidden"
+                    style={{ background: activeMonth.themeGradient }}
+                  >
+                    <div className="absolute inset-0 bg-black/20" />
+                    <div className="relative z-10 flex flex-col gap-4">
+                      <button 
+                        onClick={() => setSelectedMonthId(null)}
+                        className="self-start px-3 py-1.5 text-xs rounded-full bg-black/30 hover:bg-black/50 text-white/80 transition-colors flex items-center gap-2"
+                      >
+                        <ChevronRight className="h-3 w-3 rotate-180" />
+                        Dib u noqo
+                      </button>
+                      
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className="text-white/60 font-mono text-sm tracking-widest uppercase">
+                            Bil {activeMonth.id.toString().padStart(2, '0')} / {activeMonth.season}
+                          </span>
+                        </div>
+                        <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-2">
+                          {activeMonth.name}
+                        </h2>
+                        <h3 className="text-xl text-white/90 font-medium">
+                          Macnaheedu waa <span className="font-bold text-white">"{activeMonth.exactMeaningSomali}"</span>
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Deep Meaning Content */}
+                  <div className="p-6 space-y-6">
+                    <div className="space-y-2">
+                      <h4 className="text-xs font-mono uppercase tracking-widest text-[#D9A441]">Sharaxaadda Qoto-Dheer</h4>
+                      <p className="text-foreground/90 text-sm leading-relaxed border-l-2 border-[#D9A441]/50 pl-4 py-1">
+                        {activeMonth.detailedDescription}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                      <div className="space-y-1">
+                        <span className="text-[10px] uppercase text-muted-foreground tracking-widest">English Context</span>
+                        <p className="text-xs text-foreground/80">{activeMonth.nameEnglish}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[10px] uppercase text-muted-foreground tracking-widest">Gregorian Start</span>
+                        <p className="text-xs text-foreground/80">{activeMonth.gregorianStart} (Approximate)</p>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[10px] uppercase text-muted-foreground tracking-widest">Pastoral Activity</span>
+                        <p className="text-xs text-foreground/80">{activeMonth.pastoralActivity}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[10px] uppercase text-muted-foreground tracking-widest">Ecological State</span>
+                        <p className="text-xs text-foreground/80">{activeMonth.ecologicalIndicator}</p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl bg-white/5 p-4 border border-white/5">
+                      <p className="text-sm font-serif italic text-foreground/90 text-center mb-1">
+                        "{activeMonth.proverb}"
+                      </p>
+                      <p className="text-xs text-muted-foreground text-center">
+                        {activeMonth.proverbEnglish}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })()}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
