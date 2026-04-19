@@ -103,13 +103,19 @@ const SEASONS: Season[] = [
 ];
 
 export function getSeason(kMonthIndex: number): Season {
-  // Months 0-2 (Samalaho/Karan/Diraac-good = Jul-Sep) → Xagaa
-  if (kMonthIndex >= 0 && kMonthIndex <= 2) return SEASONS[0];
-  // Months 3-5 (Dambasame/Xoomir/Xays = Oct-Dec) → Dayr
-  if (kMonthIndex >= 3 && kMonthIndex <= 5) return SEASONS[1];
-  // Months 6-8 (Toddob/Adhi-caseeye/Aminla' = Jan-Mar) → Jiilaal
-  if (kMonthIndex >= 6 && kMonthIndex <= 8) return SEASONS[2];
-  // Months 9-11 (Fushade/Cawl/Sagaal = Apr-Jun) → Gu'
+  // Normalize index to 0-11
+  const idx = ((kMonthIndex % 12) + 12) % 12;
+
+  // 1. Xagaa (Summer / Peak Dry) - Jul, Aug, Sep
+  if (idx >= 0 && idx <= 2) return SEASONS[0];
+  
+  // 2. Dayr (Short Rains) - Oct, Nov, Dec
+  if (idx >= 3 && idx <= 5) return SEASONS[1];
+  
+  // 3. Jiilaal (Harsh Dry / Winter) - Jan, Feb, Mar
+  if (idx >= 6 && idx <= 8) return SEASONS[2];
+  
+  // 4. Gu' (Long Rains / Spring) - Apr, May, Jun
   return SEASONS[3];
 }
 

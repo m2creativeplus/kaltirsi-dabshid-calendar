@@ -30,35 +30,57 @@ function useIntelSync() {
 // ── COMPONENT: LIVE GRAZING INDEX LAYER ────────────────────────────
 function LiveGrazingIndexLayer() {
   const intel = useIntelSync()
-  if (!intel) return null
-
+  
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-      {intel.map((node: any) => (
-        <div key={node.region} className="p-4 rounded-xl border border-white/10 bg-black/40 backdrop-blur-md">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-xs uppercase tracking-widest text-white/50">{node.region}</span>
-            <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
-          </div>
-          <div className="text-2xl font-black text-white font-mono mb-1">
-            {node.intelligence.grazing_index_score.toFixed(1)} GI
-          </div>
-          <div className="flex items-center gap-2">
-            <div className={cn(
-              "text-[9px] font-bold px-2 py-1 rounded w-full text-center tracking-wider",
-              node.intelligence.pastoral_decision === "GRAZE" ? "bg-emerald-500/20 text-emerald-400" :
-                node.intelligence.pastoral_decision === "MOVE" ? "bg-red-500/20 text-red-400" :
-                  "bg-orange-500/20 text-orange-400"
-            )}>
-              ACTION: {node.intelligence.pastoral_decision}
-            </div>
-          </div>
-          <div className="mt-3 flex justify-between items-center text-[10px] text-white/40 border-t border-white/5 pt-2">
-            <span>{node.telemetry.precipitation_mm}mm Rain</span>
-            <span>{node.telemetry.temp_celsius}°C</span>
-          </div>
+    <div className="space-y-4 mb-6">
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-2">
+           <Activity className="w-4 h-4 text-emerald-400" />
+           <span className="text-xs font-black uppercase tracking-[0.2em] text-white/50">Live Ecological Nodes</span>
         </div>
-      ))}
+        {!intel && (
+          <span className="text-[10px] text-orange-400 animate-pulse font-mono">📡 SYNCING SATELLITE TELEMETRY...</span>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {(intel || [1, 2, 3, 4]).map((node: any, idx: number) => (
+          <div key={node.region || idx} className={cn(
+            "p-4 rounded-xl border border-white/10 transition-all duration-500",
+            intel ? "bg-black/40 backdrop-blur-md" : "bg-white/[0.02] animate-pulse"
+          )}>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-[10px] uppercase tracking-widest text-white/30">{node.region || 'Node ' + (idx + 1)}</span>
+              {intel && <Radio className="w-2.5 h-2.5 text-emerald-400 animate-pulse" />}
+            </div>
+            
+            {intel ? (
+              <>
+                <div className="text-2xl font-black text-white font-mono mb-1">
+                  {node.intelligence.grazing_index_score.toFixed(1)} <span className="text-[10px] text-white/40 font-normal">GI</span>
+                </div>
+                <div className={cn(
+                  "text-[9px] font-bold px-2 py-1 rounded w-full text-center tracking-wider",
+                  node.intelligence.pastoral_decision === "GRAZE" ? "bg-emerald-500/20 text-emerald-400" :
+                    node.intelligence.pastoral_decision === "MOVE" ? "bg-red-500/20 text-red-400" :
+                      "bg-orange-500/20 text-orange-400"
+                )}>
+                  {node.intelligence.pastoral_decision}
+                </div>
+                <div className="mt-3 flex justify-between items-center text-[9px] text-white/40 border-t border-white/5 pt-2">
+                  <span>{node.telemetry.precipitation_mm}mm Rain</span>
+                  <span>{node.telemetry.temp_celsius}°C</span>
+                </div>
+              </>
+            ) : (
+              <div className="space-y-2 mt-2">
+                <div className="h-6 w-20 bg-white/5 rounded" />
+                <div className="h-4 w-full bg-white/5 rounded" />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -346,40 +368,45 @@ function AnnualSparkline() {
 // ═══════════════════════════════════════════════════════════════════
 export function KaltirsiEcologicalDashboard() {
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6">
+    <div className="w-full max-w-5xl mx-auto space-y-8 pb-20 px-4 pt-10">
       
-      {/* 🔴 NEW LIVE INTELLIGENCE LAYER (GRAZING INDEX) */}
-      <LiveGrazingIndexLayer />
+      {/* SECTION 1: LIVE INTELLIGENCE LAYER (GRAZING INDEX) */}
+      <section>
+        <LiveGrazingIndexLayer />
+      </section>
 
-      <LiveChronometer />
-      <SixLayerHUD />
-
-      {/* 🔴 NEW 3D ASTRONOMICAL MAP LAYER */}
-      <Kaltirsi3DStarMap />
-
-      {/* TIER 2: Section labels */}
-      <div className="flex items-center justify-between px-0.5">
-        <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-          Liiska Xogta · Six-Layer Intelligence
+      {/* SECTION 2: CHRONOMETER & 3D STAR MAP */}
+      <section className="space-y-4">
+        <LiveChronometer />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <Kaltirsi3DStarMap />
+            <AnnualSparkline />
         </div>
-        <div className="text-[10px] text-muted-foreground/40 font-mono">
-          Hex-Temporal Matrix v3123
+      </section>
+
+      {/* SECTION 3: CORE DATA MATRIX */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
+          <div className="text-xs font-black text-white/70 uppercase tracking-widest">
+            Sirdoonka Deegaanka · Environmental OS
+          </div>
+          <div className="text-[10px] text-white/30 font-mono">
+            Hex-Temporal Protocol v3.1.2.3
+          </div>
         </div>
-      </div>
+        <SixLayerHUD />
+      </section>
 
-      {/* TIER 3: 6-Layer HUD */}
-      <SixLayerHUD />
-
-      {/* TIER 4: Annual sparkline */}
-      <AnnualSparkline />
-
-      {/* TIER 5: Upcoming Holidays strip */}
-      <div>
-        <div className="text-[9px] uppercase tracking-wider text-muted-foreground/40 font-mono mb-2">
-          Ciidaha Soo Socda · Upcoming Sovereignty Events
+      {/* SECTION 4: SOVEREIGNTY TIMELINE */}
+      <section className="space-y-4">
+        <div>
+          <div className="text-[9px] uppercase tracking-widest text-white/40 font-mono mb-4 flex items-center gap-2">
+            <div className="h-px w-8 bg-white/20" />
+            Ciidaha Qaranka · Upcoming Sovereignty Events
+          </div>
+          <HolidayStrip />
         </div>
-        <HolidayStrip />
-      </div>
+      </section>
     </div>
   )
 }

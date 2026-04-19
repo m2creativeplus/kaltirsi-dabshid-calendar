@@ -7,12 +7,14 @@ async function liveTest() {
 
   for (const [region, coords] of Object.entries(SOMALILAND_REGIONS)) {
     try {
-      const weatherData = await TelemetryEngine.fetchWeather(coords.lat, coords.lng);
+      // 1. Fetch live meteorological telemetry
+      const weatherData = await TelemetryEngine.getLiveEnvironment(region as keyof typeof SOMALILAND_REGIONS)
       
-      const currentTemp = weatherData.current.temperature_2m;
-      const precip = weatherData.current.precipitation;
-      const windSpeed = weatherData.current.wind_speed_10m;
-      const weatherState = TelemetryEngine.getWeatherState(weatherData.current.weather_code);
+      // 2. Extract key metrics (Open-Meteo V1 response format)
+      const currentTemp = weatherData.current.temp
+      const precip = weatherData.current.precipitation
+      const windSpeed = weatherData.current.windSpeed
+      const weatherState = TelemetryEngine.getWeatherState(weatherData.current.weatherCode);
 
       // Simple implementation of the formulas from the Execution Core Master Prompt
       let heatPenalty = 0;
