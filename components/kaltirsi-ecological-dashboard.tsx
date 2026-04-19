@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import { useTelemetry, TelemetryEngine } from "@/lib/telemetry-engine"
 import { GodkaEngine } from "@/lib/godka-engine"
+import { Kaltirsi3DStarMap } from "@/components/kaltirsi-3d-star-map"
 
 // ── HOOK: FETCH INTEL SYNC ─────────────────────────────────────────
 function useIntelSync() {
@@ -351,6 +352,10 @@ export function KaltirsiEcologicalDashboard() {
       <LiveGrazingIndexLayer />
 
       <LiveChronometer />
+      <SixLayerHUD />
+
+      {/* 🔴 NEW 3D ASTRONOMICAL MAP LAYER */}
+      <Kaltirsi3DStarMap />
 
       {/* TIER 2: Section labels */}
       <div className="flex items-center justify-between px-0.5">
