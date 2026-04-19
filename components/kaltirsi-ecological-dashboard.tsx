@@ -10,9 +10,58 @@ import {
 import { cn } from "@/lib/utils"
 import {
   Sun, Moon, Star, Anchor, Leaf, Flame, Droplets, Wind,
-  ChevronRight, Calendar, Clock, TrendingUp, AlertTriangle, CloudRain, ThermometerSun
+  ChevronRight, Calendar, Clock, TrendingUp, AlertTriangle, CloudRain, ThermometerSun, Radio, Activity
 } from "lucide-react"
 import { useTelemetry, TelemetryEngine } from "@/lib/telemetry-engine"
+import { GodkaEngine } from "@/lib/godka-engine"
+
+// ── HOOK: FETCH INTEL SYNC ─────────────────────────────────────────
+function useIntelSync() {
+  const [intel, setIntel] = useState<any>(null)
+  useEffect(() => {
+    fetch('/api/intel-sync').then(r => r.json()).then(data => {
+      if (data && data.data) setIntel(data.data)
+    }).catch(console.error)
+  }, [])
+  return intel
+}
+
+// ── COMPONENT: LIVE GRAZING INDEX LAYER ────────────────────────────
+function LiveGrazingIndexLayer() {
+  const intel = useIntelSync()
+  if (!intel) return null
+
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      {intel.map((node: any) => (
+        <div key={node.region} className="p-4 rounded-xl border border-white/10 bg-black/40 backdrop-blur-md">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xs uppercase tracking-widest text-white/50">{node.region}</span>
+            <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
+          </div>
+          <div className="text-2xl font-black text-white font-mono mb-1">
+            {node.intelligence.grazing_index_score.toFixed(1)} GI
+          </div>
+          <div className="flex items-center gap-2">
+            <div className={cn(
+              "text-[9px] font-bold px-2 py-1 rounded w-full text-center tracking-wider",
+              node.intelligence.pastoral_decision === "GRAZE" ? "bg-emerald-500/20 text-emerald-400" :
+                node.intelligence.pastoral_decision === "MOVE" ? "bg-red-500/20 text-red-400" :
+                  "bg-orange-500/20 text-orange-400"
+            )}>
+              ACTION: {node.intelligence.pastoral_decision}
+            </div>
+          </div>
+          <div className="mt-3 flex justify-between items-center text-[10px] text-white/40 border-t border-white/5 pt-2">
+            <span>{node.telemetry.precipitation_mm}mm Rain</span>
+            <span>{node.telemetry.temp_celsius}°C</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 
 // ── LIVE CLOCK BAR ─────────────────────────────────────────────────
 function LiveChronometer() {
@@ -118,8 +167,8 @@ const LAYER_CARDS = [
     key: "xiddigeed", icon: Star, color: "#06B6D4",
     title: "Kaltirsi Xiddigeed", sub: "Stellar / 28 Godka",
     getContent: (_kDate: ReturnType<typeof KaltirsiEngine.gregorianToKaltirsi>) => {
-      const g = KaltirsiEngine.getCurrentGodka(new Date())
-      return { primary: g?.nameSomali || "Transition", secondary: g?.mainStar || "Stellar transition", badge: "Godka" }
+      const g = GodkaEngine.getCurrentGodka(new Date())
+      return { primary: `${g.name} (${g.iauStar})`, secondary: g.significance, badge: `Active ${g.associatedSeason}` }
     }
   },
   {
@@ -296,8 +345,11 @@ function AnnualSparkline() {
 // ═══════════════════════════════════════════════════════════════════
 export function KaltirsiEcologicalDashboard() {
   return (
-    <div className="space-y-4">
-      {/* TIER 1: Live Chronometer */}
+    <div className="w-full max-w-5xl mx-auto space-y-6">
+      
+      {/* 🔴 NEW LIVE INTELLIGENCE LAYER (GRAZING INDEX) */}
+      <LiveGrazingIndexLayer />
+
       <LiveChronometer />
 
       {/* TIER 2: Section labels */}
