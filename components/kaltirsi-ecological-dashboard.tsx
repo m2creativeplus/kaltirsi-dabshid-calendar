@@ -429,10 +429,18 @@ export function KaltirsiEcologicalDashboard() {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8 pb-20 px-4 pt-10">
       
-      {/* SECTION 1: LIVE INTELLIGENCE LAYER (GRAZING INDEX & LIVE MAP) */}
-      <section>
-        <LiveGrazingIndexLayer />
-        <SovereignEcoMapLayer />
+      {/* SECTION 1: CINEMATIC SEASONAL PROJECTION (HERO) */}
+      <section className="space-y-4 pb-4">
+         <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
+           <div className="text-xs font-black text-white/70 uppercase tracking-widest flex items-center gap-2">
+             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+             Sadaasha Muuqaalka · Cinematic Seasonal Engine
+           </div>
+           <div className="text-[10px] text-white/30 font-mono">
+             Dabshid-Visual-Protocol v1.0
+           </div>
+         </div>
+         <CinematicMonthViewer />
       </section>
 
       {/* SECTION 2: CHRONOMETER & 3D STAR MAP */}
@@ -444,17 +452,15 @@ export function KaltirsiEcologicalDashboard() {
         </div>
       </section>
 
-      {/* SECTION 3: CINEMATIC SEASONAL PROJECTION */}
+      {/* SECTION 3: LIVE INTELLIGENCE LAYER (GRAZING INDEX & LIVE MAP) */}
       <section className="space-y-4 pt-4">
-         <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
+        <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
            <div className="text-xs font-black text-white/70 uppercase tracking-widest">
-             Sadaasha Muuqaalka · Cinematic Seasonal Engine
+             Sirdoonka Deegaanka · Live Map Data
            </div>
-           <div className="text-[10px] text-white/30 font-mono">
-             Dabshid-Visual-Protocol v1.0
-           </div>
-         </div>
-         <CinematicMonthViewer />
+        </div>
+        <LiveGrazingIndexLayer />
+        <SovereignEcoMapLayer />
       </section>
 
       {/* SECTION 4: CORE DATA MATRIX */}
