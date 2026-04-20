@@ -94,8 +94,8 @@ export function CalendarHeader({ currentDate, viewType, onNavigate, onToday, onV
         <div className="flex items-center gap-0.5 glass-subtle rounded-lg p-1">
           {([
             { key: "day" as const, icon: Clock, label: "Maalin" },
+            { key: "week" as const, icon: Calendar, label: "Toddobaad" },
             { key: "month" as const, icon: Grid3X3, label: "Bil" },
-            { key: "week" as const, icon: Calendar, label: "Sannad" },
           ]).map(({ key, icon: Icon, label }) => (
             <Button
               key={key}

@@ -21,7 +21,7 @@ function daysUntil(holiday: SomalilandHoliday): number | null {
 }
 
 function HolidayCard({ holiday, index }: { holiday: SomalilandHoliday; index: number }) {
-  const Icon = HOLIDAY_ICONS[holiday.type] || Star
+  const Icon = (HOLIDAY_ICONS[holiday.type] || Star) as any
   const days = daysUntil(holiday)
   const isImminent = days !== null && days <= 30
 

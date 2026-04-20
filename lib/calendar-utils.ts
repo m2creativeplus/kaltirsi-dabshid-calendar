@@ -1,5 +1,5 @@
-// Calendar utility functions for the Somali Calendar app
 import { getSomalilandHolidays } from "./holidays/somaliland-holidays"
+import { KaltirsiEngine } from "./kaltirsi-engine"
 
 // Types
 type EventType = "cultural" | "astronomical" | "holiday"
@@ -57,42 +57,10 @@ export function getCalendarData(date: Date): CalendarData {
   ]
   const gregorianMonth = gregorianMonths[month]
 
-  // Get Somali month based on Gregorian date
-  // This is a simplified mapping - in reality the transitions are more complex
-  const somaliMonths = [
-    ["Xays", "Toddob"], // Jan: 1-17 Xays, 18-31 Toddob
-    ["Toddob", "Karan"], // Feb
-    ["Karan", "Laba-Karan"], // Mar
-    ["Laba-Karan", "Rajal"], // Apr
-    ["Rajal", "Dabarasiis"], // May
-    ["Dabarasiis", "Arafo"], // Jun
-    ["Arafo", "Malabar"], // Jul
-    ["Malabar", "Soon"], // Aug
-    ["Soon", "Maqal-Soon"], // Sep
-    ["Maqal-Soon", "Wabar"], // Oct
-    ["Wabar", "Rajab"], // Nov
-    ["Rajab", "Xays"], // Dec
-  ]
-
-  // Determine which half of the month we're in
-  const dayOfMonth = date.getDate()
-  const isFirstHalf = dayOfMonth <= 15
-  const somaliMonth = isFirstHalf ? somaliMonths[month][0] : somaliMonths[month][1]
-
-  // Calculate Somali year (3122-3123 in 2025)
-  const somaliYear = year + 1097
-
-  // Determine season based on month
-  let season: Season
-  if (month >= 11 || month <= 2) {
-    season = "Jiilaal" // Dec-Mar
-  } else if (month >= 3 && month <= 4) {
-    season = "Gu'" // Apr-May
-  } else if (month >= 5 && month <= 8) {
-    season = "Xagaa" // Jun-Sep
-  } else {
-    season = "Dayr" // Oct-Nov
-  }
+  const kDate = KaltirsiEngine.gregorianToKaltirsi(date)
+  const somaliMonth = kDate.monthName
+  const somaliYear = kDate.year
+  const season = KaltirsiEngine.getSeasonFromKDate(kDate).name as Season
 
   // Get upcoming events
   const events: Event[] = []
@@ -273,31 +241,16 @@ function createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
   const hijriDate = `${hijriDay}/${hijriMonth}`
 
   // Get Somali month
-  const somaliMonths = [
-    ["Xays", "Toddob"], // Jan: 1-17 Xays, 18-31 Toddob
-    ["Toddob", "Karan"], // Feb
-    ["Karan", "Laba-Karan"], // Mar
-    ["Laba-Karan", "Rajal"], // Apr
-    ["Rajal", "Dabarasiis"], // May
-    ["Dabarasiis", "Arafo"], // Jun
-    ["Arafo", "Malabar"], // Jul
-    ["Malabar", "Soon"], // Aug
-    ["Soon", "Maqal-Soon"], // Sep
-    ["Maqal-Soon", "Wabar"], // Oct
-    ["Wabar", "Rajab"], // Nov
-    ["Rajab", "Xays"], // Dec
-  ]
-
-  const dayOfMonth = date.getDate()
-  const isFirstHalf = dayOfMonth <= 15
-  const somaliMonth = isFirstHalf ? somaliMonths[date.getMonth()][0] : somaliMonths[date.getMonth()][1]
+  const kDate = KaltirsiEngine.gregorianToKaltirsi(date)
+  const somaliMonth = kDate.monthName
 
   // Get weekday
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
   const weekday = weekdays[date.getDay()]
 
   // Check if it's a holiday
-  const holidays = getSomalilandHolidays(year)
+  const currentYear = date.getFullYear()
+  const holidays = getSomalilandHolidays(currentYear)
   const dateStr = date.toISOString().split('T')[0]
   const todaysHolidays = holidays.filter(h => h.date === dateStr)
   
@@ -320,7 +273,7 @@ function createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
     // July 19 - Dabshid Festival
     events.push({
       nameKey: "event.dabshid",
-      date: "July 19, " + year,
+      date: "July 19, " + currentYear,
       type: "cultural",
       description: "Traditional fire festival marking the beginning of the Somali New Year",
     })
@@ -330,7 +283,7 @@ function createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
     // October 19 - Dambasame Night
     events.push({
       nameKey: "event.dambasame",
-      date: "October 19, " + year,
+      date: "October 19, " + currentYear,
       type: "astronomical",
       description: "Night when the Dambasame star is at its zenith",
     })
@@ -352,19 +305,8 @@ function createCalendarDay(date: Date, isCurrentMonth: boolean): CalendarDay {
 }
 
 export function getSeason(date: Date): Season {
-  const month = date.getMonth()
-
-  // Aligned with Kaltirsi engine (Dabshid = Jul 20 anchor)
-  // Xagaa = Jul-Sep, Dayr = Oct-Dec, Jiilaal = Jan-Mar, Gu' = Apr-Jun
-  if (month >= 6 && month <= 8) {
-    return "Xagaa"   // Jul-Sep (Samalaho/Karan/Diraac-good)
-  } else if (month >= 9 && month <= 11) {
-    return "Dayr"    // Oct-Dec (Dambasame/Xoomir/Xays)
-  } else if (month >= 0 && month <= 2) {
-    return "Jiilaal" // Jan-Mar (Toddob/Adhi-caseeye/Aminla')
-  } else {
-    return "Gu'"     // Apr-Jun (Fushade/Cawl/Sagaal)
-  }
+  const kDate = KaltirsiEngine.gregorianToKaltirsi(date)
+  return KaltirsiEngine.getSeasonFromKDate(kDate).name as Season
 }
 
 function getAstronomicalEvents(date: Date): Event[] {

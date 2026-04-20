@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Star, Clock } from "lucide-react"
-import { KaltirsiEngine, GODKA_28, GOORSHEEGTA } from "@/lib/kaltirsi-engine"
+import { KaltirsiEngine, GOORSHEEGTA } from "@/lib/kaltirsi-engine"
 
 export function StarMap() {
   const now = new Date()

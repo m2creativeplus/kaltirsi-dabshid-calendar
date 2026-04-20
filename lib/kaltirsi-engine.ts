@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { KALTIRSI_MONTHS } from './kaltirsi-data';
 
 // --- Types ---
 export type KaltirsiDate = {
@@ -71,26 +72,14 @@ export type GoorsheegtaSegment = {
 //  11    Cawl              —                      May 20             Gu'
 //  12    Sagaal            —                      Jun 20             Gu'
 
-export const MONTHS_SOLAR = [
-  "Samalaho",       // 1  — Jul 20  (Dabshid, Xagaa)
-  "Karan",          // 2  — Aug 20  (Xagaa)
-  "Diraac-good",    // 3  — Sep 20  (Xagaa)
-  "Dambasame",      // 4  — Oct 20  (Dayr)
-  "Xoomir",         // 5  — Nov 20  (Dayr)
-  "Xays",           // 6  — Dec 20  (Dayr)
-  "Toddob",         // 7  — Jan 20  (Jiilaal)
-  "Adhi-caseeye",   // 8  — Feb 20  (Jiilaal)
-  "Aminla'",        // 9  — Mar 20  (Late Jiilaal → Gu')
-  "Fushade",        // 10 — Apr 19  (Gu' — certain rain onset)
-  "Cawl",           // 11 — May 20  (Gu')
-  "Sagaal",         // 12 — Jun 20  (Gu' tail)
-];
+export const MONTHS_SOLAR = KALTIRSI_MONTHS.map(m => m.name);
 
-export const MONTH_ALIASES: Record<string, string[]> = {
-  "Aminla'": ["Daydo", "Lix-koore"],
-  "Fushade": ["Seer-ma-weydo"],
-  "Adhi-caseeye": ["Laba-Karan"],
-};
+export const MONTH_ALIASES: Record<string, string[]> = KALTIRSI_MONTHS.reduce((acc, m) => {
+  if (m.altNames && m.altNames.length > 0) {
+    acc[m.name] = m.altNames;
+  }
+  return acc;
+}, {} as Record<string, string[]>);
 
 // ═══════════════════════════════════════════════════════════════════
 // SEASONS (Xilli)

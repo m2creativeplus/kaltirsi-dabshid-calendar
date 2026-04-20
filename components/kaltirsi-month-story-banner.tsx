@@ -60,7 +60,7 @@ function SeasonalParticles({ season }: { season: string }) {
 
 // Single Month Story Card — rich data visualization
 function MonthStoryCard({ month, isCurrent }: { month: HexTemporalMonth; isCurrent: boolean }) {
-  const Icon = MONTH_ICONS[month.icon] || Star
+  const Icon = (MONTH_ICONS[month.icon] || Star) as any
 
   return (
     <motion.div

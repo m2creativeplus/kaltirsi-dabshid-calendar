@@ -57,7 +57,7 @@ export function KaltirsiSuperAppShell() {
                 )}
               >
                 {currentView === item.id && (
-                  <motion.layoutId
+                  <motion.div
                     layoutId="active-pill"
                     className="absolute inset-0 bg-white/10 rounded-xl"
                     initial={false}

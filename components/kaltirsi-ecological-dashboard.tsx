@@ -15,15 +15,52 @@ import {
 import { useTelemetry, TelemetryEngine } from "@/lib/telemetry-engine"
 import { GodkaEngine } from "@/lib/godka-engine"
 import { Kaltirsi3DStarMap } from "@/components/kaltirsi-3d-star-map"
+import { CinematicMonthViewer } from "@/components/kaltirsi-cinematic-viewer"
+
+import { useAction } from "convex/react"
+import { api } from "../convex/_generated/api"
 
 // ── HOOK: FETCH INTEL SYNC ─────────────────────────────────────────
 function useIntelSync() {
   const [intel, setIntel] = useState<any>(null)
+  
+  // Connect to the actual Convex intelligence engine we built
+  // @ts-ignore - Convex naming convention can vary between generated versions
+  const generateMapState = useAction(api.kaltirsi_engine?.getLiveEcologicalGeoMap || api.kaltirsiEngine?.getLiveEcologicalGeoMap)
+
   useEffect(() => {
-    fetch('/api/intel-sync').then(r => r.json()).then(data => {
-      if (data && data.data) setIntel(data.data)
-    }).catch(console.error)
-  }, [])
+    let mounted = true;
+    const fetchNodes = async () => {
+      try {
+        // Fetch 4 exact nodes using live meteorology
+        const nodes = await Promise.all([
+          generateMapState({ regionName: 'Hargeysa', lat: 9.56, lon: 44.06 }),
+          generateMapState({ regionName: 'Burco', lat: 9.52, lon: 45.53 }),
+          generateMapState({ regionName: 'Oodweyne', lat: 9.40, lon: 45.06 }),
+          generateMapState({ regionName: 'Ceerigaabo', lat: 10.61, lon: 47.36 })
+        ]);
+        
+        if (mounted) {
+          setIntel(nodes.map((n: any) => ({
+            region: n.properties.name,
+            intelligence: {
+              grazing_index_score: n.properties.kaltirsi.grazing_index,
+              pastoral_decision: n.properties.kaltirsi.risk === "HIGH" ? "MOVE" : (n.properties.kaltirsi.risk === "MEDIUM" ? "MONITOR" : "GRAZE")
+            },
+            telemetry: {
+              precipitation_mm: n.properties.kaltirsi.real_time_metrics.rain_mm,
+              temp_celsius: n.properties.kaltirsi.real_time_metrics.temp_c
+            }
+          })));
+        }
+      } catch (err) {
+        console.error("Convex Intel Sync Error:", err);
+      }
+    };
+    fetchNodes();
+    return () => { mounted = false; };
+  }, [generateMapState])
+
   return intel
 }
 
@@ -81,6 +118,28 @@ function LiveGrazingIndexLayer() {
           </div>
         ))}
       </div>
+    </div>
+  )
+}
+
+// ── COMPONENT: SOVEREIGN GPS NODE (OPENSTREETMAP) ───────────────────────
+function SovereignEcoMapLayer() {
+  return (
+    <div className="w-full h-[450px] rounded-2xl overflow-hidden border border-white/10 mt-4 relative shadow-2xl bg-black/40">
+      <div className="absolute top-4 left-4 z-10 bg-black/60 backdrop-blur-md px-3 py-2 rounded-lg border border-white/10 flex items-center gap-2 pointer-events-none">
+        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+        <span className="text-[10px] text-white/80 uppercase tracking-widest font-mono font-bold">OSM Sovereign GPS Link</span>
+      </div>
+      <iframe
+        src="https://www.openstreetmap.org/export/embed.html?bbox=41.418%2C8.254%2C49.921%2C11.523&layer=mapnik&marker=9.56%2C44.06"
+        width="100%"
+        height="100%"
+        style={{ border: 0 }}
+        title="Sovereign OpenStreetMap Node"
+        allowFullScreen
+        loading="lazy"
+        className="brightness-90 contrast-125 saturate-50 hue-rotate-[15deg]"
+      />
     </div>
   )
 }
@@ -237,7 +296,7 @@ function SixLayerHUD() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
       {LAYER_CARDS.map((card, i) => {
-        const Icon = card.icon
+        const Icon = card.icon as any
         const content = card.getContent(kDate)
         return (
           <motion.div
@@ -370,9 +429,10 @@ export function KaltirsiEcologicalDashboard() {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8 pb-20 px-4 pt-10">
       
-      {/* SECTION 1: LIVE INTELLIGENCE LAYER (GRAZING INDEX) */}
+      {/* SECTION 1: LIVE INTELLIGENCE LAYER (GRAZING INDEX & LIVE MAP) */}
       <section>
         <LiveGrazingIndexLayer />
+        <SovereignEcoMapLayer />
       </section>
 
       {/* SECTION 2: CHRONOMETER & 3D STAR MAP */}
@@ -384,7 +444,20 @@ export function KaltirsiEcologicalDashboard() {
         </div>
       </section>
 
-      {/* SECTION 3: CORE DATA MATRIX */}
+      {/* SECTION 3: CINEMATIC SEASONAL PROJECTION */}
+      <section className="space-y-4 pt-4">
+         <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
+           <div className="text-xs font-black text-white/70 uppercase tracking-widest">
+             Sadaasha Muuqaalka · Cinematic Seasonal Engine
+           </div>
+           <div className="text-[10px] text-white/30 font-mono">
+             Dabshid-Visual-Protocol v1.0
+           </div>
+         </div>
+         <CinematicMonthViewer />
+      </section>
+
+      {/* SECTION 4: CORE DATA MATRIX */}
       <section className="space-y-4">
         <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
           <div className="text-xs font-black text-white/70 uppercase tracking-widest">

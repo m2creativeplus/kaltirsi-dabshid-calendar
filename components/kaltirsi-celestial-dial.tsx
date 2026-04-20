@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { KaltirsiEngine, MONTHS_SOLAR, GODKA_28, getSeason } from "@/lib/kaltirsi-engine"
+import { KaltirsiEngine, GODKA_28, getSeason } from "@/lib/kaltirsi-engine"
+import { KALTIRSI_MONTHS } from "@/lib/kaltirsi-data"
 import { cn } from "@/lib/utils"
 
 export function KaltirsiCelestialDial() {
@@ -53,9 +54,10 @@ export function KaltirsiCelestialDial() {
         animate={{ rotate: monthRotation, opacity: 1 }}
         transition={{ type: "spring", stiffness: 40, damping: 20, delay: 0.1 }}
       >
-        {MONTHS_SOLAR.map((month, i) => {
+        {KALTIRSI_MONTHS.map((monthData, i) => {
+          const month = monthData.name
           const rotation = i * 30
-          const season = getSeason(i)
+          const season = activeSeason
           const isCurrent = (i + 1) === kDate.month
 
           return (
@@ -130,23 +132,33 @@ export function KaltirsiCelestialDial() {
       </motion.div>
 
       {/* INNER HUB: Crosshairs & Current Fix */}
-      <div className="absolute inset-[180px] rounded-full border-2 border-primary/20 backdrop-blur-md bg-black/40 flex flex-col items-center justify-center shadow-[inset_0_0_40px_rgba(0,0,0,0.8)] z-10 pointer-events-none">
+      <div className="absolute inset-[180px] rounded-full border-2 border-primary/20 backdrop-blur-md bg-black/40 flex flex-col items-center justify-center shadow-[inset_0_0_40px_rgba(0,0,0,0.8)] z-10 pointer-events-none overflow-hidden">
         
+        {/* Pastoral Watermark Motif (Somali Blackhead Sheep) */}
+        <motion.div 
+          className="absolute inset-0 opacity-10 flex items-center justify-center"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.15 }}
+          transition={{ duration: 2 }}
+        >
+          <img src="/somali-sheep.svg" alt="Somali Pastoral Motif" className="w-[80%] h-[80%] object-contain" />
+        </motion.div>
+
         {/* Core Date Focus */}
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="text-center"
+          className="text-center relative z-20"
         >
           <div className="text-[10px] text-primary/70 uppercase tracking-[0.3em] mb-1 font-mono">{activeSeason.name}</div>
           <div className="text-6xl font-serif text-white font-bold leading-none drop-shadow-lg">{kDate.day}</div>
-          <div className="text-xl font-serif text-primary mt-1 drop-shadow-md">{kDate.monthName}</div>
+          <div className="text-xl font-serif text-primary mt-1 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">{kDate.monthName}</div>
           <div className="text-xs text-muted-foreground/80 mt-2 font-mono tracking-widest">{kDate.year} K.E.</div>
         </motion.div>
 
         {/* Center Plumb Line */}
-        <div className="absolute top-0 left-1/2 -ml-[1px] w-[2px] h-[30px] bg-gradient-to-b from-primary to-transparent" />
+        <div className="absolute top-0 left-1/2 -ml-[1px] w-[2px] h-[20px] bg-gradient-to-b from-primary to-transparent z-20" />
       </div>
 
     </div>

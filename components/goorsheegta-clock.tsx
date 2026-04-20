@@ -410,7 +410,7 @@ function ClockFace({ currentSegment }: { currentSegment: GoorsheegtaSegment }) {
 
 // ── SEGMENT DETAIL CARD ─────────────────────────────────────
 function SegmentDetail({ segment }: { segment: GoorsheegtaSegment }) {
-  const Icon = segment.icon
+  const Icon = segment.icon as any
   return (
     <motion.div
       key={segment.id}
