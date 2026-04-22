@@ -146,4 +146,51 @@ export default defineSchema({
     imageUrl: v.optional(v.string()),
   }).index("by_animal", ["animalType"])
     .index("by_activity", ["activity"]),
+
+  // ——————————————————————————————————————————————————————————
+  // NEW: OS ARCHITECTURE WIRING (CMS, ANALYTICS, CHATBOT)
+  // ——————————————————————————————————————————————————————————
+
+  // 1. CMS System Configuration (Brand Identity & Typography)
+  systemConfig: defineTable({
+    configKey: v.string(), // e.g., "primaryBrandColor", "headingFont"
+    configValue: v.string(),
+    updatedBy: v.optional(v.string()), // Admin ID
+    updatedAt: v.number(),
+  }).index("by_key", ["configKey"]),
+
+  // 2. Real-time Environmental Telemetry (NDVI, Weather Matrix)
+  environmentTelemetry: defineTable({
+    date: v.string(), // ISO String YYYY-MM-DD
+    region: v.string(), // e.g., "Maroodi Jeex", "Awdal"
+    ndviScore: v.number(), // Normalized Difference Vegetation Index
+    rainfallMm: v.number(),
+    temperatureC: v.number(),
+    grazingIndexCalculated: v.number(), 
+    kaltirsiMonthAssociation: v.number(), // Extracted relation
+    source: v.string(), // e.g., "NASA_MODIS", "OpenWeather", "Manual_CMS"
+    recordedAt: v.number(),
+  }).index("by_date", ["date"])
+    .index("by_region", ["region"])
+    .index("by_month", ["kaltirsiMonthAssociation"]),
+
+  // 3. NotebookLM Analytics & Query Logging for Public Dashboard
+  queryAnalytics: defineTable({
+    queryText: v.string(),
+    category: v.string(), // e.g., "weather", "grazing", "culture", "godka"
+    contextUsed: v.boolean(), // Did the DB return a match?
+    userRegionContext: v.optional(v.string()), 
+    timestamp: v.number(),
+  }).index("by_category", ["category"])
+    .index("by_timestamp", ["timestamp"]),
+
+  // 4. API Sync Logs for Admin Monitoring
+  apiLogs: defineTable({
+    serviceId: v.string(), // "NASA", "FAO", "OPENWEATHER"
+    status: v.string(), // "SUCCESS", "FAILURE", "SYNCING"
+    lastSyncTime: v.number(),
+    errorMessage: v.optional(v.string()),
+    recordsIngested: v.number(),
+  }).index("by_service", ["serviceId"]),
+
 });

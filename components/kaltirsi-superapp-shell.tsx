@@ -28,11 +28,11 @@ export function KaltirsiSuperAppShell() {
   const [currentView, setCurrentView] = useState<AppView>("dashboard")
 
   return (
-    <div className="min-h-screen flex flex-col relative z-10 w-full max-w-[1600px] mx-auto">
+    <div className="min-h-screen flex flex-col relative z-10 w-full max-w-[1440px] mx-auto px-4 md:px-8 xl:px-12">
       
       {/* Top Header & Navigation (Glassmorphic) */}
-      <header className="sticky top-0 z-50 px-4 md:px-8 py-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-3xl bg-background/40 backdrop-blur-xl border border-white/10 shadow-2xl">
+      <header className="sticky top-0 z-50 py-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-4 rounded-3xl bg-background/40 backdrop-blur-xl border border-white/10 shadow-2xl">
           
           <div className="flex items-center gap-3 pl-2">
              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center flex-shrink-0 animate-kaltirsi-pulse shadow-[0_0_15px_rgba(245,158,11,0.5)]">
@@ -50,7 +50,7 @@ export function KaltirsiSuperAppShell() {
                 key={item.id}
                 onClick={() => setCurrentView(item.id)}
                 className={cn(
-                  "relative px-4 py-2 text-sm font-medium transition-colors rounded-xl whitespace-nowrap",
+                  "relative px-6 py-3 text-sm font-medium transition-colors rounded-xl whitespace-nowrap",
                   currentView === item.id 
                     ? "text-foreground" 
                     : "text-muted-foreground hover:text-foreground/80 hover:bg-white/5"
@@ -75,7 +75,7 @@ export function KaltirsiSuperAppShell() {
       </header>
 
       {/* Main Content Area with Entry Animations */}
-      <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+      <main className="flex-1 py-8 overflow-x-hidden">
         <AnimatePresence mode="wait">
           <motion.div
              key={currentView}

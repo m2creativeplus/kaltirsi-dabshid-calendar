@@ -42,7 +42,7 @@ export function CinematicMonthViewer() {
   const imagePath = MONTH_ASSETS[activeMonth.name] || "/assets/months/karan.png"
 
   return (
-    <div className="relative w-full h-[600px] rounded-3xl overflow-hidden glass border border-white/5 group shadow-2xl">
+    <div className="relative w-full h-[600px] rounded-3xl overflow-hidden flex flex-col glass border border-white/5 group shadow-2xl">
       {/* Background Image Layer with Crossfade */}
       <AnimatePresence mode="popLayout">
         <motion.div
@@ -57,10 +57,10 @@ export function CinematicMonthViewer() {
       </AnimatePresence>
 
       {/* Gradient Overlay for Legibility */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90 pointer-events-none z-0" />
 
       {/* Monumental Centered Content Overlay */}
-      <div className="absolute inset-0 p-8 flex flex-col items-center justify-center pointer-events-none">
+      <div className="flex-1 p-6 md:p-8 flex flex-col items-center justify-center relative z-10 pointer-events-none">
         <motion.div 
           key={`text-${activeMonth.name}`}
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -83,17 +83,17 @@ export function CinematicMonthViewer() {
             aria-controls="lore-details"
             className="group outline-none block focus-visible:ring-4 focus-visible:ring-primary/50 rounded-2xl transition-all"
           >
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center relative z-10 pointer-events-none">
               {kYear && (
                 <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-7xl md:text-9xl font-black font-mono text-primary/90 drop-shadow-[0_0_30px_rgba(229,166,49,0.3)] tracking-tighter mix-blend-plus-lighter -mb-2 md:-mb-6 mt-2"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 0.2, scale: 1 }}
+                  className="absolute -top-12 md:-top-20 left-1/2 -translate-x-1/2 text-[100px] md:text-[140px] font-black font-mono text-primary/80 tracking-tighter z-0 select-none"
                 >
-                  {kYear} K.E.
+                  {kYear}
                 </motion.div>
               )}
-              <h2 className="text-6xl md:text-[8rem] font-black font-serif text-white tracking-tighter drop-shadow-2xl inline-block bg-clip-text text-transparent bg-gradient-to-b from-white via-white/90 to-white/60 group-hover:from-white group-hover:to-primary/80 transition-all duration-500 leading-none">
+              <h2 className="text-6xl md:text-[8rem] font-black font-serif text-white tracking-tighter drop-shadow-2xl inline-block bg-clip-text text-transparent bg-gradient-to-b from-white via-white/90 to-white/60 group-hover:from-white group-hover:to-primary/80 transition-all duration-500 leading-none relative z-10">
                 {activeMonth.name}
               </h2>
             </div>
@@ -153,9 +153,9 @@ export function CinematicMonthViewer() {
         </motion.div>
       </div>
 
-      {/* Interactive Month Scrubber at absolute bottom */}
-      <div className="absolute bottom-6 inset-x-6">
-        <div className="w-full flex items-center justify-center gap-1.5 md:gap-2 overflow-x-auto pb-4 pt-2 hide-scrollbar snap-x snap-mandatory">
+      {/* Interactive Month Scrubber structured in Flex flow */}
+      <div className="w-full px-4 md:px-8 pb-6 relative z-20 mt-auto">
+        <div className="w-full flex items-center justify-center gap-4 overflow-x-auto pb-4 pt-2 hide-scrollbar snap-x snap-mandatory">
           {KALTIRSI_MONTHS.map((m, i) => (
             <button
               key={m.name}
@@ -165,7 +165,7 @@ export function CinematicMonthViewer() {
               tabIndex={0}
               onClick={() => setActiveMonthIdx(i)}
               className={cn(
-                "h-14 md:h-16 flex-1 min-w-[55px] md:min-w-[70px] snap-center rounded-xl border transition-all duration-500 relative flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+                "h-[56px] md:h-[64px] min-w-[56px] md:min-w-[72px] flex-1 snap-center rounded-xl border p-3 md:p-4 transition-all duration-300 relative flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black",
                 activeMonthIdx === i 
                   ? "border-primary bg-primary/10 shadow-[0_4px_30px_rgba(229,166,49,0.3)] backdrop-blur-md" 
                   : "border-white/10 bg-black/60 hover:bg-white/20 backdrop-blur-sm hover:border-white/30"

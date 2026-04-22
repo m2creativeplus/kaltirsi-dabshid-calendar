@@ -14,8 +14,10 @@ import {
 } from "lucide-react"
 import { useTelemetry, TelemetryEngine } from "@/lib/telemetry-engine"
 import { GodkaEngine } from "@/lib/godka-engine"
-import { Kaltirsi3DStarMap } from "@/components/kaltirsi-3d-star-map"
+import { AstronomicalSkyEngine } from "@/components/astronomical-sky-engine"
 import { CinematicMonthViewer } from "@/components/kaltirsi-cinematic-viewer"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 
 import { useAction } from "convex/react"
 import { api } from "../convex/_generated/api"
@@ -69,8 +71,8 @@ function LiveGrazingIndexLayer() {
   const intel = useIntelSync()
   
   return (
-    <div className="space-y-4 mb-6">
-      <div className="flex items-center justify-between px-1">
+    <div className="space-y-4 mb-8">
+      <div className="flex items-center justify-between px-2">
         <div className="flex items-center gap-2">
            <Activity className="w-4 h-4 text-emerald-400" />
            <span className="text-xs font-black uppercase tracking-[0.2em] text-white/50">Live Ecological Nodes</span>
@@ -80,12 +82,9 @@ function LiveGrazingIndexLayer() {
         )}
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {(intel || [1, 2, 3, 4]).map((node: any, idx: number) => (
-          <div key={node.region || idx} className={cn(
-            "p-4 rounded-xl border border-white/10 transition-all duration-500",
-            intel ? "bg-black/40 backdrop-blur-md" : "bg-white/[0.02] animate-pulse"
-          )}>
+          <Card key={node.region || idx} className="p-4 transition-all duration-500">
             <div className="flex justify-between items-center mb-2">
               <span className="text-[10px] uppercase tracking-widest text-white/30">{node.region || 'Node ' + (idx + 1)}</span>
               {intel && <Radio className="w-2.5 h-2.5 text-emerald-400 animate-pulse" />}
@@ -96,15 +95,13 @@ function LiveGrazingIndexLayer() {
                 <div className="text-2xl font-black text-white font-mono mb-1">
                   {node.intelligence.grazing_index_score.toFixed(1)} <span className="text-[10px] text-white/40 font-normal">GI</span>
                 </div>
-                <div className={cn(
-                  "text-[9px] font-bold px-2 py-1 rounded w-full text-center tracking-wider",
-                  node.intelligence.pastoral_decision === "GRAZE" ? "bg-emerald-500/20 text-emerald-400" :
-                    node.intelligence.pastoral_decision === "MOVE" ? "bg-red-500/20 text-red-400" :
-                      "bg-orange-500/20 text-orange-400"
-                )}>
+                <Badge variant={
+                  node.intelligence.pastoral_decision === "GRAZE" ? "secondary" :
+                  node.intelligence.pastoral_decision === "MOVE" ? "destructive" : "default"
+                } className="w-full justify-center">
                   {node.intelligence.pastoral_decision}
-                </div>
-                <div className="mt-3 flex justify-between items-center text-[9px] text-white/40 border-t border-white/5 pt-2">
+                </Badge>
+                <div className="mt-4 flex justify-between items-center text-[9px] text-white/40 border-t border-white/5 pt-2">
                   <span>{node.telemetry.precipitation_mm}mm Rain</span>
                   <span>{node.telemetry.temp_celsius}°C</span>
                 </div>
@@ -115,7 +112,7 @@ function LiveGrazingIndexLayer() {
                 <div className="h-4 w-full bg-white/5 rounded" />
               </div>
             )}
-          </div>
+          </Card>
         ))}
       </div>
     </div>
@@ -125,7 +122,7 @@ function LiveGrazingIndexLayer() {
 // ── COMPONENT: SOVEREIGN GPS NODE (OPENSTREETMAP) ───────────────────────
 function SovereignEcoMapLayer() {
   return (
-    <div className="w-full h-[450px] rounded-2xl overflow-hidden border border-white/10 mt-4 relative shadow-2xl bg-black/40">
+    <div className="w-full h-full min-h-[450px] rounded-2xl overflow-hidden border border-white/10 relative shadow-2xl bg-black/40">
       <div className="absolute top-4 left-4 z-10 bg-black/60 backdrop-blur-md px-3 py-2 rounded-lg border border-white/10 flex items-center gap-2 pointer-events-none">
         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
         <span className="text-[10px] text-white/80 uppercase tracking-widest font-mono font-bold">OSM Sovereign GPS Link</span>
@@ -172,19 +169,19 @@ function LiveChronometer() {
       {/* Top: Full Kaltirsi datetime */}
       <div className="px-6 py-4 flex items-center justify-between flex-wrap gap-4">
         <div>
-          <div className="text-[9px] uppercase tracking-[0.4em] text-white/50 font-mono mb-1">
+          <div className="text-[9px] uppercase tracking-[0.4em] text-white/50 font-mono mb-2">
             Taariikhda Kaltirsi · Kaltirsi Date
           </div>
-          <div className="flex items-baseline gap-3">
+          <div className="flex items-baseline gap-4">
             <span className="text-5xl font-black text-white leading-none">{kDate.day}</span>
             <span className="text-3xl font-bold text-white/80">{month.name}</span>
             <span className="text-lg text-white/50 font-mono">{kDate.year} K.E.</span>
           </div>
-          <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+          <div className="flex items-center gap-4 mt-2 flex-wrap">
             <span className="text-sm text-white/70">{weekday.nameStandard} — <span className="text-white/90 font-medium">{weekday.nameIndigenous}</span></span>
-            <span className="h-3 w-px bg-white/20" />
+            <span className="h-4 w-px bg-white/20" />
             <span className="text-sm text-white/60">{month.season} · {month.seasonEnglish}</span>
-            <span className="h-3 w-px bg-white/20" />
+            <span className="h-4 w-px bg-white/20" />
             <span className="text-sm text-white/60">{month.nameEnglish}</span>
           </div>
         </div>
@@ -193,8 +190,8 @@ function LiveChronometer() {
           <div className="text-4xl font-black text-white font-mono tabular-nums leading-none">
             {now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}
           </div>
-          <div className="text-sm text-white/60 mt-1">{somaliTime} · Waqtiga Dhaqanka</div>
-          <div className="text-[10px] text-white/40 mt-0.5">
+          <div className="text-sm text-white/60 mt-2">{somaliTime} · Waqtiga Dhaqanka</div>
+          <div className="text-[10px] text-white/40 mt-1">
             {now.toLocaleDateString("en-US", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
           </div>
         </div>
@@ -427,11 +424,11 @@ function AnnualSparkline() {
 // ═══════════════════════════════════════════════════════════════════
 export function KaltirsiEcologicalDashboard() {
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-8 pb-20 px-4 pt-10">
+    <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-8 pb-16 pt-4">
       
       {/* SECTION 1: CINEMATIC SEASONAL PROJECTION (HERO) */}
-      <section className="space-y-4 pb-4">
-         <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
+      <section className="flex flex-col gap-6">
+         <div className="flex items-center justify-between px-2 border-b border-white/10 pb-4">
            <div className="text-xs font-black text-white/70 uppercase tracking-widest flex items-center gap-2">
              <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
              Sadaasha Muuqaalka · Cinematic Seasonal Engine
@@ -444,27 +441,37 @@ export function KaltirsiEcologicalDashboard() {
       </section>
 
       {/* SECTION 2: CHRONOMETER & 3D STAR MAP */}
-      <section className="space-y-4">
+      <section className="flex flex-col gap-6">
         <LiveChronometer />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Kaltirsi3DStarMap />
-            <AnnualSparkline />
+        <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="lg:col-span-2 xl:col-span-3 h-[500px]">
+              <AstronomicalSkyEngine />
+            </div>
+            <div className="lg:col-span-1 h-[500px]">
+              <AnnualSparkline />
+            </div>
         </div>
       </section>
 
       {/* SECTION 3: LIVE INTELLIGENCE LAYER (GRAZING INDEX & LIVE MAP) */}
-      <section className="space-y-4 pt-4">
+      <section className="flex flex-col gap-6">
         <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
            <div className="text-xs font-black text-white/70 uppercase tracking-widest">
              Sirdoonka Deegaanka · Live Map Data
            </div>
         </div>
-        <LiveGrazingIndexLayer />
-        <SovereignEcoMapLayer />
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 h-[450px]">
+          <div className="xl:col-span-1 h-full overflow-y-auto pr-2">
+            <LiveGrazingIndexLayer />
+          </div>
+          <div className="xl:col-span-2 h-full">
+            <SovereignEcoMapLayer />
+          </div>
+        </div>
       </section>
 
       {/* SECTION 4: CORE DATA MATRIX */}
-      <section className="space-y-4">
+      <section className="flex flex-col gap-6 pt-6">
         <div className="flex items-center justify-between px-0.5 border-b border-white/5 pb-2">
           <div className="text-xs font-black text-white/70 uppercase tracking-widest">
             Sirdoonka Deegaanka · Environmental OS
