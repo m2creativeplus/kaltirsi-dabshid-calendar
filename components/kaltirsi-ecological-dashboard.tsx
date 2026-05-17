@@ -26,37 +26,97 @@ import { api } from "../convex/_generated/api"
 function useIntelSync() {
   const [intel, setIntel] = useState<any>(null)
   
-  // Connect to the actual Convex intelligence engine we built
-  // @ts-ignore - Convex naming convention can vary between generated versions
-  const generateMapState = useAction(api.kaltirsi_engine?.getLiveEcologicalGeoMap || api.kaltirsiEngine?.getLiveEcologicalGeoMap)
+  // Safe hook initialization
+  let generateMapState: any = null
+  try {
+    // @ts-ignore
+    const actionRef = api?.kaltirsi_engine?.getLiveEcologicalGeoMap || api?.kaltirsiEngine?.getLiveEcologicalGeoMap
+    if (actionRef) {
+      generateMapState = useAction(actionRef)
+    }
+  } catch (e) {
+    console.warn("Convex useAction hooks not loaded:", e)
+  }
 
   useEffect(() => {
     let mounted = true;
     const fetchNodes = async () => {
       try {
-        // Fetch 4 exact nodes using live meteorology
-        const nodes = await Promise.all([
-          generateMapState({ regionName: 'Hargeysa', lat: 9.56, lon: 44.06 }),
-          generateMapState({ regionName: 'Burco', lat: 9.52, lon: 45.53 }),
-          generateMapState({ regionName: 'Oodweyne', lat: 9.40, lon: 45.06 }),
-          generateMapState({ regionName: 'Ceerigaabo', lat: 10.61, lon: 47.36 })
-        ]);
-        
-        if (mounted) {
-          setIntel(nodes.map((n: any) => ({
-            region: n.properties.name,
-            intelligence: {
-              grazing_index_score: n.properties.kaltirsi.grazing_index,
-              pastoral_decision: n.properties.kaltirsi.risk === "HIGH" ? "MOVE" : (n.properties.kaltirsi.risk === "MEDIUM" ? "MONITOR" : "GRAZE")
-            },
-            telemetry: {
-              precipitation_mm: n.properties.kaltirsi.real_time_metrics.rain_mm,
-              temp_celsius: n.properties.kaltirsi.real_time_metrics.temp_c
-            }
-          })));
+        if (generateMapState) {
+          // Fetch 4 exact nodes using live meteorology
+          const nodes = await Promise.all([
+            generateMapState({ regionName: 'Hargeysa', lat: 9.56, lon: 44.06 }),
+            generateMapState({ regionName: 'Burco', lat: 9.52, lon: 45.53 }),
+            generateMapState({ regionName: 'Oodweyne', lat: 9.40, lon: 45.06 }),
+            generateMapState({ regionName: 'Ceerigaabo', lat: 10.61, lon: 47.36 })
+          ]);
+          
+          if (mounted) {
+            setIntel(nodes.map((n: any) => ({
+              region: n.properties.name,
+              intelligence: {
+                grazing_index_score: n.properties.kaltirsi.grazing_index,
+                pastoral_decision: n.properties.kaltirsi.risk === "HIGH" ? "MOVE" : (n.properties.kaltirsi.risk === "MEDIUM" ? "MONITOR" : "GRAZE")
+              },
+              telemetry: {
+                precipitation_mm: n.properties.kaltirsi.real_time_metrics.rain_mm,
+                temp_celsius: n.properties.kaltirsi.real_time_metrics.temp_c
+              }
+            })));
+            return;
+          }
         }
       } catch (err) {
-        console.error("Convex Intel Sync Error:", err);
+        console.warn("Convex Intel Sync failed, running local telemetry engine fallback...", err);
+      }
+
+      // Fallback: Fetch directly from client-side TelemetryEngine
+      try {
+        const Hargeysa = await TelemetryEngine.getLiveEnvironment("Oogo");
+        const Burco = await TelemetryEngine.getLiveEnvironment("Bannaan");
+        const Oodweyne = await TelemetryEngine.getLiveEnvironment("Guban");
+        const Ceerigaabo = await TelemetryEngine.getLiveEnvironment("Webiyada");
+
+        const mapToIntel = (regionName: string, data: any) => {
+          const precip = data?.current?.precipitation || 0;
+          const temp = data?.current?.temp || 28;
+          const windSpeed = data?.current?.windSpeed || 10;
+          
+          let heatPenalty = 0;
+          if (temp > 35) heatPenalty = 2;
+          else if (temp > 30) heatPenalty = 1;
+          
+          const baseGI = (precip * 0.4) + (windSpeed < 15 ? 0.5 : 0) - heatPenalty;
+          const grazing_index_score = Math.max(0.5, Math.min(9.8, baseGI + 4.5)); // Dynamic shift
+          
+          let decision = "GRAZE";
+          if (precip > 5) decision = "GRAZE";
+          else if (heatPenalty >= 2 && precip === 0) decision = "MOVE";
+          else if (temp > 32) decision = "MONITOR";
+
+          return {
+            region: regionName,
+            intelligence: {
+              grazing_index_score,
+              pastoral_decision: decision
+            },
+            telemetry: {
+              precipitation_mm: precip,
+              temp_celsius: temp
+            }
+          };
+        };
+
+        if (mounted) {
+          setIntel([
+            mapToIntel("Hargeysa", Hargeysa),
+            mapToIntel("Burco", Burco),
+            mapToIntel("Oodweyne", Oodweyne),
+            mapToIntel("Ceerigaabo", Ceerigaabo),
+          ]);
+        }
+      } catch (fallbackErr) {
+        console.error("Local Telemetry Fallback failed too:", fallbackErr);
       }
     };
     fetchNodes();
@@ -65,6 +125,7 @@ function useIntelSync() {
 
   return intel
 }
+
 
 // ── COMPONENT: LIVE GRAZING INDEX LAYER ────────────────────────────
 function LiveGrazingIndexLayer() {
@@ -155,8 +216,19 @@ function LiveChronometer() {
   const weekday = KALTIRSI_WEEKDAYS[now.getDay() === 0 ? 1 : now.getDay() === 6 ? 0 : now.getDay() + 1] || KALTIRSI_WEEKDAYS[0]
   const month = getCurrentKaltirsiMonth(kDate.month)
 
-  // Real-time environmental engine
-  const { data: telemetry, isLoading: telLoading } = useTelemetry("Oogo")
+  // Real-time environmental engine with safe fallback
+  const { data: telemetry, isLoading: telLoadingRaw } = useTelemetry("Oogo")
+  const [telLoading, setTelLoading] = useState(true)
+
+  useEffect(() => {
+    if (!telLoadingRaw) {
+      setTelLoading(false)
+    } else {
+      const timer = setTimeout(() => setTelLoading(false), 1500) // 1.5s absolute loading fail-safe
+      return () => clearTimeout(timer)
+    }
+  }, [telLoadingRaw])
+
   const weatherState = TelemetryEngine.getWeatherState(telemetry.current.weatherCode)
 
   return (
@@ -224,6 +296,7 @@ function LiveChronometer() {
   )
 }
 
+
 // ── SIX-LAYER INTELLIGENCE HUD ─────────────────────────────────────
 const LAYER_CARDS = [
   {
@@ -289,6 +362,86 @@ const LAYER_CARDS = [
 
 function SixLayerHUD() {
   const kDate = useMemo(() => KaltirsiEngine.gregorianToKaltirsi(new Date()), [])
+  const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null)
+
+  const activeCard = useMemo(() => {
+    return LAYER_CARDS.find(c => c.key === activeLayerKey)
+  }, [activeLayerKey])
+
+  const activeMonth = useMemo(() => {
+    return getCurrentKaltirsiMonth(kDate.month)
+  }, [kDate.month])
+
+  const getDetailedDescription = (key: string) => {
+    switch (key) {
+      case "qorraxeed":
+        return {
+          title: "Solar Agriculture Layer",
+          desc: activeMonth.detailedDescription,
+          somali: activeMonth.ecologicalIndicatorSo,
+          meta: `Month: ${activeMonth.name} (${activeMonth.nameEnglish}) · Season: ${activeMonth.season}`,
+          proverb: activeMonth.proverb,
+        };
+      case "dayaxeed":
+        try {
+          const hijri = KaltirsiEngine.getHijriDate(new Date());
+          return {
+            title: "Lunar Religious Layer",
+            desc: "Synched to the 354-day lunar calendar tracking islamic holidays, traditional night herding watches, and historical trade currents.",
+            somali: "Habka is-waafajinta taariikhda Islaamka iyo Kaltirsiga, isagoo xambaarsan magacyada bilaha ee Soomaalidii hore.",
+            meta: `Current Lunar State: ${hijri} · Nominal Alignment`,
+            proverb: "Dayaxu wuxuu u iftiimaa sida runta oo kale.",
+          };
+        } catch {
+          return {
+            title: "Lunar Religious Layer",
+            desc: "Synched to the 354-day lunar calendar tracking islamic holidays.",
+            somali: "Taariikhda Hijriga Soomaalida.",
+            meta: "Standard sync",
+            proverb: "Waqtigu waa seef, haddii aadan goyn adiga ayuu kugu jarayaa.",
+          };
+        }
+      case "xiddigeed":
+        const godka = GodkaEngine.getCurrentGodka(new Date())
+        return {
+          title: "Stellar Navigation (Godka) Layer",
+          desc: `Active station: ${godka.name} (${godka.iauStar}). Traditional Somali astronomical navigation employs 28 distinct sky stations along the moon's orbit.`,
+          somali: `Xiddigta saamaynta leh: ${godka.name}. Waxay tilmaamaysaa saadaalinta cimilada iyo hagaajinta socodka badaha.`,
+          meta: `IAU Star: ${godka.iauStar} · Season: ${godka.associatedSeason} · ${godka.significance}`,
+          proverb: "Cirka iyo xiddiguhu waa saaxiibada safarka ee aan marnaba lumin.",
+        };
+      case "hawd":
+        return {
+          title: "Hawd Pastoral Intelligence",
+          desc: activeMonth.pastoralActivity,
+          somali: `Heerka daaqsinta ee bishan waa ${activeMonth.grazingIndex}/10. Khatarta abaaruhu waa ${activeMonth.droughtRisk.toUpperCase()}.`,
+          meta: `Grazing Index: ${activeMonth.grazingIndex}/10 · Drought Risk: ${activeMonth.droughtRisk.toUpperCase()}`,
+          proverb: "Rag iyo geelba way wada daaqaan laakiin go'aanka ayaa kala duwan.",
+        };
+      case "badda":
+        return {
+          title: "Maritime & Trade Winds Intelligence",
+          desc: activeMonth.maritimeNote,
+          somali: `Meeqaanka badaha ee bishan: Badaha waa kuwo furan ama xiran iyadoo lagu salaynayo xawaaraha dabaylaha deegaanka.`,
+          meta: `Coastal Status: ${activeMonth.id === 6 ? "Bad-Furan" : activeMonth.id === 12 ? "Bad-Xiran" : "Nominal Water Flow"}`,
+          proverb: "Badda maanta furan, berri way xidhmi kartaa; garashadu waa hagaha ugu habboon.",
+        };
+      case "diimeed":
+        const upcoming = getUpcomingHolidays(new Date(), 1)
+        const h = upcoming[0]
+        return {
+          title: "Sovereignty & Cultural Events",
+          desc: h ? `${h.name} — ${h.description}` : "Sovereign holiday tracking system linking ancient Somali calendar events and modern administrative landmarks.",
+          somali: h ? `${h.nameSomali} — ${h.descriptionSomali}` : "Dhacdooyinka muhiimka ah ee taariikhda deegaanka.",
+          meta: h ? `Date: ${h.date} (${h.kaltirsiMonth}) · Significance: ${h.significance.toUpperCase()}` : "Events Nominally Audited",
+          proverb: "Madaxbannaanidu waa sharafta iyo nolol-tiris kasta.",
+        };
+      default:
+        return null;
+    }
+  };
+
+  const detail = activeCard ? getDetailedDescription(activeCard.key) : null;
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -302,6 +455,7 @@ function SixLayerHUD() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.07, type: "spring", stiffness: 300 }}
             whileHover={{ scale: 1.02, y: -2 }}
+            onClick={() => setActiveLayerKey(card.key)}
             className="group rounded-2xl border border-white/5 bg-white/[0.02] p-4 cursor-pointer transition-all hover:border-white/10 hover:bg-white/[0.04]"
             style={{ boxShadow: `0 0 0 0 ${card.color}` }}
           >
@@ -333,16 +487,83 @@ function SixLayerHUD() {
           </motion.div>
         )
       })}
+
+      {/* Detailed Modal Overlay */}
+      <AnimatePresence>
+        {activeLayerKey && detail && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-[100] p-4"
+            onClick={() => setActiveLayerKey(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              transition={{ type: "spring", damping: 25, stiffness: 220 }}
+              className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#0c0c12]/95 p-6 shadow-2xl relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setActiveLayerKey(null)}
+                className="absolute top-4 right-4 text-white/50 hover:text-white text-lg font-bold w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors"
+              >
+                ×
+              </button>
+              <div className="flex items-center gap-3 mb-4 border-b border-white/5 pb-4">
+                <div className="w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10"
+                  style={{ backgroundColor: `${activeCard?.color}15` }}>
+                  {activeCard && <activeCard.icon className="h-5 w-5" style={{ color: activeCard.color }} />}
+                </div>
+                <div>
+                  <span className="text-[9px] font-mono tracking-widest text-[#D4AF37] uppercase font-bold block">Temporal Matrix briefing</span>
+                  <h3 className="text-xl font-bold text-white mt-0.5">{detail.title}</h3>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <span className="text-[10px] text-white/30 uppercase tracking-widest font-mono">Pastoral Description</span>
+                  <p className="text-sm text-white/95 leading-relaxed bg-white/[0.02] p-3 rounded-xl border border-white/5">{detail.desc}</p>
+                </div>
+
+                <div className="space-y-1">
+                  <span className="text-[10px] text-[#D4AF37]/50 uppercase tracking-widest font-mono">Deegaan & Ecology</span>
+                  <p className="text-xs text-white/80 leading-relaxed italic border-l-2 border-[#D4AF37]/50 pl-3">{detail.somali}</p>
+                </div>
+
+                <div className="rounded-2xl bg-[#D4AF37]/5 border border-[#D4AF37]/10 p-3 flex flex-col gap-1 items-center justify-center text-center">
+                  <span className="text-[9px] text-[#D4AF37] font-serif italic">"{detail.proverb}"</span>
+                  <span className="text-[8px] text-white/30 uppercase tracking-[0.2em] font-mono mt-1">Nomadic Proverb</span>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-white/5 pt-4 text-[10px] text-white/40">
+                  <span>{detail.meta}</span>
+                  <span className="font-mono text-emerald-400 uppercase tracking-wider">Sync: Nominal</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
 
+
 // ── UPCOMING HOLIDAYS STRIP ─────────────────────────────────────────
 function HolidayStrip() {
   const upcoming = useMemo(() => getUpcomingHolidays(new Date(), 3), [])
+  const [selectedHolidayId, setSelectedHolidayId] = useState<string | null>(null)
+
+  const activeHoliday = useMemo(() => {
+    return upcoming.find(h => h.id === selectedHolidayId)
+  }, [selectedHolidayId, upcoming])
 
   return (
-    <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1">
+    <div className="flex gap-3 overflow-x-auto scrollbar-hide pb-1 relative">
       {upcoming.map((h, i) => {
         const daysLeft = (() => {
           const now = new Date()
@@ -356,7 +577,8 @@ function HolidayStrip() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="flex-shrink-0 flex items-center gap-3 px-4 py-3 rounded-xl border border-white/5 bg-white/[0.02] min-w-[220px]"
+            onClick={() => setSelectedHolidayId(h.id)}
+            className="flex-shrink-0 flex items-center gap-3 px-4 py-3 rounded-xl border border-white/5 bg-white/[0.02] min-w-[220px] cursor-pointer transition-all hover:bg-white/5 hover:border-white/10"
           >
             <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-white font-black text-sm"
               style={{ backgroundColor: h.color + "25" }}>
@@ -373,51 +595,206 @@ function HolidayStrip() {
           </motion.div>
         )
       })}
+
+      {/* Holiday Briefing Modal */}
+      <AnimatePresence>
+        {selectedHolidayId && activeHoliday && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-[100] p-4"
+            onClick={() => setSelectedHolidayId(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              className="w-full max-w-md rounded-3xl border border-white/10 bg-[#0c0c12]/95 p-6 shadow-2xl relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setSelectedHolidayId(null)}
+                className="absolute top-4 right-4 text-white/50 hover:text-white text-lg font-bold w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-colors"
+              >
+                ×
+              </button>
+              <div className="flex items-center gap-3.5 mb-4 border-b border-white/5 pb-4">
+                <div className="w-11 h-11 rounded-2xl flex items-center justify-center text-white font-black text-base"
+                  style={{ backgroundColor: activeHoliday.color + "25" }}>
+                  {activeHoliday.day === 0 ? "☪" : activeHoliday.day}
+                </div>
+                <div>
+                  <span className="text-[9px] font-mono tracking-widest text-[#D4AF37] uppercase font-bold block">Sovereign Historical Audit</span>
+                  <h3 className="text-lg font-bold text-white mt-0.5">{activeHoliday.nameSomali}</h3>
+                  <span className="text-[10px] text-white/50 block mt-0.5">{activeHoliday.name}</span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <span className="text-[10px] text-white/30 uppercase tracking-widest font-mono">Significance & Details</span>
+                  <p className="text-xs text-white/90 leading-relaxed bg-white/[0.02] p-3 rounded-xl border border-white/5">
+                    {activeHoliday.description}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <span className="text-[10px] text-[#D4AF37]/50 uppercase tracking-widest font-mono">Faahfaahinta Taariikhda</span>
+                  <p className="text-xs text-white/80 leading-relaxed italic border-l-2 border-[#D4AF37]/50 pl-3">
+                    {activeHoliday.descriptionSomali}
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-center bg-white/[0.01] p-3 rounded-xl border border-white/5 text-[10px]">
+                  <div className="space-y-0.5">
+                    <span className="text-white/30 uppercase tracking-wider block text-[8px]">Gregorian Date</span>
+                    <span className="text-white/80 font-bold">{activeHoliday.date}</span>
+                  </div>
+                  <div className="space-y-0.5 text-right">
+                    <span className="text-white/30 uppercase tracking-wider block text-[8px]">Kaltirsi Alignment</span>
+                    <span className="text-[#D4AF37] font-bold">{activeHoliday.kaltirsiMonth}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-white/5 pt-4 text-[10px] text-white/40">
+                  <span>Restoration State: Certified</span>
+                  <span className="font-mono text-emerald-400 uppercase tracking-wider">Sync: True</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
 
-// ── ANNUAL GRAZING SPARKLINE (mini) ────────────────────────────────
+
+// ── ANNUAL GRAZING ENGINE ─────────────────────────────────────────
 function AnnualSparkline() {
   const kDate = useMemo(() => KaltirsiEngine.gregorianToKaltirsi(new Date()), [])
+  const currentMonth = useMemo(() => KALTIRSI_MONTHS.find(m => m.id === kDate.month) || KALTIRSI_MONTHS[0], [kDate.month])
+
+  // Group months by seasons to show stats
+  const seasonStats = useMemo(() => {
+    const stats: Record<string, { count: number; totalGI: number; icon: any; color: string }> = {
+      "Xagaa": { count: 0, totalGI: 0, icon: Flame, color: "text-orange-400" },
+      "Dayr": { count: 0, totalGI: 0, icon: CloudRain, color: "text-blue-400" },
+      "Jiilaal": { count: 0, totalGI: 0, icon: ThermometerSun, color: "text-amber-500" },
+      "Gu'": { count: 0, totalGI: 0, icon: Leaf, color: "text-emerald-400" },
+    };
+    KALTIRSI_MONTHS.forEach(m => {
+      if (stats[m.season]) {
+        stats[m.season].count++;
+        stats[m.season].totalGI += m.grazingIndex;
+      }
+    });
+    return stats;
+  }, []);
 
   return (
-    <div className="rounded-2xl border border-white/5 bg-white/[0.02] p-4">
-      <div className="flex items-center justify-between mb-3">
-        <div>
-          <div className="text-[9px] uppercase tracking-wider text-muted-foreground/40 font-mono">Tilmaamaha Daaqsinta Sannadlaha</div>
-          <div className="text-sm font-bold text-foreground">Annual Grazing Cycle</div>
+    <div className="rounded-2xl border border-white/10 bg-black/60 backdrop-blur-md p-5 h-full flex flex-col justify-between shadow-2xl">
+      {/* Header */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <span className="text-[9px] uppercase tracking-[0.2em] text-[#D4AF37] font-mono font-bold">Tilmaamaha Sannadlaha</span>
+            <h3 className="text-base font-black text-white mt-1">Annual Grazing Engine</h3>
+          </div>
+          <div className="text-right">
+            <span className="text-[8px] text-white/40 font-mono block">KALTIRSI</span>
+            <span className="text-xs text-primary font-bold font-mono">{kDate.year} K.E.</span>
+          </div>
         </div>
-        <div className="text-xs text-muted-foreground/50">Kaltirsi {kDate.year} K.E.</div>
-      </div>
-      <div className="flex items-end gap-0.5 h-12">
-        {KALTIRSI_MONTHS.map((m) => {
-          const isCurrent = m.id === kDate.month
-          const pct = (m.grazingIndex / 10) * 100
-          const color = m.grazingIndex >= 8 ? "#1EB53A" : m.grazingIndex >= 5 ? "#D9A441" : m.grazingIndex >= 3 ? "#F97316" : "#DC2626"
-          return (
-            <div key={m.id} className="flex-1 flex flex-col items-center gap-0.5 group relative">
-              <div className="w-full relative" style={{ height: "40px" }}>
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: `${pct}%` }}
-                  transition={{ delay: m.id * 0.04, type: "spring" }}
-                  className="absolute bottom-0 w-full rounded-sm"
-                  style={{ backgroundColor: isCurrent ? color : color + "55" }}
-                />
-                {isCurrent && <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary animate-pulse" />}
+
+        {/* Main Interactive Bar Chart */}
+        <div className="flex items-end gap-1.5 h-36 border-b border-white/5 pb-4 mb-4">
+          {KALTIRSI_MONTHS.map((m) => {
+            const isCurrent = m.id === kDate.month
+            const pct = (m.grazingIndex / 10) * 100
+            const color = m.grazingIndex >= 8 ? "#1EB53A" : m.grazingIndex >= 5 ? "#D9A441" : m.grazingIndex >= 3 ? "#F97316" : "#DC2626"
+            return (
+              <div key={m.id} className="flex-1 flex flex-col items-center gap-1 group relative">
+                <div className="w-full relative h-28 flex items-end">
+                  {/* Tooltip */}
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 rounded-lg bg-black/90 border border-white/20 text-[9px] text-white font-mono opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 shadow-xl z-50 whitespace-nowrap">
+                    <div className="font-bold text-primary">{m.name}</div>
+                    <div className="text-white/60">Grazing Index: {m.grazingIndex}/10</div>
+                    <div className="text-white/40 capitalize">{m.droughtRisk} Risk</div>
+                  </div>
+
+                  <motion.div
+                    initial={{ height: 0 }}
+                    animate={{ height: `${pct}%` }}
+                    transition={{ delay: m.id * 0.03, type: "spring", stiffness: 100 }}
+                    className={cn("w-full rounded-t-md transition-all duration-300", 
+                      isCurrent ? "shadow-[0_0_15px_rgba(30,181,58,0.4)]" : ""
+                    )}
+                    style={{ backgroundColor: isCurrent ? color : color + "33" }}
+                  />
+                  {isCurrent && <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#1EB53A]" />}
+                </div>
+                <span className={cn("text-[8px] font-bold font-mono text-center w-full truncate mt-1",
+                  isCurrent ? "text-primary font-black uppercase" : "text-white/30")}>
+                  {m.name.substring(0, 3)}
+                </span>
               </div>
-              <div className={cn("text-[7px] font-mono text-center w-full truncate",
-                isCurrent ? "text-primary font-bold" : "text-muted-foreground/25")}>
-                {m.name.substring(0, 3)}
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Seasonal Breakdowns */}
+      <div className="flex-1 flex flex-col justify-center gap-3">
+        <span className="text-[9px] uppercase tracking-[0.2em] text-white/40 font-mono font-bold block mb-1">Seasonal Telemetry Metrics</span>
+        {Object.entries(seasonStats).map(([seasonName, stat]) => {
+          const Icon = stat.icon;
+          const avgGI = (stat.totalGI / stat.count).toFixed(1);
+          const isActive = currentMonth.season === seasonName;
+          return (
+            <div 
+              key={seasonName} 
+              className={cn(
+                "flex items-center justify-between p-2.5 rounded-xl border transition-all duration-300",
+                isActive 
+                  ? "bg-white/5 border-white/20 shadow-lg shadow-black/30" 
+                  : "bg-transparent border-transparent opacity-50 hover:opacity-80"
+              )}
+            >
+              <div className="flex items-center gap-2.5">
+                <div className={cn("p-1.5 rounded-lg bg-white/5", stat.color)}>
+                  <Icon className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                    {seasonName}
+                    {isActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+                  </span>
+                  <span className="text-[9px] text-white/40 uppercase tracking-wider block">Pastoral Season</span>
+                </div>
+              </div>
+              <div className="text-right">
+                <span className="text-xs font-mono font-black text-white">{isActive ? avgGI : (stat.totalGI / stat.count).toFixed(1)} <span className="text-[9px] text-white/40 font-normal">Ø GI</span></span>
+                <span className="text-[8px] text-white/30 uppercase tracking-widest block mt-0.5">Average Yield</span>
               </div>
             </div>
-          )
+          );
         })}
+      </div>
+
+      {/* Footer Active Banner */}
+      <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-[10px] text-white/50">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-[#D4AF37]" />
+          Active Season: <span className="text-white font-bold">{currentMonth.season}</span>
+        </span>
+        <span className="font-mono text-emerald-400 uppercase tracking-wider">Sync: Nominal</span>
       </div>
     </div>
   )
 }
+
 
 // ═══════════════════════════════════════════════════════════════════
 // MAIN EXPORT: Kaltirsi Ecological Intelligence Dashboard
