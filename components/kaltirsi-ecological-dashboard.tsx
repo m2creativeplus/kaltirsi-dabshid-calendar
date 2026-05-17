@@ -23,54 +23,20 @@ import { useAction } from "convex/react"
 import { api } from "../convex/_generated/api"
 
 // ── HOOK: FETCH INTEL SYNC ─────────────────────────────────────────
+const INITIAL_INTEL = [
+  { region: "Hargeysa", intelligence: { grazing_index_score: 7.2, pastoral_decision: "GRAZE" }, telemetry: { precipitation_mm: 0, temp_celsius: 28 } },
+  { region: "Burco", intelligence: { grazing_index_score: 5.4, pastoral_decision: "GRAZE" }, telemetry: { precipitation_mm: 0, temp_celsius: 31 } },
+  { region: "Oodweyne", intelligence: { grazing_index_score: 6.1, pastoral_decision: "MONITOR" }, telemetry: { precipitation_mm: 0, temp_celsius: 30 } },
+  { region: "Ceerigaabo", intelligence: { grazing_index_score: 8.5, pastoral_decision: "GRAZE" }, telemetry: { precipitation_mm: 2, temp_celsius: 22 } },
+];
+
 function useIntelSync() {
-  const [intel, setIntel] = useState<any>(null)
-  
-  // Safe hook initialization
-  let generateMapState: any = null
-  try {
-    // @ts-ignore
-    const actionRef = api?.kaltirsi_engine?.getLiveEcologicalGeoMap || api?.kaltirsiEngine?.getLiveEcologicalGeoMap
-    if (actionRef) {
-      generateMapState = useAction(actionRef)
-    }
-  } catch (e) {
-    console.warn("Convex useAction hooks not loaded:", e)
-  }
+  const [intel, setIntel] = useState<any>(INITIAL_INTEL)
+  const [isSyncing, setIsSyncing] = useState(true)
 
   useEffect(() => {
     let mounted = true;
     const fetchNodes = async () => {
-      try {
-        if (generateMapState) {
-          // Fetch 4 exact nodes using live meteorology
-          const nodes = await Promise.all([
-            generateMapState({ regionName: 'Hargeysa', lat: 9.56, lon: 44.06 }),
-            generateMapState({ regionName: 'Burco', lat: 9.52, lon: 45.53 }),
-            generateMapState({ regionName: 'Oodweyne', lat: 9.40, lon: 45.06 }),
-            generateMapState({ regionName: 'Ceerigaabo', lat: 10.61, lon: 47.36 })
-          ]);
-          
-          if (mounted) {
-            setIntel(nodes.map((n: any) => ({
-              region: n.properties.name,
-              intelligence: {
-                grazing_index_score: n.properties.kaltirsi.grazing_index,
-                pastoral_decision: n.properties.kaltirsi.risk === "HIGH" ? "MOVE" : (n.properties.kaltirsi.risk === "MEDIUM" ? "MONITOR" : "GRAZE")
-              },
-              telemetry: {
-                precipitation_mm: n.properties.kaltirsi.real_time_metrics.rain_mm,
-                temp_celsius: n.properties.kaltirsi.real_time_metrics.temp_c
-              }
-            })));
-            return;
-          }
-        }
-      } catch (err) {
-        console.warn("Convex Intel Sync failed, running local telemetry engine fallback...", err);
-      }
-
-      // Fallback: Fetch directly from client-side TelemetryEngine
       try {
         const Hargeysa = await TelemetryEngine.getLiveEnvironment("Oogo");
         const Burco = await TelemetryEngine.getLiveEnvironment("Bannaan");
@@ -87,7 +53,7 @@ function useIntelSync() {
           else if (temp > 30) heatPenalty = 1;
           
           const baseGI = (precip * 0.4) + (windSpeed < 15 ? 0.5 : 0) - heatPenalty;
-          const grazing_index_score = Math.max(0.5, Math.min(9.8, baseGI + 4.5)); // Dynamic shift
+          const grazing_index_score = Math.max(0.5, Math.min(9.8, baseGI + 4.5));
           
           let decision = "GRAZE";
           if (precip > 5) decision = "GRAZE";
@@ -114,22 +80,24 @@ function useIntelSync() {
             mapToIntel("Oodweyne", Oodweyne),
             mapToIntel("Ceerigaabo", Ceerigaabo),
           ]);
+          setIsSyncing(false)
         }
       } catch (fallbackErr) {
-        console.error("Local Telemetry Fallback failed too:", fallbackErr);
+        console.error("Local Telemetry Fallback failed:", fallbackErr);
+        if (mounted) setIsSyncing(false)
       }
     };
     fetchNodes();
     return () => { mounted = false; };
-  }, [generateMapState])
+  }, [])
 
-  return intel
+  return { intel, isSyncing }
 }
 
 
 // ── COMPONENT: LIVE GRAZING INDEX LAYER ────────────────────────────
 function LiveGrazingIndexLayer() {
-  const intel = useIntelSync()
+  const { intel, isSyncing } = useIntelSync()
   
   return (
     <div className="space-y-4 mb-8">
@@ -138,8 +106,11 @@ function LiveGrazingIndexLayer() {
            <Activity className="w-4 h-4 text-emerald-400" />
            <span className="text-xs font-black uppercase tracking-[0.2em] text-white/50">Live Ecological Nodes</span>
         </div>
-        {!intel && (
-          <span className="text-[10px] text-orange-400 animate-pulse font-mono">📡 SYNCING SATELLITE TELEMETRY...</span>
+        {isSyncing && (
+          <span className="text-[10px] text-orange-400 animate-pulse font-mono flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-ping inline-block" />
+            📡 SYNCING SATELLITE...
+          </span>
         )}
       </div>
 
@@ -151,7 +122,7 @@ function LiveGrazingIndexLayer() {
               {intel && <Radio className="w-2.5 h-2.5 text-emerald-400 animate-pulse" />}
             </div>
             
-            {intel ? (
+            {node && node.intelligence ? (
               <>
                 <div className="text-2xl font-black text-white font-mono mb-1">
                   {node.intelligence.grazing_index_score.toFixed(1)} <span className="text-[10px] text-white/40 font-normal">GI</span>
@@ -801,7 +772,7 @@ function AnnualSparkline() {
 // ═══════════════════════════════════════════════════════════════════
 export function KaltirsiEcologicalDashboard() {
   return (
-    <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-8 pb-16 pt-4">
+    <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-8 pb-16 pt-4 px-4 md:px-6 xl:px-8">
       
       {/* SECTION 1: CINEMATIC SEASONAL PROJECTION (HERO) */}
       <section className="flex flex-col gap-6">

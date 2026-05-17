@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 
@@ -15,6 +16,10 @@ import { InteractiveRegionMap } from "@/components/interactive-region-map"
 
 type AppView = "dashboard" | "calendar" | "sky" | "timeline" | "regions" | "holidays"
 
+interface KaltirsiSuperAppShellProps {
+  defaultView?: AppView
+}
+
 const NAV_ITEMS: { id: AppView; label: string; icon: string }[] = [
   { id: "dashboard", label: "Dashboard", icon: "⊞" },
   { id: "calendar",  label: "Calendar",  icon: "📅" },
@@ -24,8 +29,37 @@ const NAV_ITEMS: { id: AppView; label: string; icon: string }[] = [
   { id: "holidays",  label: "Events",    icon: "⭐" },
 ]
 
-export function KaltirsiSuperAppShell() {
-  const [currentView, setCurrentView] = useState<AppView>("dashboard")
+export function KaltirsiSuperAppShell({ defaultView = "dashboard" }: KaltirsiSuperAppShellProps) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const [currentView, setCurrentView] = useState<AppView>(defaultView)
+
+  // Map view keys to standard Next.js pathnames
+  const viewToPath = (view: AppView) => {
+    if (view === "dashboard") return "/"
+    if (view === "holidays") return "/events"
+    return `/${view}`
+  }
+
+  // Handle URL change to keep state synchronized
+  useEffect(() => {
+    if (!pathname) return
+    const pathToView = (path: string): AppView => {
+      if (path === "/") return "dashboard"
+      if (path === "/events") return "holidays"
+      const clean = path.replace("/", "")
+      return clean as AppView
+    }
+    const derived = pathToView(pathname)
+    if (NAV_ITEMS.some(item => item.id === derived)) {
+      setCurrentView(derived)
+    }
+  }, [pathname])
+
+  const handleNavClick = (view: AppView) => {
+    setCurrentView(view)
+    router.push(viewToPath(view))
+  }
 
   return (
     <div className="min-h-screen flex flex-col relative z-10 w-full max-w-[1440px] mx-auto px-4 md:px-8 xl:px-12">
@@ -48,7 +82,7 @@ export function KaltirsiSuperAppShell() {
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setCurrentView(item.id)}
+                onClick={() => handleNavClick(item.id)}
                 className={cn(
                   "relative px-6 py-3 text-sm font-medium transition-colors rounded-xl whitespace-nowrap",
                   currentView === item.id 
