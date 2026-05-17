@@ -3,13 +3,18 @@ import { mutation, query } from "./_generated/server";
 
 // Simple hasher for MVP without external crypto dependencies inside Convex (Edge environment)
 // For true production, use `@convex-dev/auth` or the WebCrypto API.
-const hashPasswordSimple = (pw: string) => {
-  // Mock hashing for demo sovereignty compliance without complex dependencies
-  return `hashed_${pw}_m2creative_salt`;
+// Secure SHA-256 hashing for Sovereign Identity compliance using WebCrypto (Edge compatible)
+const hashPassword = async (pw: string) => {
+  const msgUint8 = new TextEncoder().encode(pw + "m2creative_salt_2026");
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 };
 
 const generateToken = () => {
-  return `m2_token_${Math.random().toString(36).substring(2, 15)}_${Date.now()}`;
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  return `m2_token_${Array.from(array).map(b => b.toString(16).padStart(2, "0")).join("")}`;
 };
 
 export const signup = mutation({
@@ -31,7 +36,7 @@ export const signup = mutation({
 
     const userId = await ctx.db.insert("users", {
       email: args.email,
-      passwordHash: hashPasswordSimple(args.password),
+      passwordHash: await hashPassword(args.password),
       name: args.name,
       role: "user",
       createdAt: Date.now(),
@@ -66,7 +71,7 @@ export const login = mutation({
       throw new Error("Invalid email or password");
     }
 
-    if (user.passwordHash !== hashPasswordSimple(args.password)) {
+    if (user.passwordHash !== (await hashPassword(args.password))) {
       throw new Error("Invalid password");
     }
 
